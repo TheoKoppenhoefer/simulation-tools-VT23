@@ -25,7 +25,7 @@ def run_elastic_pendulum_problem(with_plots=True,k=1):
 
     y0 = np.ones(4)
     t0 = 0.0
-    tfinal = 10.0        #Specify the final time
+    tfinal = 100.0        #Specify the final time
     # Define an Assimulo problem
     mod = Explicit_Problem(rhs, y0, t0, name=r'Elastic Pendulum Problem')
 
@@ -41,12 +41,14 @@ def run_elastic_pendulum_problem(with_plots=True,k=1):
 
     # Plot
     if with_plots:
-        pl.plot(t, y, color="b")
-        pl.title(mod.name)
-        pl.ylabel('y')
-        pl.xlabel('Time')
-        pl.show()
-        sim.plot()
+        for i in range(y.shape[1]):
+            mpl.plot(t,y[:,i])
+        mpl.legend([r'$y_1$',r'$y_2$',r'$\dot{y}_1$',r'$\dot{y}_2$'])
+        mpl.show()
+        mpl.plot(y[:,0],y[:,1])
+        mpl.xlabel(r'$y_1$')
+        mpl.ylabel(r'$y_2$')
+        mpl.title('phase portrait')
         mpl.show()
     return mod, sim
 
