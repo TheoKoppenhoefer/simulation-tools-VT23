@@ -2,11 +2,8 @@ from assimulo.explicit_ode import Explicit_ODE
 from assimulo.ode import *
 import numpy as np
 import matplotlib.pyplot as mpl
-import scipy.linalg as SL
 from scipy.optimize import fsolve
-
-
-# from assimulo.solvers import CVode
+import numpy.linalg as nl
 
 class BDF_k(Explicit_ODE):
     """
@@ -30,8 +27,14 @@ class BDF_k(Explicit_ODE):
     def _set_h(self, h):
         self.options["h"] = float(h)
 
+    def _set_order(self, order):
+        self.options["order"] = int(order)
+
     def _get_h(self):
         return self.options["h"]
+
+    def _get_order(self):
+        return self.options["order"]
 
     h = property(_get_h, _set_h)
 
@@ -47,7 +50,7 @@ class BDF_k(Explicit_ODE):
         yres = []
         T = []
         Y = np.expand_dims(y_np1, 0)
-        alpha = [[-1, 1], [3 / 2, -2, 1 / 2], [11 / 6, -3, 3 / 2, -1 / 3], [25 / 12, -4, 3, -4 / 3, 1 / 4], \
+        alpha = [[-1, 1], [3 / 2, -2, 1 / 2], [11 / 6, -3, 3 / 2, -1 / 3], [25 / 12, -4, 3, -4 / 3, 1 / 4],
                  [137 / 60, -5, 5, -10 / 3, 5 / 4, -1 / 5], [49 / 20, -6, 15 / 2, -20 / 3, 15 / 4, -6 / 5, 1 / 6]]
 
         for i in range(self.maxsteps):
@@ -57,7 +60,7 @@ class BDF_k(Explicit_ODE):
             if t_np1 >= tf:
                 break
             self.statistics["nsteps"] += 1
-            h = min(h, np.abs(tf - t))
+            h = min(h, np.abs(tf - t_np1))
             k = min(i + 1, order)
             # shift
             T = np.concatenate(([t_np1], T[:k - 1]))
@@ -91,6 +94,8 @@ class BDF_k(Explicit_ODE):
         # the following should be replaced by newton iteration
         y_np1 = fsolve(lambda x: h * f(t_np1, x) - alpha_cdot_Y - alpha[0] * x
                        , y_np1, xtol=self.tol)
+        # y_np1 = classical_newton_optimisation(lambda x: h * f(t_np1, x) - alpha_cdot_Y - alpha[0] * x
+        #               , y_np1, residual_eps=self.tol)
 
         return t_np1, y_np1
 
@@ -104,6 +109,73 @@ class BDF_k(Explicit_ODE):
         self.log_message(' Solver            : BDF2', verbose)
         self.log_message(' Solver type       : Fixed step\n', verbose)
 
+def finite_difference_gradient(func, x_arg, epsilon=1e-12):
+    """
+    Implementation of finite difference because scipy.optimisation.approx_fprime is useless
+    :param func: (scalar) Function to differentiate, has to be vectorised in such a way that it can handle input of
+                 the form [[x1,y1,...],...,[xd,yd,...]]
+    :param x_arg: the coordinates [x1, ..., xd] or coordinate list [[x1,y1,...],...,[xd,yd,...]] at which to differentiate
+    :param epsilon: the finite difference step size
+    :return: A gradient of the form [f1,...,fd] or [[f1,g1,...],...,[fd,gd,...]]
+    """
+    # TODO: Implement the following using symmetric gradients
+    x = np.asarray(x_arg)
+    vectorized = True
+    if x.ndim == 0:
+        x = np.expand_dims(x, axis=0)
+    if x.ndim == 1:
+        vectorized = False
+        x = np.expand_dims(x, axis=1)
+    dim = x.shape[0]
+    left = np.tile(np.expand_dims(x, axis=1), (dim, 1))
+    right = np.expand_dims(np.eye(dim), list(range(2, left.ndim)))
+    temp_arr = left + epsilon * right
+    soln = (func(temp_arr) - func(left)) / epsilon
+    # if not vectorized:
+    #     return np.squeeze(soln, axis=-1)
+    return soln
+
+
+def finite_difference_hessian(gradient, x_arg, epsilon=1e-6):
+    """
+    Implementation of finite difference to calculate the hessian
+    :param gradient: a gradient function that handles input in the same way as finite_difference_gradient does
+    :param x_arg: coordinates of the form [x1,...,xd] at which to calculate the hessian
+    :param epsilon: the finite difference step size. This has to be smaller than the step size of the
+    finite_difference_gradient function, if used
+    :return: A dxd numpy jacobian matrix
+    """
+    # TODO: Implement the following as symmetric gradients
+    x = np.asarray(x_arg)
+    x = np.expand_dims(x, axis=1)
+    dim = x.shape[0]
+    left = np.tile(np.expand_dims(x, axis=1), (dim, 1))
+    right = np.expand_dims(np.eye(dim), list(range(2, left.ndim)))
+    temp_arr = left + epsilon * right
+    soln = (gradient(np.squeeze(temp_arr)) - gradient(x)) / epsilon
+    return (soln + soln.transpose()) / 2.
+
+
+def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1E-6, maxiter=100):
+    """
+
+    :param objective:
+    :param x0:
+    :param tol:
+    :param maxiter:
+    :return:
+    """
+    gradient = lambda x: finite_difference_gradient(objective, x)
+    hessian = lambda y: finite_difference_hessian(gradient, y)
+    xk = x0
+    for i in range(maxiter):
+        gk = gradient(xk)
+        sk = -nl.linalg.solve(hessian(xk), gk)
+        xk += sk
+        if nl.norm(sk) < cauchy_eps and nl.norm(gk) < residual_eps:
+            break
+    else:
+        raise Exception('Newton iteration did not converge')
 
 if __name__ == '__main__':
     # Define the rhs
