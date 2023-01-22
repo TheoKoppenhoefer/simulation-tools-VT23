@@ -4,12 +4,11 @@ import numpy as np
 from assimulo.problem import Explicit_Problem
 from assimulo.solvers import CVode
 import matplotlib.pyplot as mpl
-import pylab as pl
 
 
 
 
-def run_elastic_pendulum_problem(with_plots=True,k=1):
+def run_elastic_pendulum_problem(with_plots=True,k=1,atol=1E-6,rtol=1E-6):
     """
     """
 
@@ -23,7 +22,7 @@ def run_elastic_pendulum_problem(with_plots=True,k=1):
         yd[3] = -y[1]*lam-1
         return yd
 
-    y0 = np.ones(4)
+    y0 = np.array([1.1,0,0,0])
     t0 = 0.0
     tfinal = 100.0        #Specify the final time
     # Define an Assimulo problem
@@ -33,8 +32,8 @@ def run_elastic_pendulum_problem(with_plots=True,k=1):
     sim = CVode(mod)  # Create a CVode solver
 
     # Sets the parameters
-    # sim.atol = [1e-4]  # Default 1e-6
-    # sim.rtol = 1e-4  # Default 1e-6
+    sim.atol = [atol]
+    sim.rtol = rtol
 
     # Simulate
     t, y = sim.simulate(tfinal)
