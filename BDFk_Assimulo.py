@@ -6,9 +6,9 @@ import scipy.linalg as SL
 from scipy.optimize import fsolve
 # from assimulo.solvers import CVode
 
-class BDF_2(Explicit_ODE):
+class BDF_k(Explicit_ODE):
     """
-    BDF-2   (Example of how to set-up own integrators for Assimulo)
+    BDF-k   (Example of how to set-up own integrators for Assimulo)
     """
     tol=1.e-8     
     maxit=100     
@@ -103,27 +103,28 @@ class BDF_2(Explicit_ODE):
         self.log_message('\nSolver options:\n',                                    verbose)
         self.log_message(' Solver            : BDF2',                     verbose)
         self.log_message(' Solver type       : Fixed step\n',                      verbose)
-            
-#Define the rhs
-def f(t,y):
-    ydot = -y[0]
-    return np.array([ydot])
-    
-#Define an Assimulo problem
-exp_mod = Explicit_Problem(f, 4)
-exp_mod.name = 'Simple BDF-2 Example'
 
-#Define another Assimulo problem
-def pend(t,y):
-    #g=9.81    l=0.7134354980239037
-    gl=13.7503671
-    return np.array([y[1],-gl*np.sin(y[0])])
-    
-pend_mod=Explicit_Problem(pend, y0=np.array([2.*np.pi,1.]))
-pend_mod.name='Nonlinear Pendulum'
+if __name__ == '__main__':
+    #Define the rhs
+    def f(t,y):
+        ydot = -y[0]
+        return np.array([ydot])
 
-#Define an explicit solver
-exp_sim = BDF_2(pend_mod) #Create a BDF solver
-t, y = exp_sim.simulate(1)
-exp_sim.plot()
-mpl.show()
+    #Define an Assimulo problem
+    exp_mod = Explicit_Problem(f, 4)
+    exp_mod.name = 'Simple BDF-k Example'
+
+    #Define another Assimulo problem
+    def pend(t,y):
+        #g=9.81    l=0.7134354980239037
+        gl=13.7503671
+        return np.array([y[1],-gl*np.sin(y[0])])
+
+    pend_mod=Explicit_Problem(pend, y0=np.array([2.*np.pi,1.]))
+    pend_mod.name='Nonlinear Pendulum'
+
+    #Define an explicit solver
+    exp_sim = BDF_k(pend_mod) #Create a BDF solver
+    t, y = exp_sim.simulate(1)
+    exp_sim.plot()
+    mpl.show()
