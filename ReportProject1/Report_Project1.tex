@@ -1,0 +1,227 @@
+
+\documentclass{scrartcl}
+% alternative article or report
+
+
+%%%%% PACKAGES
+
+% small tweaks and nicer typography
+\usepackage{microtype}
+\usepackage{hyperref}
+
+% dealing with figures
+\usepackage{subcaption}
+\usepackage{wrapfig}
+
+% basic math stuff
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+%\usepackage{tikz-cd}
+\usepackage{cancel}
+\usepackage{cases}
+\usepackage{dsfont}
+
+% tikz
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usetikzlibrary{positioning}
+%\usetikzlibrary{patterns}
+%\usetikzlibrary{babel}
+\tikzset{>=stealth}
+\usepackage{wrapfig}
+
+%\newcommand{\tikzmark}[3][]{\tikz[remember picture,baseline] \node [anchor=base,#1](#2) {$#3$};}
+
+%\usepackage{booktabs}
+%\usepackage{bm}
+%\usepackage{minted}
+
+% for inkscape images
+%\usepackage{pdftricks}
+%\begin{psinputs}
+%   \usepackage{pstricks}
+%   \usepackage{multido}
+%\end{psinputs}
+%\usepackage[pdf]{pstricks}
+%\usepackage{import}
+
+
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{mybib.bib}
+
+
+%%%%% CONFIGURATION
+
+% prevents automatic line breaks inside of equations
+% since it looks bad
+\binoppenalty = \maxdimen
+\relpenalty   = \maxdimen
+
+% theorem-like environments
+\newcounter{everything}
+\newtheorem{corollary}[everything]{Corollary}
+\newtheorem{lemma}[everything]{Lemma}
+\newtheorem{proposition}[everything]{Proposition}
+\newtheorem{theorem}[everything]{Theorem}
+\newtheorem*{claim}{Claim}
+\newtheorem*{given}{Given}
+
+
+%%%%% CUSTOM COMMANDS
+
+% real numbers via \R
+% complex numbers via \C
+% general field via \K
+\def\C{\mathbb{C}}
+\def\R{\mathbb{R}}
+\def\K{\mathbb{K}}
+\def\Q{\mathbb{Q}}
+\def\Z{\mathbb{Z}}
+\def\N{\mathbb{N}}
+\def\H{\mathbb{H}}
+\def\e{\varepsilon}
+
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cJ}{\mathcal{J}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cZ}{\mathcal{Z}}
+
+\newcommand{\bA}{\mathbb{A}}
+\newcommand{\bB}{\mathbb{B}}
+\newcommand{\bC}{\mathbb{C}}
+\newcommand{\bD}{\mathbb{D}}
+\newcommand{\bE}{\mathbb{E}}
+\newcommand{\bF}{\mathbb{F}}
+\newcommand{\bG}{\mathbb{G}}
+\newcommand{\bH}{\mathbb{H}}
+\newcommand{\bI}{\mathbb{I}}
+\newcommand{\bJ}{\mathbb{J}}
+\newcommand{\bK}{\mathbb{K}}
+\newcommand{\bL}{\mathbb{L}}
+\newcommand{\bM}{\mathbb{M}}
+\newcommand{\bN}{\mathbb{N}}
+\newcommand{\bO}{\mathbb{O}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\bQ}{\mathbb{Q}}
+\newcommand{\bR}{\mathbb{R}}
+\newcommand{\bS}{\mathbb{S}}
+\newcommand{\bT}{\mathbb{T}}
+\newcommand{\bU}{\mathbb{U}}
+\newcommand{\bV}{\mathbb{V}}
+\newcommand{\bW}{\mathbb{W}}
+\newcommand{\bX}{\mathbb{X}}
+\newcommand{\bY}{\mathbb{Y}}
+\newcommand{\bZ}{\mathbb{Z}}
+
+\newcommand{\dif}[1]{\,\mathrm{d} #1}
+%\newcommand{\norm}[1]{\lVert #1 \rVert}
+%\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\bnorm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\vii}[2]{\ensuremath{\begin{bmatrix}#1 \\ #2 \end{bmatrix}}}
+\newcommand{\mii}[4]{\ensuremath{\begin{bmatrix}#1&#2 \\ #3&#4 \end{bmatrix}}}
+\newcommand{\mc}[1]{\mathcal{#1}}
+
+\newcommand{\one}{\mathds{1}}
+\newcommand{\bigO}{\mathcal{O}}
+
+
+%%%%%%%%%%    Math operators    %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DeclareMathOperator{\Id}{Id}             % identity morphism
+% \DeclareMathOperator{\ker}{ker}           % kernel
+\DeclareMathOperator{\rg}{rg}             % image
+\DeclareMathOperator{\defekt}{def}             % defect
+\DeclareMathOperator{\im}{im}             % image
+\DeclareMathOperator{\Hom}{Hom}           % homomorphisms
+\DeclareMathOperator{\End}{End}           % endomorphisms
+\DeclareMathOperator{\Span}{Span}         % linear span
+\DeclareMathOperator{\grad}{\nabla}         % gradient
+\DeclareMathOperator{\diam}{diam}         % gradient
+\DeclareMathOperator{\Tr}{Tr}       	  % trace
+\DeclareMathOperator{\diver}{Div}			% divergence
+\DeclareMathOperator{\supp}{supp}			% support
+\DeclareMathOperator{\dist}{dist}			% distance
+\DeclareMathOperator{\inter}{int}			% interiour
+\DeclareMathOperator{\epi}{epi}			% epigraph
+\DeclareMathOperator{\hyp}{hyp}			% hypograph
+\DeclareMathOperator{\Lip}{Lip}			% lipschitz konstant
+\DeclareMathOperator{\graph}{graph}			% graph
+\DeclareMathOperator{\sgn}{sgn}			% sign
+\DeclareMathOperator{\BMO}{BMO}			% BMO
+%\DeclareMathOperator{\B}{B}			% BMO
+
+% inner product (scalar product) via \inner{v, w}
+% norm via \norm{x}
+% absolute value via \abs{x}
+% use the star-version for automatic scaling
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\inner}{\langle}{\rangle}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% \vect{ x // y // z } for a column vector with entries x, y, z
+% similarly for larger vectors
+% in this code:  1 = number of arguments
+%               #1 = first argument
+\newcommand{\vect}[1]{\begin{bmatrix} #1 \end{bmatrix}}
+\newcommand{\commentops}[2]{\stackrel{\mathclap{#1}}{#2}}
+
+
+% \conj{z} for complex conjugation
+\newcommand{\conj}{\overline}
+
+%counter of current constant number:    
+\newcounter{constant} 
+%defines a new constant, but does not typeset anything:
+\newcommand{\newconstant}[1]{\refstepcounter{constant}\label{#1}} 
+%typesets named constant:
+\newcommand{\useconstant}[1]{c_{\ref{#1}}}
+
+%%%%%%% GENERAL STYLE %%%%%%%%%%%%%%%%%%
+
+%\setcounter{tocdepth}{3}
+
+
+%%%%% TITLE PAGE
+
+\subject{Simulation Tools, VT23}
+\title{Report on Project 1}
+\author{Salvador Castagnino, Theo Koppenhöfer}
+\date{\today}
+
+
+%%%%% The content starts here %%%%%%%%%%%%%
+
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+\nocite{*}
+\printbibliography
+
+\end{document}
