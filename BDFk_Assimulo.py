@@ -94,9 +94,9 @@ class BDF_k(Explicit_ODE):
         # the following should be replaced by newton iteration
         # y_np1 = fsolve(lambda x: h * f(t_np1, x) - alpha_cdot_Y - alpha[0] * x
         #                , y_np1, xtol=self.tol)
-        y_np1 = classical_newton_optimisation(lambda x: h * f(t_np1, x) - alpha_cdot_Y - alpha[0] * x
+        y_np1, newton_iterations = classical_newton_optimisation(lambda x: h * f(t_np1, x) - alpha_cdot_Y - alpha[0] * x
                        , y_np1, residual_eps=self.tol)
-
+        self.statistics["nfcns"] += newton_iterations*2*y_np1.size
         return t_np1, y_np1
 
     def print_statistics(self, verbose=NORMAL):
@@ -132,7 +132,6 @@ def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1
     :return:
     """
     gradient = lambda x: finite_difference_gradient(objective, x)
-    # hessian = lambda y: finite_difference_hessian(gradient, y)
     xk = x0
     for i in range(maxiter):
         gk = objective(xk)
@@ -142,7 +141,7 @@ def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1
             break
     else:
         raise Exception('Newton iteration did not converge')
-    return xk
+    return xk, i
 
 if __name__ == '__main__':
     # Define the rhs
