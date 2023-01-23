@@ -109,10 +109,17 @@ class BDF_k(Explicit_ODE):
         self.log_message(' Solver            : BDF2', verbose)
         self.log_message(' Solver type       : Fixed step\n', verbose)
 
-def finite_difference_gradient(func, x, epsilon=1e-6):
+def finite_difference_gradient(func, x, delta_x=1e-6):
+    """
+    Implementation of symmetric finite differences
+    :param func: vectorised function
+    :param x: the point at which to evaluate the gradient
+    :param delta_x:
+    :return:
+    """
     dim = x.size
     temp_arr = np.transpose(np.tile(np.expand_dims(x, axis=1), dim))
-    return (func(temp_arr+epsilon*np.eye(dim))-func(temp_arr-epsilon*np.eye(dim)))/(2*epsilon)
+    return (func(temp_arr+delta_x*np.eye(dim))-func(temp_arr-delta_x*np.eye(dim)))/(2*delta_x)
 
 
 def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1E-6, maxiter=100):
