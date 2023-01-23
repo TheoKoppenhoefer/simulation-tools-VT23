@@ -20,7 +20,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6):
 
     y0 = np.array([1.1, 0, 0, 0])
     t0 = 0.0
-    tfinal = 100.0  # Specify the final time
+    tfinal = 10.0  # Specify the final time
     # Define an Assimulo problem
     mod = Explicit_Problem(rhs, y0, t0, name=r'Elastic Pendulum Problem')
 
