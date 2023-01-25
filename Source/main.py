@@ -4,7 +4,7 @@ from assimulo.solvers import CVode
 import matplotlib.pyplot as mpl
 
 
-def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6):
+def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, maxord=5):
     """
     """
 
@@ -30,6 +30,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6):
     # Sets the parameters
     sim.atol = [atol]
     sim.rtol = rtol
+    sim.maxord = maxord
 
     # Simulate
     t, y = sim.simulate(tfinal)

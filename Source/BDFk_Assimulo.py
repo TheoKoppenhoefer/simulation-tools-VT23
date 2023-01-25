@@ -18,7 +18,7 @@ class BDF_k(Explicit_ODE):
 
         # Solver options
         self.options["h"] = 0.01
-        self.options["order"] = 2
+        self.options["order"] = 4
 
         # Statistics
         self.statistics["nsteps"] = 0
