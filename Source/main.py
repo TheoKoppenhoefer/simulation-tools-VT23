@@ -4,7 +4,7 @@ from assimulo.solvers import CVode
 import matplotlib.pyplot as mpl
 
 
-def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, maxord=5):
+def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
     """
     """
 
@@ -31,6 +31,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
     sim.atol = [atol]
     sim.rtol = rtol
     sim.maxord = maxord
+    sim.discr = discr
 
     # Simulate
     t, y = sim.simulate(tfinal)
@@ -46,8 +47,54 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
         mpl.ylabel(r'$y_2$')
         mpl.title('phase portrait')
         mpl.show()
+        # Energy plot
     return mod, sim
 
+def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100):
+    ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails']
+    for i in range(4):
+        mpl.figure(plotnumber+i, clear=False)
+        mpl.plot(ks, ydata[i], label=plotlabel)
+        mpl.legend()
+        mpl.ylabel(ylabels[i])
+        mpl.xlabel(xlabel)
 
 if __name__ == '__main__':
-    run_elastic_pendulum_problem()
+    for discr in ['BDF', 'Adams']:
+        ks = []
+        nsteps = []
+        nfcns = []
+        njacs = []
+        nerrfails = []
+        for k in range(1, int(1E3), int(1E2)):
+            # Test ATOL
+            ks.append(k)
+            mod, sim = run_elastic_pendulum_problem(discr=discr, k=k, with_plots=False)
+            stats = sim.get_statistics()
+            nsteps.append(stats.__getitem__('nsteps'))
+            nfcns.append(stats.__getitem__('nfcns'))
+            njacs.append(stats.__getitem__('njacs'))
+            nerrfails.append(stats.__getitem__('nerrfails'))
+
+        # Plot the whole lot
+        plot_stats(ks, [nsteps, nfcns, njacs, nerrfails], xlabel='k', plotlabel=f'discr={discr}', plotnumber=200)
+
+
+    atols = []
+    nsteps = []
+    nfcns = []
+    njacs = []
+    nerrfails = []
+    for atol in np.linspace(1,1E-8,10):
+        # Test ATOL
+        atols.append(atol)
+        mod, sim = run_elastic_pendulum_problem(atol=atol, with_plots=False)
+        stats = sim.get_statistics()
+        nsteps.append(stats.__getitem__('nsteps'))
+        nfcns.append(stats.__getitem__('nfcns'))
+        njacs.append(stats.__getitem__('njacs'))
+        nerrfails.append(stats.__getitem__('nerrfails'))
+
+    # Plot the whole lot
+    plot_stats(atols, [nsteps, nfcns, njacs, nerrfails], xlabel='k', plotlabel=f'atols',plotnumber=300)
+    mpl.show()
