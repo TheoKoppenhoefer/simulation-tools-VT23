@@ -4,21 +4,22 @@ import numpy as np
 import matplotlib.pyplot as mpl
 from scipy.optimize import fsolve
 import numpy.linalg as nl
+import math
 
 class BDF_k(Explicit_ODE):
     """
     BDF-k   (Example of how to set-up own integrators for Assimulo)
     """
-    tol = 1.e-8
+    tol = 1.e-4
     maxit = 100
-    maxsteps = 500
+    maxsteps = 50000
 
     def __init__(self, problem):
         Explicit_ODE.__init__(self, problem)  # Calls the base class
 
         # Solver options
         self.options["h"] = 0.01
-        self.options["order"] = 4
+        self.options["order"] = 2
 
         # Statistics
         self.statistics["nsteps"] = 0
@@ -153,6 +154,7 @@ if __name__ == '__main__':
     # Define an Assimulo problem
     exp_mod = Explicit_Problem(f, 4)
     exp_mod.name = 'Simple BDF-k Example'
+    k=50
 
 
     # Define another Assimulo problem
@@ -161,12 +163,31 @@ if __name__ == '__main__':
         gl = 13.7503671
         return np.array([y[1], -gl * np.sin(y[0])])
 
+    # Define the rhs
+    def rhs(t, y):
+        yd = np.zeros(np.shape(y))
+        yd[0:2] = y[2:4]
+        norm_y = np.linalg.norm(y[0:2])
+        lam = k * (norm_y - 1) / norm_y
+        yd[2] = -y[0] * lam
+        yd[3] = -y[1] * lam - 1
+        return yd
 
-    pend_mod = Explicit_Problem(pend, y0=np.array([2. * np.pi, 1.]))
+    y0 = np.array([1.1, 0, 0, 0])
+    #y0=np.array([2. * np.pi, 1.])
+    t0 = 0.0
+
+
+    pend_mod = Explicit_Problem(rhs, y0)
     pend_mod.name = 'Nonlinear Pendulum'
 
     # Define an explicit solver
     exp_sim = BDF_k(pend_mod)  # Create a BDF solver
-    t, y = exp_sim.simulate(1)
-    exp_sim.plot()
+    t, y = exp_sim.simulate(20)
+
+    mpl.plot(t, np.sqrt( y[:, 0] ** 2 + y[:, 1] ** 2))
+    mpl.plot(t, np.arctan2(y[:, 1], y[:, 0]) + math.pi/2)
+    mpl.xlabel(r'$t$')
+    mpl.legend([r'$r$', r'$theta$'])
+    mpl.title('Polar Coordinates')
     mpl.show()
