@@ -28,13 +28,16 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
     sim = CVode(mod)  # Create a CVode solver
 
     # Sets the parameters
+    sim.discr = discr
     sim.atol = [atol]
     sim.rtol = rtol
     sim.maxord = maxord
-    sim.discr = discr
 
     # Simulate
     t, y = sim.simulate(tfinal)
+
+    # calculate the energy
+
 
     # Plot
     if with_plots:
@@ -58,26 +61,36 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100):
         mpl.legend()
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
+    ylabels = ['nfcns / nsteps', 'njacs / nsteps', 'nerrfails / nsteps']
+    for i in range(3):
+        mpl.figure(plotnumber+4+i, clear=False)
+        mpl.plot(ks, np.asarray(ydata[i+1]) / np.asarray(ydata[0]), label=plotlabel)
+        mpl.legend()
+        mpl.ylabel(ylabels[i])
+        mpl.xlabel(xlabel)
+
 
 if __name__ == '__main__':
+    maxords = {'BDF': [3,4,5], 'Adams': [3,6,12]}
     for discr in ['BDF', 'Adams']:
-        ks = []
-        nsteps = []
-        nfcns = []
-        njacs = []
-        nerrfails = []
-        for k in range(1, int(1E3), int(1E2)):
-            # Test ATOL
-            ks.append(k)
-            mod, sim = run_elastic_pendulum_problem(discr=discr, k=k, with_plots=False)
-            stats = sim.get_statistics()
-            nsteps.append(stats.__getitem__('nsteps'))
-            nfcns.append(stats.__getitem__('nfcns'))
-            njacs.append(stats.__getitem__('njacs'))
-            nerrfails.append(stats.__getitem__('nerrfails'))
+        for maxord in maxords[discr]:
+            ks = []
+            nsteps = []
+            nfcns = []
+            njacs = []
+            nerrfails = []
+            for k in range(1, int(1E3), int(1E2)):
+                # Test ATOL
+                ks.append(k)
+                mod, sim = run_elastic_pendulum_problem(discr=discr, maxord=maxord, k=k, with_plots=False)
+                stats = sim.get_statistics()
+                nsteps.append(stats.__getitem__('nsteps'))
+                nfcns.append(stats.__getitem__('nfcns'))
+                njacs.append(stats.__getitem__('njacs'))
+                nerrfails.append(stats.__getitem__('nerrfails'))
 
-        # Plot the whole lot
-        plot_stats(ks, [nsteps, nfcns, njacs, nerrfails], xlabel='k', plotlabel=f'discr={discr}', plotnumber=200)
+            # Plot the whole lot
+            plot_stats(ks, [nsteps, nfcns, njacs, nerrfails], xlabel='k', plotlabel=f'discr={discr}, maxord={maxord}', plotnumber=200)
 
 
     atols = []

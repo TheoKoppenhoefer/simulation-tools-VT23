@@ -7,4 +7,7 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 - [ ] Task 3
 - [ ] Task 4
 - [ ] Task 5
-- [ ] implement statistics on function evaluations in 
+- [ ] implement nfuncs/step ... /step
+- [ ] implement energy plot
+- [ ] vary influence of maxord
+- [ ] implement rtol
