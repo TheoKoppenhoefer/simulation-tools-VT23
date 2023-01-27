@@ -241,7 +241,7 @@ In the following we use the model of a pendulum attached to a rod which is elast
 \label{dr:Pendulum}
 \end{wrapfigure}
 
- In particular our ODE is given by
+This problem leads to the formulation as an ODE
 \begin{align*}
 	\vect{y_1 \\ y_2 \\ y_3 \\ y_4}' = \vect{y_3 \\ y_4 \\ -y_1\lambda(y_1,y_2) \\ -y_2\lambda(y_1,y_2)-1}
 \end{align*}
@@ -249,7 +249,7 @@ with
 \begin{align*}
 	\lambda(y_1,y_2)=k\frac{\norm{(y_1,y_2)}-1}{\norm{(y_1,y_2)}}\,.
 \end{align*}
-The plot of a numerical solution to this problem for $k=1$ can be seen in figures \ref{pl:StateTime1} and \ref{pl:PhasePortrait1}.
+The plot of a numerical solution to this problem for $k=1$ can be seen in figures \ref{pl:StateTime1} \ref{pl:PhasePortrait1} and \ref{pl:PolarPlot1}.
 
 \begin{figure}[h]
 \centering
@@ -278,8 +278,8 @@ Adding these up we get the approximate total energy
 \begin{align*}
 	E_{\text{tot}}=E_{\text{pot}}+E_{\text{tot}}+E_{\text{tot}}\,.
 \end{align*}
-We expect the approximate total energy to be constant which indeed can be seen in Figure \ref{pl:EnergyPlot1}.
-Because of this property we can use the relative variation of the approximate total energy as an index meas implement
+We expect the approximate total energy to be constant which indeed can be seen in Figure \ref{pl:EnergyPlot1} for that previously calculated numerical solution.
+Because of this property we can use the relative variation of the approximate total energy as an index to measure the stability of the method. We specifically implement
 \begin{python}
 import numpy as np
 instability_index = (np.max(total_energy)-np.min(total_energy)) \
@@ -307,8 +307,8 @@ In the ideal world this index almost vanishes.
 \section*{Testing CVODE}
 \subsection*{A first test series}
 
-In the first specific test of CVODE we solve our toy problem for increasing $k$. Hereby we switch between the BDF and Adam-Moultons discretisation method. We also vary the \pyth{maxorder} parameter for both methods.
-A higher $k$ reflects a problem which is more stiff. As a stiff problem requires finer steps the number of steps \pyth{nsteps} increases as $k$ increases which is what can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per stepsize \pyth{nfcns/nsteps} hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase correspondingly as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. And the general trend is that the number of steps increases as \pyth{maxord} is reduced. 
+In the first specific test of CVODE we solve our toy problem for increasing $k$. Here we switch between the BDF and Adam-Moultons discretisation method. We also vary the \pyth{maxorder} parameter for both methods.
+A higher $k$ reflects a problem which is more stiff. As a stiff problem requires smaller steps the number of steps \pyth{nsteps} increases as $k$ increases which  can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per stepsize \pyth{nfcns/nsteps} hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase analogously to \pyth{nsteps} with $k$ as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. And the general trend is that the number of steps increases as \pyth{maxord} is reduced. 
 
 \begin{figure}[h]
 \centering
@@ -327,7 +327,7 @@ A higher $k$ reflects a problem which is more stiff. As a stiff problem requires
 \end{minipage}
 \end{figure}
 
-From figure \ref{pl:njacs_nsteps1} it can be seen that the number of jacobian evaluations stays roughly constant and happens roughly every 5th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though the general tendency is that it is smaller the lower \pyth{maxord} is set. This makes sense because a lower \pyth{maxord} means there are fewer possibilities to change the method order to and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result tends to be further away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
+From figure \ref{pl:njacs_nsteps1} it can be seen that the number of jacobian evaluations stays roughly constant and happens roughly every 5th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though the general tendency is that it is smaller the lower \pyth{maxord} is set. This makes sense because a lower \pyth{maxord} means there are fewer possibilities for the method order and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result tends to be further away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
 
 
 \begin{figure}[h]
@@ -365,8 +365,12 @@ From figure \ref{pl:njacs_nsteps1} it can be seen that the number of jacobian ev
 \end{minipage}
 \end{figure}
 
+This test confirms once again that a stiffer Problem needs more function evaluations in CVODE.
+Perhaps surprisingly the Adams-Moulton-method seems to perform better on this problem.
+This experiment also highlights that a lower \pyth{maxord} parameter tends to be more computationally expensive though it reduces the number of error test failures \pyth{nerrfails}.
+
 \subsection*{Testing the parameter rtol}
-We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). If one compares figures the instability index for $k\approx10^3$ in figure \ref{pl:stability1} with the instability index in figure \ref{pl:stability2} one sees that setting the \pyth{rtol} parameter makes the result significantly worse.
+We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). If one compares figures the instability index for $k\approx10^3$ in figure \ref{pl:stability1} with the instability index in figure \ref{pl:stability2} one sees that changing the \pyth{rtol} parameter from the default makes the result significantly worse in terms of energy conservation.
 
 \begin{figure}[h]
 \centering
@@ -416,7 +420,7 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 
 \subsection*{Testing the parameter atol}
 
-If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we once again get an instability index that is significantly above the value for the method in which we did not specify this value as can be seen in Figure \ref{pl:stability3}. In either case we observe that fixing the tolerance seems to come at the cost of energy conversation as can be seen in the Figures \ref{pl:energy2} and \ref{pl:energy3}.
+If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we once again get an instability index that is significantly above the value for the method in which we did not specify this value as can be seen in Figure \ref{pl:stability3}. In either case we observe that fixing the tolerance seems to come at the cost of energy conversation as is dramatically visualised in Figures \ref{pl:energy2} and \ref{pl:energy3}.
 
 
 \begin{figure}[h]
@@ -445,6 +449,8 @@ If we test the \pyth{atol} parameter on the Adams and Newton method analogously 
 \label{pl:energy3}
 \end{minipage}
 \end{figure}
+
+All in all we see that none of the (admittedly crude) tweaking of the parameters improved the performance of CVODE. To the contrary, most changes worsened the performance. The choice of the discretisation method on the other hand did make a big difference and the performance for solving the toy problem could be improved by switching from the default BDF method.
 
 
 % here come some stability regions
