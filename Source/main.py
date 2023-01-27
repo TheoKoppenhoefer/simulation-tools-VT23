@@ -77,7 +77,7 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
         if savefig:
-            mpl.savefig(f'../Plots/Figure_{plotnumber+i}.svg')
+            mpl.savefig(f'../Plots/Figure_{plotnumber+i}.pdf')
     ylabels = ['nfcns / nsteps', 'njacs / nsteps', 'nerrfails / nsteps']
     for i in range(3):
         mpl.figure(plotnumber+10+i, clear=False)
@@ -89,7 +89,7 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
         if savefig:
-            mpl.savefig(f'../Plots/Figure_{plotnumber+10+i}.svg')
+            mpl.savefig(f'../Plots/Figure_{plotnumber+10+i}.pdf')
 
 
 if __name__ == '__main__':
