@@ -234,7 +234,7 @@
 
 In the following we use the model of a pendulum attached to a rod which is elastic in the radial direction as described in Task 1. The situation is depicted in figure \ref{dr:Pendulum}.
 
-\begin{wrapfigure}{r}{0.46\textwidth}
+\begin{wrapfigure}{r}{0.43\textwidth}
 \centering
 \input{../Drawings/pendulum.pdf_tex}
 \caption{The pendulum}
@@ -310,54 +310,50 @@ For linear problems, explicit methods present a much reduced stability region wh
 For the problem of the elastic pendulum, approximated by explicit methods, when the value of $k$ is increased we are expected to see the approximation blow up showing oscillations of unbounded amplitude.
 This unstable behavior will be attenuated by reducing the value of the step $h$.
 
-\newline
-
 The problem was simulated using Explicit Euler and RK4.
-All the experiments in this section, if not otherwise stated, take as initial value $y_0 = \[1.1, 0, 0, 0\]$ and have $\[0, 20\]$ for domain.
-The graphs are presented in polar coordinates where $r$ refers to the length of the spring and $theta$ refers to the angle conformed between the pendulum and the vertical axis.
+All the experiments in this section, if not otherwise stated, take as initial value $y_0 = [1.1, 0, 0, 0]$ and have $[0, 20]$ for domain.
+The graphs are presented in polar coordinates where $r$ refers to the length of the spring and $\theta$ refers to the angle conformed between the pendulum and the vertical axis.
 
-\newline
-
-It can be observed that for a step size of $h=0.01$ Explicit Eurler \(Figure \ref{exp_euler_k=50_h=0.01_c}\) already shows instability for values of $k=50$ while RK4 \(Figure \ref{rk4_h=0.01_k=3000_c}\) with that same step size remains stable for values up to $k=3000$.
+It can be observed that for a step size of $h=0.01$ Explicit Eurler (Figure \ref{exp_euler_k=50_h=0.01_c}) already shows instability for values of $k=50$ while RK4 (Figure \ref{rk4_h=0.01_k=3000_c}) with that same step size remains stable for values up to $k=3000$.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/ExpEuler/exp_euler_k=50_h=0.01_c}
-\caption{\pyth{nfcns/nsteps} Explicit Euler $h=0.01$ $k=50$}
+\caption{Explicit Euler $h=0.01$ $k=50$}
 \label{exp_euler_k=50_h=0.01_c}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4/rk4_h=0.01_k=3000_c}
-\caption{\pyth{njacs/nsteps} RK4 $h=0.01$ $k=3000$}
+\caption{RK4 $h=0.01$ $k=3000$}
 \label{rk4_h=0.01_k=3000_c}
 \end{minipage}
 \end{figure}
 	
-For Explicit Euler \(Figure \ref{exp_euler_k=50_h=0.001_c}\), by keeping the value of $k$ constant and reducing the step size by a decimal place we can see how the instability is attenuated presenting a similar amplitude over time.
-It takes a much larger step size and spring constant for RK4 to become unstable \(Figure \ref{rk4_h=0.1_k=975_c}\), once unstabilized it’s growth is much more rapid than Explicit Euler’s and it does so without oscillating.
+For Explicit Euler (Figure \ref{exp_euler_k=50_h=0.001_c}), by keeping the value of $k$ constant and reducing the step size by a decimal place we can see how the instability is attenuated presenting a similar amplitude over time.
+It takes a much larger step size and spring constant for RK4 to become unstable (Figure \ref{rk4_h=0.1_k=975_c}), once unstabilized it’s growth is much more rapid than Explicit Euler’s and it does so without oscillating.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/ExpEuler/exp_euler_k=50_h=0.001_c}
-\caption{\pyth{nfcns/nsteps} Explicit Euler $h=0.001$ $k=50$}
+\caption{Explicit Euler $h=0.001$ $k=50$}
 \label{exp_euler_k=50_h=0.001_c}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4/rk4_h=0.1_k=975_c}
-\caption{\pyth{njacs/nsteps} RK4 $h=0.1$ $k=975$}
+\caption{RK4 $h=0.1$ $k=975$}
 \label{rk4_h=0.1_k=975_c}
 \end{minipage}
 \end{figure}
 
-It is interesting to observe that the oscillation of the spring is rapidly dumped when using RK4 \(Figure \ref{rk4_h=0.1_k=300_c}\), a behavior similar to that presented by implicit methods.
+It is interesting to observe that the oscillation of the spring is rapidly dumped when using RK4 (Figure \ref{rk4_h=0.1_k=300_c}), a behavior similar to that presented by implicit methods.
 This behavior cannot be observed in the other explicit methods.
 
 \begin{figure}[h]
@@ -365,7 +361,7 @@ This behavior cannot be observed in the other explicit methods.
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4/rk4_h=0.1_k=300_c}
-\caption{\pyth{njacs/nsteps} RK4 $h=0.1$ $k=300$}
+\caption{RK4 $h=0.1$ $k=300$}
 \label{rk4_h=0.1_k=300_c}
 \end{minipage}
 \end{figure}
@@ -373,7 +369,7 @@ This behavior cannot be observed in the other explicit methods.
 \section*{Testing Implicit Methods}
 
 Opposite to the case of explicit methods, for linear problems implicit methods count with an extensive stability region which doesn’t make their stability dependent on the value of the step $k$.
-The problem was simulated using Implicit Euler, BDF2 with Fixed Point as corrector and BDFk with Newton as corrector for $k$ between $1$ and $4$. All the following experiments take as initial value $y_0 = \[1.1, 0, 0, 0\]$ and have $\[0, 20\]$ for time domain.
+The problem was simulated using Implicit Euler, BDF2 with Fixed Point as corrector and BDFk with Newton as corrector for $k$ between $1$ and $4$. All the following experiments take as initial value $y_0 = [1.1, 0, 0, 0]$ and have $[0, 20]$ for time domain.
 It is interesting to see how the oscillation of the spring decays for implicit methods. This decay can be attenuated by reducing the step size or accelerated by increasing the value of the spring constant.
 
 \begin{figure}[h]
@@ -381,7 +377,7 @@ It is interesting to see how the oscillation of the spring decays for implicit m
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/ImpEuler/imp_euler_h=0.01_k=50_c}
-\caption{\pyth{njacs/nsteps} Implicit Euler $h=0.01$ $k=50$}
+\caption{Implicit Euler $h=0.01$ $k=50$}
 \label{imp_euler_h=0.01_k=50_c}
 \end{minipage}
 \end{figure}
@@ -391,35 +387,35 @@ It is interesting to see how the oscillation of the spring decays for implicit m
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/BDF2/bdf2_h=0.01_k=500_c}
-\caption{\pyth{nfcns/nsteps} BDF2-Fixed Point $h=0.001$ $k=500$}
+\caption{BDF2-Fixed Point $h=0.001$ $k=500$}
 \label{exp_euler_k=50_h=0.001_c}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/BDF2/bdf2_h=0.01_k=1000_c}
-\caption{\pyth{njacs/nsteps} BDF2-Fixed Point $h=0.01$ $k=1000$}
+\caption{BDF2-Fixed Point $h=0.01$ $k=1000$}
 \label{bdf2_h=00.1_k=1000_c}
 \end{minipage}
 \end{figure}
 
 The method BDFk with Newton presents a decay in the spring oscillation as the other methods do.
 However, it also shows decay of the pendulum oscillation which cannot be observed in the other implicit methods.
-To better observe this decay \(Figure \ref{bdf2_h=0.01_h=100_tf=100.png} & Figure \ref{bdf4_h=0.01_h=100_tf=100.png}\) the domain is increased to $\[0, 100\]$.
+To better observe this decay (Figure \ref{bdf2_h=0.01_h=100_tf=100} and Figure \ref{bdf4_h=0.01_h=100_tf=100.png}) the domain is increased to $[0, 100]$.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/BDFk/bdf2_h=0.01_h=100_tf=100}
-\caption{\pyth{nfcns/nsteps} BDF2-Newton $h=0.01$ $k=100$}
+\caption{BDF2-Newton $h=0.01$ $k=100$}
 \label{bdf2_h=0.01_h=100_tf=100}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/BDFk/bdf4_h=0.01_h=100_tf=100}
-\caption{\pyth{njacs/nsteps} BDF4-Newton $h=0.01$ $k=100$}
+\caption{BDF4-Newton $h=0.01$ $k=100$}
 \label{bdf4_h=0.01_h=100_tf=100.png}
 \end{minipage}
 \end{figure}
