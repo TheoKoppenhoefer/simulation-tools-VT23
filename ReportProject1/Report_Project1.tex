@@ -179,6 +179,7 @@
 \DeclareMathOperator{\graph}{graph}			% graph
 \DeclareMathOperator{\sgn}{sgn}			% sign
 \DeclareMathOperator{\BMO}{BMO}			% BMO
+\DeclareMathOperator{\mean}{mean}			% BMO
 %\DeclareMathOperator{\B}{B}			% BMO
 
 % inner product (scalar product) via \inner{v, w}
@@ -278,8 +279,9 @@ Adding these up we get the approximate total energy
 	E_{\text{tot}}=E_{\text{pot}}+E_{\text{tot}}+E_{\text{tot}}\,.
 \end{align*}
 We expect the approximate total energy to be constant which indeed can be seen in Figure \ref{pl:EnergyPlot1}.
-Because of this property we can use the relative variation of the approximate total energy as an index measuring the (in)stability of the solver. Specifically we implement
+Because of this property we can use the relative variation of the approximate total energy as an index meas implement
 \begin{python}
+import numpy as np
 instability_index = (np.max(total_energy)-np.min(total_energy)) \
 				              /np.mean(total_energy)
 \end{python}
@@ -287,6 +289,13 @@ In the ideal world this index almost vanishes.
 
 \begin{figure}[h]
 \centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Task4/Figure_0}
+\caption{Polar coordinates.}
+\label{pl:PolarPlot1}
+\end{minipage}
+\hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_3}
@@ -357,7 +366,7 @@ From figure \ref{pl:njacs_nsteps1} it can be seen that the number of jacobian ev
 \end{figure}
 
 \subsection*{Testing the parameter rtol}
-We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^2$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). If one compares figures the instability index for $k\approx100$ in figure \ref{pl:stability1} with the instability index in figure \ref{pl:stability2} one sees that setting the \pyth{rtol} parameter makes the result significantly worse.
+We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). If one compares figures the instability index for $k\approx10^3$ in figure \ref{pl:stability1} with the instability index in figure \ref{pl:stability2} one sees that setting the \pyth{rtol} parameter makes the result significantly worse.
 
 \begin{figure}[h]
 \centering
@@ -407,6 +416,35 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 
 \subsection*{Testing the parameter atol}
 
+If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we once again get an instability index that is significantly above the value for the method in which we did not specify this value as can be seen in Figure \ref{pl:stability3}. In either case we observe that fixing the tolerance seems to come at the cost of energy conversation as can be seen in the Figures \ref{pl:energy2} and \ref{pl:energy3}.
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Task4/Figure_404}
+\caption{instability index in relation to the parameter \pyth{atol}.}
+\label{pl:stability3}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Task4/Figure_450}
+\caption{Energy plot for $k=10^3$ with \pyth{atol=1E-2}.}
+\label{pl:energy2}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Task4/Figure_451}
+\caption{Energy plot for $k=10^3$.}
+\label{pl:energy3}
+\end{minipage}
+\end{figure}
 
 
 \nocite{*}
