@@ -5,7 +5,7 @@ import matplotlib.pyplot as mpl
 import math
 
 
-def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
+def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
     """
     """
 
@@ -38,11 +38,11 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
     t, y = sim.simulate(tfinal)
 
     # calculate the energy
-    pot_energy = 1+y[:,1]
-    kin_energy = np.linalg.norm(y[:,2:4], axis=1)**2/2.
-    elast_energy = k*(1-np.linalg.norm(y[:,0:2], axis=1))**2 /2.
-    total_energy = pot_energy+kin_energy+elast_energy
-    stability_index = (np.max(total_energy)-np.min(total_energy))/np.mean(total_energy)
+    pot_energy = 1 + y[:, 1]
+    kin_energy = np.linalg.norm(y[:, 2:4], axis=1) ** 2 / 2.
+    elast_energy = k * (1 - np.linalg.norm(y[:, 0:2], axis=1)) ** 2 / 2.
+    total_energy = pot_energy + kin_energy + elast_energy
+    stability_index = (np.max(total_energy) - np.min(total_energy)) / np.mean(total_energy)
 
     # Plot
     if with_plots:
@@ -66,18 +66,19 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
         mpl.legend()
         mpl.show()
         # Polar Coordiantes
-        mpl.plot(t, np.sqrt( y[:, 0] ** 2 + y[:, 1] ** 2))
-        mpl.plot(t, np.arctan2(y[:, 1], y[:, 0]) + math.pi/2)
+        mpl.plot(t, np.sqrt(y[:, 0] ** 2 + y[:, 1] ** 2))
+        mpl.plot(t, np.arctan2(y[:, 1], y[:, 0]) + math.pi / 2)
         mpl.xlabel(r'$t$')
         mpl.legend([r'$r$', r'$theta$'])
         mpl.title('Polar Coordinates')
         mpl.show()
     return mod, sim, stability_index
 
+
 def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=False, savefig=False):
     ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails', 'instability index']
     for i in range(5):
-        mpl.figure(plotnumber+i, clear=False)
+        mpl.figure(plotnumber + i, clear=False)
         if semilogx:
             mpl.semilogx(xdata, ydata[i], label=plotlabel)
         else:
@@ -86,25 +87,25 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
         if savefig:
-            mpl.savefig(f'../Plots/Task4/Figure_{plotnumber+i}.pdf')
+            mpl.savefig(f'../Plots/Task4/Figure_{plotnumber + i}.pdf')
     ylabels = ['nfcns / nsteps', 'njacs / nsteps', 'nerrfails / nsteps']
     for i in range(3):
-        mpl.figure(plotnumber+10+i, clear=False)
+        mpl.figure(plotnumber + 10 + i, clear=False)
         if semilogx:
-            mpl.semilogx(xdata, np.asarray(ydata[i+1]) / np.asarray(ydata[0]), label=plotlabel)
+            mpl.semilogx(xdata, np.asarray(ydata[i + 1]) / np.asarray(ydata[0]), label=plotlabel)
         else:
             mpl.plot(xdata, np.asarray(ydata[i + 1]) / np.asarray(ydata[0]), label=plotlabel)
         mpl.legend()
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
         if savefig:
-            mpl.savefig(f'../Plots/Task4/Figure_{plotnumber+10+i}.pdf')
+            mpl.savefig(f'../Plots/Task4/Figure_{plotnumber + 10 + i}.pdf')
 
 
 if __name__ == '__main__':
     run_elastic_pendulum_problem()
 
-    maxords = {'BDF': [3,4,5], 'Adams': [3,6,12]}
+    maxords = {'BDF': [3, 4, 5], 'Adams': [3, 6, 12]}
     for discr in ['BDF', 'Adams']:
         for maxord in maxords[discr]:
             ks = []
@@ -116,7 +117,8 @@ if __name__ == '__main__':
             for k in range(1, int(1E3), int(1E2)):
                 # Test ATOL
                 ks.append(k)
-                mod, sim, stability_index = run_elastic_pendulum_problem(discr=discr, maxord=maxord, k=k, with_plots=False)
+                mod, sim, stability_index = run_elastic_pendulum_problem(discr=discr, maxord=maxord, k=k,
+                                                                         with_plots=False)
                 stats = sim.get_statistics()
                 nsteps.append(stats.__getitem__('nsteps'))
                 nfcns.append(stats.__getitem__('nfcns'))
@@ -129,8 +131,7 @@ if __name__ == '__main__':
                        xlabel=r'$k$', plotlabel=f'discr={discr}, maxord={maxord}', plotnumber=200,
                        savefig=True)
 
-
-        rtols = np.logspace(1E-8,1,10)
+        rtols = np.logspace(1E-8, 1, 10)
         nsteps = []
         nfcns = []
         njacs = []
@@ -148,11 +149,10 @@ if __name__ == '__main__':
 
         # Plot the whole lot
         plot_stats(rtols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
-                   xlabel='rtol', plotlabel=f'discr={discr}',plotnumber=300, semilogx=True,
+                   xlabel='rtol', plotlabel=f'discr={discr}', plotnumber=300, semilogx=True,
                    savefig=True)
 
-
-        atols = np.logspace(1E-8,1,10)
+        atols = np.logspace(1E-8, 1, 10)
         nsteps = []
         nfcns = []
         njacs = []
@@ -170,6 +170,6 @@ if __name__ == '__main__':
 
         # Plot the whole lot
         plot_stats(atols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
-                   xlabel='atol', plotlabel=f'discr={discr}',plotnumber=400, semilogx=True,
+                   xlabel='atol', plotlabel=f'discr={discr}', plotnumber=400, semilogx=True,
                    savefig=True)
-    #mpl.show()
+    # mpl.show()
