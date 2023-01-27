@@ -65,7 +65,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
         mpl.show()
     return mod, sim, stability_index
 
-def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=False):
+def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=False, savefig=False):
     ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails', 'instability index']
     for i in range(5):
         mpl.figure(plotnumber+i, clear=False)
@@ -76,6 +76,8 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=
         mpl.legend()
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
+        if savefig:
+            mpl.savefig(f'../Plots/Figure_{plotnumber+i}.svg')
     ylabels = ['nfcns / nsteps', 'njacs / nsteps', 'nerrfails / nsteps']
     for i in range(3):
         mpl.figure(plotnumber+10+i, clear=False)
@@ -86,6 +88,8 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=
         mpl.legend()
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
+        if savefig:
+            mpl.savefig(f'../Plots/Figure_{plotnumber+10+i}.svg')
 
 
 if __name__ == '__main__':
@@ -112,7 +116,9 @@ if __name__ == '__main__':
                 stability_indexs.append(stability_index)
 
             # Plot the whole lot
-            plot_stats(ks, [nsteps, nfcns, njacs, nerrfails, stability_indexs], xlabel=r'$k$', plotlabel=f'discr={discr}, maxord={maxord}', plotnumber=200)
+            plot_stats(ks, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
+                       xlabel=r'$k$', plotlabel=f'discr={discr}, maxord={maxord}', plotnumber=200,
+                       savefig=True)
 
 
         rtols = np.logspace(1E-8,1,10)
@@ -133,7 +139,8 @@ if __name__ == '__main__':
 
         # Plot the whole lot
         plot_stats(rtols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
-                   xlabel='rtol', plotlabel=f'rtols, discr={discr}',plotnumber=300, semilogx=True)
+                   xlabel='rtol', plotlabel=f'rtols, discr={discr}',plotnumber=300, semilogx=True,
+                   savefig=True)
 
 
         atols = np.logspace(1E-8,1,10)
@@ -154,5 +161,6 @@ if __name__ == '__main__':
 
         # Plot the whole lot
         plot_stats(atols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
-                   xlabel='atol', plotlabel=f'atol, discr={discr}',plotnumber=400, semilogx=True)
-    mpl.show()
+                   xlabel='atol', plotlabel=f'atol, discr={discr}',plotnumber=400, semilogx=True,
+                   savefig=True)
+    #mpl.show()
