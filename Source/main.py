@@ -2,6 +2,7 @@ import numpy as np
 from assimulo.problem import Explicit_Problem
 from assimulo.solvers import CVode
 import matplotlib.pyplot as mpl
+import math
 
 
 def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
@@ -10,7 +11,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
 
     # Define the rhs
     def rhs(t, y):
-        yd = np.zeros(np.shape(y)
+        yd = np.zeros(np.shape(y))
         yd[0:2] = y[2:4]
         norm_y = np.linalg.norm(y[0:2])
         lam = k * (norm_y - 1) / norm_y
@@ -48,6 +49,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
         for i in range(y.shape[1]):
             mpl.plot(t, y[:, i])
         mpl.legend([r'$y_1$', r'$y_2$', r'$\dot{y}_1$', r'$\dot{y}_2$'])
+        mpl.title('Cartesian Coordinates')
         mpl.show()
         mpl.plot(y[:, 0], y[:, 1])
         mpl.xlabel(r'$y_1$')
@@ -62,6 +64,13 @@ def run_elastic_pendulum_problem(with_plots=True, k=1, atol=1E-6, rtol=1E-6, max
         mpl.xlabel(r'$t$')
         mpl.ylabel(r'Energy')
         mpl.legend()
+        mpl.show()
+        # Polar Coordiantes
+        mpl.plot(t, np.sqrt( y[:, 0] ** 2 + y[:, 1] ** 2))
+        mpl.plot(t, np.arctan2(y[:, 1], y[:, 0]) + math.pi/2)
+        mpl.xlabel(r'$t$')
+        mpl.legend([r'$r$', r'$theta$'])
+        mpl.title('Polar Coordinates')
         mpl.show()
     return mod, sim, stability_index
 
