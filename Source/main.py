@@ -86,7 +86,7 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
         if savefig:
-            mpl.savefig(f'../Plots/Figure_{plotnumber+i}.pdf')
+            mpl.savefig(f'../Plots/Task4/Figure_{plotnumber+i}.pdf')
     ylabels = ['nfcns / nsteps', 'njacs / nsteps', 'nerrfails / nsteps']
     for i in range(3):
         mpl.figure(plotnumber+10+i, clear=False)
@@ -98,7 +98,7 @@ def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=
         mpl.ylabel(ylabels[i])
         mpl.xlabel(xlabel)
         if savefig:
-            mpl.savefig(f'../Plots/Figure_{plotnumber+10+i}.pdf')
+            mpl.savefig(f'../Plots/Task4/Figure_{plotnumber+10+i}.pdf')
 
 
 if __name__ == '__main__':
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
         # Plot the whole lot
         plot_stats(rtols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
-                   xlabel='rtol', plotlabel=f'rtols, discr={discr}',plotnumber=300, semilogx=True,
+                   xlabel='rtol', plotlabel=f'discr={discr}',plotnumber=300, semilogx=True,
                    savefig=True)
 
 
@@ -170,6 +170,6 @@ if __name__ == '__main__':
 
         # Plot the whole lot
         plot_stats(atols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
-                   xlabel='atol', plotlabel=f'atol, discr={discr}',plotnumber=400, semilogx=True,
+                   xlabel='atol', plotlabel=f'discr={discr}',plotnumber=400, semilogx=True,
                    savefig=True)
     #mpl.show()
