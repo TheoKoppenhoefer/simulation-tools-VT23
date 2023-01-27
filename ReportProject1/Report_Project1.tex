@@ -276,7 +276,7 @@ We can calculate the potential, kinetic and approximate the elastic energy with 
 \end{align*}
 Adding these up we get the approximate total energy
 \begin{align*}
-	E_{\text{tot}}=E_{\text{pot}}+E_{\text{tot}}+E_{\text{tot}}\,.
+	E_{\text{tot}}=E_{\text{pot}}+E_{\text{kin}}+E_{\text{elast}}\,.
 \end{align*}
 We expect the approximate total energy to be constant which indeed can be seen in Figure \ref{pl:EnergyPlot1} for that previously calculated numerical solution.
 Because of this property we can use the relative variation of the approximate total energy as an index to measure the stability of the method. We specifically implement
@@ -333,7 +333,7 @@ It can be observed that for a step size of $h=0.01$ Explicit Eurler (Figure \ref
 \end{minipage}
 \end{figure}
 	
-For Explicit Euler (Figure \ref{exp_euler_k=50_h=0.001_c}), by keeping the value of $k$ constant and reducing the step size by a decimal place we can see how the instability is attenuated presenting a similar amplitude over time.
+For Explicit Euler (Figure \ref{exp_euler_k=50_h=0.001_c_2}), by keeping the value of $k$ constant and reducing the step size by a decimal place we can see how the instability is attenuated presenting a similar amplitude over time.
 It takes a much larger step size and spring constant for RK4 to become unstable (Figure \ref{rk4_h=0.1_k=975_c}), once unstabilized it’s growth is much more rapid than Explicit Euler’s and it does so without oscillating.
 
 \begin{figure}[h]
@@ -342,7 +342,7 @@ It takes a much larger step size and spring constant for RK4 to become unstable 
 \centering
 \includegraphics[width=\textwidth]{../Plots/ExpEuler/exp_euler_k=50_h=0.001_c}
 \caption{Explicit Euler $h=0.001$ $k=50$}
-\label{exp_euler_k=50_h=0.001_c}
+\label{exp_euler_k=50_h=0.001_c_2}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.45\textwidth}
