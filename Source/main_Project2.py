@@ -1,12 +1,15 @@
 import numpy as np
-from assimulo.problem import Explicit_Problem
 from assimulo.solvers import IDA
 from squeezer import Seven_bar_mechanism
 from squeezer2 import Seven_bar_mechanism_indx2
 from squeezer1 import Seven_bar_mechanism_indx1
 import matplotlib.pyplot as mpl
-import math
 
+
+var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega$', r'$\epsilon$',
+              r'$\dot{\beta}$', r'$\dot{\Theta}$', r'$\dot{\phi}$', r'$\dot{\delta}$', r'$\dot{\omega}$',
+              r'$\dot{\Omega}$', r'$\dot{\epsilon}$', r'$\lambda_1$', r'$\lambda_2$', r'$\lambda_3$',
+              r'$\lambda_4$', r'$\lambda_5$', r'$\lambda_6$', r'$\lambda_7$']
 
 def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lambda=1E5,
                           algvar_v=False, algvar_lambda=False):
@@ -42,10 +45,6 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lam
     # Plot
     if with_plots:
         # do some plotting
-        var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega', r'$\epsilon$',
-                      r'$\dot{\beta}$', r'$\dot{\Theta}$', r'$\dot{\phi}$', r'$\dot{\delta}$', r'$\dot{\omega}$',
-                      r'$\dot{\Omega}$', r'$\dot{\epsilon}$', r'$\lambda_1$', r'$\lambda_2$', r'$\lambda_3$',
-                      r'$\lambda_4$', r'$\lambda_5$', r'$\lambda_6$', r'$\lambda_7$']
         for i in range(7):
             mpl.plot(t, y[:, i])
         mpl.legend(var_labels[:7])

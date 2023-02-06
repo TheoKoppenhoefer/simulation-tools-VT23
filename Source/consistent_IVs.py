@@ -3,7 +3,8 @@ import scipy.linalg
 
 from BDFk_Assimulo import classical_newton_optimisation
 from numpy import array, zeros, dot, hstack, sin, cos, sqrt
-import numpy as np
+from tabulate import tabulate
+from main_Project2 import var_labels
 
 
 def squeezer_g(p):
@@ -146,15 +147,18 @@ if __name__ == '__main__':
     """
     Calculate consistent initial values according to Hairer, p.535f
     """
+    y = zeros((20,))
     squeezer_g_vec = lambda x: np.transpose(np.vectorize(squeezer_g, signature='(6)->(6)')(x))
     p_bar, its = classical_newton_optimisation(squeezer_g_vec, zeros((6,)))
-    p = hstack((p_bar[0], zeros((1,)), p_bar[1:]))
-    [M, Gp, f] = squeezer_M_Gp_f(p, zeros((7,)))
+    y[0] = p_bar[0]
+    y[2:7] = p_bar[1:]
+    [M, Gp, f] = squeezer_M_Gp_f(y[:7], zeros((7,)))
     # Assemble A
     A = zeros((13,13))
     A[:7,:7] = M
     A[:7,7:] = np.transpose(Gp)
     A[7:,:7] = Gp
     b = hstack((f, zeros((6,))))
-    y = scipy.linalg.solve(A, b)
-    print(f'p = {p}, \n y = {y}, \n newton iterations={its}')
+    y[7:] = scipy.linalg.solve(A, b)
+    print(f'We have determined the following initial values \n',
+          tabulate(list(zip(var_labels, y)), headers='firstrow', tablefmt='fancy_grid'))
