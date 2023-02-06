@@ -107,16 +107,17 @@ class Seven_bar_mechanism_indx1(Seven_bar_mechanism):
         gp[5, 6] = - zf * coomep - u * siep
 
         # Index-1 constraints
-        gqq = array([-rr*cobe*v[0]**2+d*cobeth*(v[1]+v[2])**2+ss*siga*v[3]**2,
-                     -rr*sibe*v[0]**2+d*sibeth*(v[1]+v[2])**2-ss*coga*v[3]**2,
-                     -rr*cobe*v[1]**2+d*cobeth*(v[1]+v[2])**2
-                        +e*siphde*(v[4]+v[5])**2+zt*code*v[5]**2,
-                     -rr*sibe*v[1]**2+d*sibeth*(v[1]+v[2])**2
-                        -e*cophde*(v[4]+v[5])**2+zt*side*v[5]**2,
-                     -rr*cobe*v[1]**2+d*cobeth*(v[1]+v[2])**2
-                        +zf*coomep*(v[6]+v[7])**2+u*siep*v[7]**2,
-                     -rr*sibe*v[1]**2+d*sibeth*(v[1]+v[2])**2
-                        +zf*siomep*(v[6]+v[7])**2-u*coep*v[7]**2])
+        v = yp[:7]
+        gqq = array([-rr*cobe*v[0]**2+d*cobeth*(v[0]+v[1])**2+ss*siga*v[2]**2,
+                     -rr*sibe*v[0]**2+d*sibeth*(v[0]+v[1])**2-ss*coga*v[2]**2,
+                     -rr*cobe*v[0]**2+d*cobeth*(v[0]+v[1])**2
+                        +e*siphde*(v[3]+v[4])**2+zt*code*v[4]**2,
+                     -rr*sibe*v[0]**2+d*sibeth*(v[0]+v[1])**2
+                        -e*cophde*(v[3]+v[4])**2+zt*side*v[4]**2,
+                     -rr*cobe*v[0]**2+d*cobeth*(v[0]+v[1])**2
+                        +zf*coomep*(v[5]+v[6])**2+u*siep*v[6]**2,
+                     -rr*sibe*v[0]**2+d*sibeth*(v[0]+v[1])**2
+                        +zf*siomep*(v[5]+v[6])**2-u*coep*v[6]**2])
 
         #     Construction of the residual
         res_1 = yp[0:7] - y[7:14]
