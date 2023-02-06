@@ -11,7 +11,6 @@ class Seven_bar_mechanism_indx1(Seven_bar_mechanism):
 	"""
     problem_name = 'Woodpecker w/o friction (index 1)'
 
-
     def res(self, t, y, yp):
         """
 		Residual function of the 7-bar mechanism in
@@ -108,16 +107,16 @@ class Seven_bar_mechanism_indx1(Seven_bar_mechanism):
 
         # Index-1 constraints
         v = yp[:7]
-        gqq = array([-rr*cobe*v[0]**2+d*cobeth*(v[0]+v[1])**2+ss*siga*v[2]**2,
-                     -rr*sibe*v[0]**2+d*sibeth*(v[0]+v[1])**2-ss*coga*v[2]**2,
-                     -rr*cobe*v[0]**2+d*cobeth*(v[0]+v[1])**2
-                        +e*siphde*(v[3]+v[4])**2+zt*code*v[4]**2,
-                     -rr*sibe*v[0]**2+d*sibeth*(v[0]+v[1])**2
-                        -e*cophde*(v[3]+v[4])**2+zt*side*v[4]**2,
-                     -rr*cobe*v[0]**2+d*cobeth*(v[0]+v[1])**2
-                        +zf*coomep*(v[5]+v[6])**2+u*siep*v[6]**2,
-                     -rr*sibe*v[0]**2+d*sibeth*(v[0]+v[1])**2
-                        +zf*siomep*(v[5]+v[6])**2-u*coep*v[6]**2])
+        gqq = array([-rr * cobe * v[0] ** 2 + d * cobeth * (v[0] + v[1]) ** 2 + ss * siga * v[2] ** 2,
+                     -rr * sibe * v[0] ** 2 + d * sibeth * (v[0] + v[1]) ** 2 - ss * coga * v[2] ** 2,
+                     -rr * cobe * v[0] ** 2 + d * cobeth * (v[0] + v[1]) ** 2
+                     + e * siphde * (v[3] + v[4]) ** 2 + zt * code * v[4] ** 2,
+                     -rr * sibe * v[0] ** 2 + d * sibeth * (v[0] + v[1]) ** 2
+                     - e * cophde * (v[3] + v[4]) ** 2 + zt * side * v[4] ** 2,
+                     -rr * cobe * v[0] ** 2 + d * cobeth * (v[0] + v[1]) ** 2
+                     + zf * coomep * (v[5] + v[6]) ** 2 + u * siep * v[6] ** 2,
+                     -rr * sibe * v[0] ** 2 + d * sibeth * (v[0] + v[1]) ** 2
+                     + zf * siomep * (v[5] + v[6]) ** 2 - u * coep * v[6] ** 2])
 
         #     Construction of the residual
         res_1 = yp[0:7] - y[7:14]
