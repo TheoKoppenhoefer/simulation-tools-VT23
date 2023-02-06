@@ -123,6 +123,7 @@ def finite_difference_gradient(func, x, delta_x=1e-6):
     return (func(temp_arr+delta_x*np.eye(dim))-func(temp_arr-delta_x*np.eye(dim)))/(2*delta_x)
 
 
+
 def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1E-6, maxiter=100):
     """
 

@@ -33,9 +33,9 @@ def run_seven_bar_problem(with_plots=True):
     # Plot
     if with_plots:
         # do some plotting
-        var_labels = [r'$\beta$', r'$\theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\omega$', r'$\epsilon$',
-                      r'$\dot{\beta}$', r'$\dot{\theta}$', r'$\dot{\phi}$', r'$\dot{\delta}$', r'$\dot{\omega}$',
-                      r'$\dot{\omega}$', r'$\dot{\epsilon}$', r'$\lambda_1$', r'$\lambda_2$', r'$\lambda_3$',
+        var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega', r'$\epsilon$',
+                      r'$\dot{\beta}$', r'$\dot{\Theta}$', r'$\dot{\phi}$', r'$\dot{\delta}$', r'$\dot{\omega}$',
+                      r'$\dot{\Omega}$', r'$\dot{\epsilon}$', r'$\lambda_1$', r'$\lambda_2$', r'$\lambda_3$',
                       r'$\lambda_4$', r'$\lambda_5$', r'$\lambda_6$', r'$\lambda_7$']
         for i in range(7):
             mpl.plot(t, y[:, i])

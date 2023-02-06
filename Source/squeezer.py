@@ -67,12 +67,13 @@ class Seven_bar_mechanism(ap.Implicit_Problem):
         lamb = y[14:20]
         sibe, sith, siga, siph, side, siom, siep = sin(y[0:7])
         cobe, coth, coga, coph, code, coom, coep = cos(y[0:7])
-        sibeth = sin(beta + theta);
+        sibeth = sin(beta + theta)
         cobeth = cos(beta + theta)
-        siphde = sin(phi + delta);
+        siphde = sin(phi + delta)
         cophde = cos(phi + delta)
-        siomep = sin(omega + epsilon);
+        siomep = sin(omega + epsilon)
         coomep = cos(omega + epsilon)
+
         # Mass matrix
         m = zeros((7, 7))
         m[0, 0] = m1 * ra ** 2 + m2 * (rr ** 2 - 2 * da * rr * coth + da ** 2) + i1 + i2
@@ -87,7 +88,6 @@ class Seven_bar_mechanism(ap.Implicit_Problem):
         m[6, 6] = m6 * ((zf - fa) ** 2 - 2 * u * (zf - fa) * siom + u ** 2) + m7 * (ua ** 2 + ub ** 2) + i6 + i7
 
         #   Applied forces
-
         xd = sd * coga + sc * siga + xb
         yd = sd * siga - sc * coga + yb
         lang = sqrt((xd - xc) ** 2 + (yd - yc) ** 2)
@@ -104,9 +104,7 @@ class Seven_bar_mechanism(ap.Implicit_Problem):
             m6 * u * (zf - fa) * omp * (omp + 2 * epp) * coom])
 
         #  constraint matrix  G
-
         gp = zeros((6, 7))
-
         gp[0, 0] = - rr * sibe + d * sibeth
         gp[0, 1] = d * sibeth
         gp[0, 2] = - ss * coga
