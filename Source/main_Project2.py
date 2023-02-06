@@ -8,23 +8,30 @@ import matplotlib.pyplot as mpl
 import math
 
 
-def run_seven_bar_problem(with_plots=True):
+def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lambda=1E5,
+                          algvar_v=False, algvar_lambda=False):
     """
     """
     tfinal = 0.03  # Specify the final time
-    mod = Seven_bar_mechanism_indx1()
 
-    # Define an explicit solver
+    if problem_index == 3:
+        mod = Seven_bar_mechanism()
+    elif problem_index == 2:
+        mod = Seven_bar_mechanism_indx2()
+    else:
+        mod = Seven_bar_mechanism_indx1()
+
+    # Define an implicit solver
     sim = IDA(mod)
-
 
     # Set the parameters
     atol = 1E-6*np.ones((20,))
-    atol[14:20] = 1E5
+    atol[7:14] = atol_v
+    atol[14:20] = atol_lambda
     sim.atol = atol
-    # Remove lambdas from the error test
-    algvar = np.zeros((20,))
-    algvar[14:20] = 1
+    algvar = np.ones((20,))
+    algvar[7:14] = algvar_v
+    algvar[14:20] = algvar_lambda
     sim.algvar = algvar
     sim.suppress_alg = True
 

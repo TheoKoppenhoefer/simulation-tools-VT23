@@ -9,7 +9,7 @@ class Seven_bar_mechanism_indx2(Seven_bar_mechanism):
 	A class which describes the squezzer according to
 	Hairer, Vol. II, p. 533 ff, see also formula (7.11)
 	"""
-    problem_name = 'Woodpecker w/o friction'
+    problem_name = 'Woodpecker w/o friction (index 2)'
 
 
     def res(self, t, y, yp):
