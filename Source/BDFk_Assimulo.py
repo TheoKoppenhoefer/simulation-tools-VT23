@@ -124,7 +124,7 @@ def finite_difference_gradient(func, x, delta_x=1e-6):
 
 
 
-def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1E-6, maxiter=100):
+def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1E-6, finitediff_eps=1E-6, maxiter=100):
     """
 
     :param objective:
@@ -133,7 +133,7 @@ def classical_newton_optimisation(objective, x0, cauchy_eps=1E-6, residual_eps=1
     :param maxiter:
     :return:
     """
-    gradient = lambda x: finite_difference_gradient(objective, x)
+    gradient = lambda x: finite_difference_gradient(objective, x, delta_x=finitediff_eps)
     xk = x0
     for i in range(maxiter):
         gk = objective(xk)

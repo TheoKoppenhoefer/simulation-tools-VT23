@@ -146,10 +146,16 @@ if __name__ == '__main__':
     """
     Calculate consistent initial values according to Hairer, p.535f
     """
-    p_bar = classical_newton_optimisation(np.vectorize(squeezer_g, signature='(6)->(6)'), zeros((6,)))
+    x0 = zeros((6,))
+    squeezer_g_vec = lambda x: np.transpose(np.vectorize(squeezer_g, signature='(6)->(6)')(x))
+    p_bar, its = classical_newton_optimisation(squeezer_g_vec, x0, finitediff_eps=1E-6)
     p = hstack((p_bar[0], zeros((1,)), p_bar[1:]))
     [M, Gp, f] = squeezer_M_Gp_f(p, zeros((7,)))
-    A = array([[M, np.transpose(Gp)], [Gp, np.zeros((6, 6))]])
+    # Assemble A
+    A = zeros((13,13))
+    A[:7,:7] = M
+    A[:7,7:] = np.transpose(Gp)
+    A[7:,:7] = Gp
     b = hstack((f, zeros((6,))))
     y = scipy.linalg.solve(A, b)
-    print(f'y = {y}')
+    print(f'p = {p}, y = {y}, newton iterations={its}')
