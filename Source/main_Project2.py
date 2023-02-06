@@ -2,6 +2,7 @@ import numpy as np
 from assimulo.problem import Explicit_Problem
 from assimulo.solvers import IDA
 from squeezer import Seven_bar_mechanism
+from squeezer2 import Seven_bar_mechanism_indx2
 import matplotlib.pyplot as mpl
 import math
 
@@ -10,7 +11,7 @@ def run_seven_bar_problem(with_plots=True):
     """
     """
     tfinal = 0.03  # Specify the final time
-    mod = Seven_bar_mechanism()
+    mod = Seven_bar_mechanism_indx2()
 
     # Define an explicit solver
     sim = IDA(mod)
