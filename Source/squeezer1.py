@@ -4,7 +4,7 @@ from numpy import array, zeros, dot, hstack, sin, cos, sqrt
 from squeezer import Seven_bar_mechanism
 
 
-class Seven_bar_mechanism_indx2(Seven_bar_mechanism):
+class Seven_bar_mechanism_indx1(Seven_bar_mechanism):
     """
 	A class which describes the squezzer according to
 	Hairer, Vol. II, p. 533 ff, see also formula (7.11)
@@ -106,9 +106,21 @@ class Seven_bar_mechanism_indx2(Seven_bar_mechanism):
         gp[5, 5] = - zf * coomep
         gp[5, 6] = - zf * coomep - u * siep
 
-        #     Construction of the residual with Index-2 constraint
+        # Index-1 constraints
+        gqq = array([-rr*cobe*v[0]**2+d*cobeth*(v[1]+v[2])**2+ss*siga*v[3]**2,
+                     -rr*sibe*v[0]**2+d*sibeth*(v[1]+v[2])**2-ss*coga*v[3]**2,
+                     -rr*cobe*v[1]**2+d*cobeth*(v[1]+v[2])**2
+                        +e*siphde*(v[4]+v[5])**2+zt*code*v[5]**2,
+                     -rr*sibe*v[1]**2+d*sibeth*(v[1]+v[2])**2
+                        -e*cophde*(v[4]+v[5])**2+zt*side*v[5]**2,
+                     -rr*cobe*v[1]**2+d*cobeth*(v[1]+v[2])**2
+                        +zf*coomep*(v[6]+v[7])**2+u*siep*v[7]**2,
+                     -rr*sibe*v[1]**2+d*sibeth*(v[1]+v[2])**2
+                        +zf*siomep*(v[6]+v[7])**2-u*coep*v[7]**2])
+
+        #     Construction of the residual
         res_1 = yp[0:7] - y[7:14]
         res_2 = dot(m, yp[7:14]) - ff[0:7] + dot(gp.T, lamb)
-        res_3 = dot(gp, yp[0:7])
+        res_3 = gqq + dot(gp, yp[7:14])
 
         return hstack((res_1, res_2, res_3))
