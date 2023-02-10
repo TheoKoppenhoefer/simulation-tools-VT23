@@ -1,8 +1,8 @@
 import numpy as np
-from assimulo.solvers import IDA
+from assimulo.solvers import IDA, RungeKutta4, CVode
 from squeezer import Seven_bar_mechanism
 from squeezer2 import Seven_bar_mechanism_indx2
-from squeezer1 import Seven_bar_mechanism_indx1
+from squeezer1 import Seven_bar_mechanism_indx1, Seven_bar_mechanism_expl
 import matplotlib.pyplot as mpl
 
 
@@ -17,29 +17,40 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lam
     """
     tfinal = 0.03  # Specify the final time
 
-    if problem_index == 3:
-        mod = Seven_bar_mechanism()
+    if problem_index <= 0:
+        mod = Seven_bar_mechanism_expl()
+    elif problem_index == 1:
+        mod = Seven_bar_mechanism_indx1()
     elif problem_index == 2:
         mod = Seven_bar_mechanism_indx2()
     else:
-        mod = Seven_bar_mechanism_indx1()
+        mod = Seven_bar_mechanism()
 
-    # Define an implicit solver
-    sim = IDA(mod)
+    if problem_index <= 0:
+        # Define an explicit solver
+        sim = CVode(mod)
 
-    # Set the parameters
-    atol = 1E-6*np.ones((20,))
-    atol[7:14] = atol_v
-    atol[14:20] = atol_lambda
-    sim.atol = atol
-    algvar = np.ones((20,))
-    algvar[7:14] = algvar_v
-    algvar[14:20] = algvar_lambda
-    sim.algvar = algvar
-    sim.suppress_alg = True
+        # Set the parameters
 
-    # Simulate
-    t, y, yd = sim.simulate(tfinal)
+        # Simulate
+        t, y = sim.simulate(tfinal)
+    else:
+        # Define an implicit solver
+        sim = IDA(mod)
+
+        # Set the parameters
+        atol = 1E-6*np.ones((20,))
+        atol[7:14] = atol_v
+        atol[14:20] = atol_lambda
+        sim.atol = atol
+        algvar = np.ones((20,))
+        algvar[7:14] = algvar_v
+        algvar[14:20] = algvar_lambda
+        sim.algvar = algvar
+        sim.suppress_alg = True
+
+        # Simulate
+        t, y, yd = sim.simulate(tfinal)
 
 
     # Plot
@@ -53,13 +64,14 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lam
             mpl.plot(t, y[:, i])
         mpl.legend(var_labels[7:14])
         mpl.figure()
-        for i in range(14,20):
-            mpl.plot(t, y[:, i])
-        mpl.legend(var_labels[14:])
+        if problem_index > 0:
+            for i in range(14,20):
+                mpl.plot(t, y[:, i])
+            mpl.legend(var_labels[14:])
         mpl.show()
     return mod, sim
 
 
 
 if __name__ == '__main__':
-    run_seven_bar_problem()
+    run_seven_bar_problem(problem_index=0)

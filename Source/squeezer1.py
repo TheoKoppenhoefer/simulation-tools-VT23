@@ -135,7 +135,7 @@ class Seven_bar_mechanism_expl(ap.Explicit_Problem):
     problem_name = 'Woodpecker w/o friction (index 1, explicit)'
 
     def __init__(self):
-        y0,  = self.init_squeezer()
+        y0,_  = self.init_squeezer()
         self.y0 = y0[:14]
 
     def init_squeezer(self):
@@ -263,8 +263,9 @@ class Seven_bar_mechanism_expl(ap.Explicit_Problem):
 
         # Solve that equation system
         def g(x):
+            # We have yd = x[:7], lambda = x[7:]
             return hstack((dot(m, x[:7]) - ff[0:7] + dot(gp.T, x[7:]), gqq + dot(gp, x[:7])))
-        yp = fsolve(g, hstack(y[7:], zeros((7,))))
+        yp = fsolve(g, hstack((y[7:], zeros((6,)))))
 
         #     Construction of the rhs
         return hstack((y[7:14], yp[:7]))
