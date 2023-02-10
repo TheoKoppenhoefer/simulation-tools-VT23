@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-import assimulo.implicit_ode as ai
 import assimulo.problem as ap
-from scipy import *
 from numpy import array, zeros, dot, hstack, sin, cos, sqrt
 
 
