@@ -154,11 +154,11 @@ if __name__ == '__main__':
     y[2:7] = p_bar[1:]
     [M, Gp, f] = squeezer_M_Gp_f(y[:7], zeros((7,)))
     # Assemble A
-    A = zeros((13,13))
-    A[:7,:7] = M
-    A[:7,7:] = np.transpose(Gp)
-    A[7:,:7] = Gp
+    A = zeros((13, 13))
+    A[:7, :7] = M
+    A[:7, 7:] = np.transpose(Gp)
+    A[7:, :7] = Gp
     b = hstack((f, zeros((6,))))
     y[7:] = scipy.linalg.solve(A, b)
-    print(f'We have determined the following initial values \n',
-          tabulate(list(zip(var_labels, y)), headers='firstrow', tablefmt='fancy_grid'))
+    print(f'We have determined the following initial values in {its} iterations:')
+    print(tabulate(list(zip(var_labels, y)), headers='firstrow', tablefmt='fancy_grid'))

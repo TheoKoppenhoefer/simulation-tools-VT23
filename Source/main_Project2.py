@@ -90,9 +90,9 @@ def plot_stats(xdata, ydata, plotnumber=100, savefig=False):
 
 
 if __name__ == '__main__':
-    # run_seven_bar_problem(False, 1, 1E5, 1E5, False, False, True)
+    run_seven_bar_problem(True, 2, 1E5, 1E5, False, False, True)
 
-    if True:
+    if False:
         # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
         experiments = [[1, 1E5, 1E5, False, False, True],
                        [1, 1E-6, 1E5, False, True, True],
