@@ -1,8 +1,6 @@
 import numpy as np
 from assimulo.solvers import IDA, RungeKutta4, CVode
-from squeezer import Seven_bar_mechanism
-from squeezer2 import Seven_bar_mechanism_indx2
-from squeezer1 import Seven_bar_mechanism_indx1, Seven_bar_mechanism_expl
+from squeezer import Seven_bar_mechanism_indx3, Seven_bar_mechanism_indx2, Seven_bar_mechanism_indx1, Seven_bar_mechanism_expl
 import matplotlib.pyplot as mpl
 
 var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega$', r'$\epsilon$',
@@ -24,7 +22,7 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E-6, atol_la
     elif problem_index == 2:
         mod = Seven_bar_mechanism_indx2()
     else:
-        mod = Seven_bar_mechanism()
+        mod = Seven_bar_mechanism_indx3()
 
     if problem_index <= 0:
         # Define an explicit solver
@@ -71,11 +69,11 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E-6, atol_la
     return mod, sim
 
 
-def plot_stats(xdata, ydata, plotnumber=100, savefig=False):
+def plot_stats(xdata, ydata, plotnumber=500, savefig=False):
     ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails']
     for i in range(4):
         mpl.figure(plotnumber + i, clear=False)
-        # fig, ax = mpl.subplots()
+        # fig, ax = mpl.subplots(plotnumber + i, clear=False)
         mpl.bar(xdata, ydata[i])
         mpl.ylabel(ylabels[i])
         if savefig:
@@ -90,30 +88,26 @@ def plot_stats(xdata, ydata, plotnumber=100, savefig=False):
 
 
 if __name__ == '__main__':
-    run_seven_bar_problem(True, 2, 1E5, 1E5, False, False, True)
+    # run_seven_bar_problem(True, 3, 1E5, 1E5, False, False, True)
 
     if False:
+        # This compares the index=1,2,3 formulations
         # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
         experiments = [[1, 1E5, 1E5, False, False, True],
-                       [1, 1E-6, 1E5, False, True, True],
-                       [2, 1E-6, 1E5, False, False, True],
-                       [2, 1E-6, 1E5, False, True, True],
-                       [2, 1E-6, 1E5, False, True, True],
-                       [3, 1E5, 1E5, False, False, True],
-                       [3, 1E5, 1E-6, True, False, True]]
+                       [2, 1E5, 1E5, False, False, True],
+                       [3, 1E5, 1E5, False, False, True]]
 
         nsteps = []
         nfcns = []
         njacs = []
         nerrfails = []
         xdata = []
-        for exp in experiments:
+        for counter, exp in enumerate(experiments):
             try:
                 mod, sim = run_seven_bar_problem(False, *exp)
 
                 stats = sim.get_statistics()
-                xdata.append(
-                    f'problem_index={exp[0]} \n  atol_v={exp[1]:.0E} \n atol_lambda={exp[2]:.0E} \n algvar_v={exp[3]} \n algvar_lambda={exp[4]} \n suppress_alg={exp[5]}')
+                xdata.append(f'index {exp[0]}')
                 nsteps.append(stats.__getitem__('nsteps'))
                 nfcns.append(stats.__getitem__('nfcns'))
                 njacs.append(stats.__getitem__('njacs'))
@@ -121,5 +115,60 @@ if __name__ == '__main__':
             except:
                 print(f'There seems to be a problem in the experiment {exp}')
 
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails])
-        mpl.show()
+        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=600, savefig=True)
+
+    if False:
+        # This tests the index=1 problem
+        # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
+        experiments = [[1, 1E5, 1E5, False, False, True],
+                       [1, 1E-6, 1E5, False, True, True]]
+
+        nsteps = []
+        nfcns = []
+        njacs = []
+        nerrfails = []
+        xdata = []
+        for counter, exp in enumerate(experiments):
+            try:
+                mod, sim = run_seven_bar_problem(False, *exp)
+
+                stats = sim.get_statistics()
+                xdata.append(f'problem {counter}')
+                nsteps.append(stats.__getitem__('nsteps'))
+                nfcns.append(stats.__getitem__('nfcns'))
+                njacs.append(stats.__getitem__('njacs'))
+                nerrfails.append(stats.__getitem__('nerrfails'))
+            except:
+                print(f'There seems to be a problem in the experiment {exp}')
+
+        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True)
+
+    if False:
+        # This tests the index=2 problem
+        # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
+        experiments = [[2, 1E-6, 1E5, False, False, True],
+                       [2, 1E-6, 1E5, False, True, True],
+                       [2, 1E-6, 1E5, False, True, True]]
+
+        nsteps = []
+        nfcns = []
+        njacs = []
+        nerrfails = []
+        xdata = []
+        for counter, exp in enumerate(experiments):
+            try:
+                mod, sim = run_seven_bar_problem(False, *exp)
+
+                stats = sim.get_statistics()
+                xdata.append(f'prblm {counter}')
+                nsteps.append(stats.__getitem__('nsteps'))
+                nfcns.append(stats.__getitem__('nfcns'))
+                njacs.append(stats.__getitem__('njacs'))
+                nerrfails.append(stats.__getitem__('nerrfails'))
+            except:
+                print(f'There seems to be a problem in the experiment {exp}')
+
+        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True)
+    # mpl.show()
+
+

@@ -1,6 +1,6 @@
 
-\documentclass{scrartcl}
-% alternative article or report
+\documentclass{report}
+% alternatives: scrartcl, article or report
 
 
 %%%%% PACKAGES
@@ -215,8 +215,8 @@
 
 %%%%% TITLE PAGE
 
-\subject{Simulation Tools, VT23}
-\title{Report on Project 1}
+%\subject{Simulation Tools, VT23}
+\title{Project Reports}
 \author{Salvador Castagnino, Theo Koppenhöfer}
 \date{\today}
 
@@ -227,6 +227,8 @@
 \begin{document}
 
 \maketitle
+
+\chapter*{Project 1}
 
 \section*{Introduction}
 
@@ -570,6 +572,11 @@ If we test the \pyth{atol} parameter on the Adams and Newton method analogously 
 \end{figure}
 
 All in all we see that none of the (admittedly crude) tweaking of the parameters improved the performance of CVODE. To the contrary, most changes worsened the performance. The choice of the discretisation method on the other hand did make a big difference and the performance for solving the toy problem could be improved by switching from the default BDF method.
+
+
+\chapter*{Project 2}
+
+\newpage
 
 
 % here come some stability regions

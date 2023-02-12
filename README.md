@@ -6,3 +6,5 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 - [ ] Task 7
 - [ ] Task 8
 - [ ] Write report
+- [ ] Code cleanup (in particular the squeezers)
+- [ ] compare solution plots
