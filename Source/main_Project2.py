@@ -1,6 +1,7 @@
 import numpy as np
 from assimulo.solvers import IDA, RungeKutta4, CVode
-from squeezer import Seven_bar_mechanism_indx3, Seven_bar_mechanism_indx2, Seven_bar_mechanism_indx1, Seven_bar_mechanism_expl
+from squeezer import Seven_bar_mechanism_indx3, Seven_bar_mechanism_indx2, Seven_bar_mechanism_indx1, \
+    Seven_bar_mechanism_expl
 import matplotlib.pyplot as mpl
 
 var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega$', r'$\epsilon$',
@@ -56,27 +57,28 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lam
         mpl.show()
     return mod, sim, [t, y]
 
+
 def plot_soln(t, y, savefig=False, plotnumber=500):
     # do some plotting
+    mpl.figure(plotnumber, clear=False)
     for i in range(7):
         mpl.plot(t, y[:, i])
     mpl.legend(var_labels[:7])
     if savefig:
         mpl.savefig(f'../Plots/Project2_main/Figure_{plotnumber}.pdf')
-    mpl.figure()
+    mpl.figure(plotnumber + 1, clear=False)
     for i in range(7, 14):
         mpl.plot(t, y[:, i])
     mpl.legend(var_labels[7:14])
     if savefig:
         mpl.savefig(f'../Plots/Project2_main/Figure_{plotnumber + 1}.pdf')
     if y.shape[1] > 14:
-        mpl.figure()
+        mpl.figure(plotnumber + 2, clear=False)
         for i in range(14, 20):
             mpl.plot(t, y[:, i])
         mpl.legend(var_labels[14:])
         if savefig:
             mpl.savefig(f'../Plots/Project2_main/Figure_{plotnumber + 2}.pdf')
-    
 
 
 def plot_stats(xdata, ydata, plotnumber=500, savefig=False):
@@ -98,26 +100,29 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False):
 
 
 if __name__ == '__main__':
-    # run_seven_bar_problem(True, 3, 1E5, 1E5, False, False, True)
+    # run_seven_bar_problem(True, 0, 1E5, 1E5, False, False, True)
 
-    if True:
+    if False:
         # This plots comparisons of the index 1,2,3 formulations
-        _, _, indx1_soln = run_seven_bar_problem(False, 1)
-        _, _, indx2_soln = run_seven_bar_problem(False, 2)
-        _, _, indx3_soln = run_seven_bar_problem(False, 3)
-        
-        t = np.linspace(0, 0.03, 500)
-        all_solns = np.zeros((3,t.size, 20))
-        for i, soln in enumerate([indx1_soln, indx2_soln, indx3_soln]):
-            for j in range(20):
-                all_solns[i, :, j] = np.interp(t, soln[0], soln[1][:, j])
-        
-        # Plot soln
-        plot_soln(indx2_soln[0], indx2_soln[1], savefig=True, plotnumber=510)
-        plot_soln(t, all_solns[1, :, :]-all_solns[0, :, :], savefig=True, plotnumber=520)
-        plot_soln(t, all_solns[2, :, :]-all_solns[1, :, :], savefig=True, plotnumber=530)
-        mpl.show()
+        all_solns = []
+        for i in range(4):
+            _, _, soln = run_seven_bar_problem(False, i)
+            if i <= 0:
+                soln[1] = np.hstack((soln[1], np.zeros((len(soln[0]), 6))))
+            all_solns.append(soln)
 
+        t = np.linspace(0, 0.03, 500)
+        all_solns_interp = np.zeros((4, t.size, 20))
+        for i, soln in enumerate(all_solns):
+            for j in range(20):
+                all_solns_interp[i, :, j] = np.interp(t, soln[0], soln[1][:, j])
+
+        # Plot soln
+        plot_soln(all_solns[1][0], all_solns[1][1], savefig=True, plotnumber=510)
+        plot_soln(t, all_solns_interp[2, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
+        plot_soln(t, all_solns_interp[2, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
+        plot_soln(t, all_solns_interp[2, :, :] - all_solns_interp[3, :, :], savefig=True, plotnumber=540)
+        mpl.show()
 
     if False:
         # This compares the index=1,2,3 formulations
@@ -199,5 +204,3 @@ if __name__ == '__main__':
 
         plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True)
     # mpl.show()
-
-
