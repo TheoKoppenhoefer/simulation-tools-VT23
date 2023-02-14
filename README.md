@@ -8,3 +8,4 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 - [ ] Write report
 - [ ] Code cleanup (in particular the squeezers)
 - [ ] compare solution plots
+- [ ] find out what goes wrong with the explicit solving of the index 1 problem

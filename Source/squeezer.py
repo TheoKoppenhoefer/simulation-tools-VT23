@@ -5,7 +5,7 @@ from numpy import array, zeros, dot, hstack, sin, cos, sqrt
 from scipy.optimize import fsolve
 
 
-def res_general(t, y, yp, index=3):
+def res_general(t, y, yp, index=3, expl=False):
     """
     Residual function of the 7-bar mechanism in
     Hairer, Vol. II, p. 533 ff, see also formula (7.11)
@@ -112,6 +112,16 @@ def res_general(t, y, yp, index=3):
                      + zf * coomep * (v[5] + v[6]) ** 2 + u * siep * v[6] ** 2,
                      -rr * sibe * v[0] ** 2 + d * sibeth * (v[0] + v[1]) ** 2
                      + zf * siomep * (v[5] + v[6]) ** 2 - u * coep * v[6] ** 2])
+        if expl:
+            # Solve that equation system
+            def g(x):
+                # We have yd = x[:7], lambda = x[7:]
+                return hstack((dot(m, x[:7]) - ff[0:7] + dot(gp.T, x[7:]), gqq + dot(gp, x[:7])))
+
+            yp = fsolve(g, hstack((y[7:], zeros((6,)))))
+
+            #     Construction of the rhs
+            return hstack((y[7:14], yp[:7]))
         res_3 = gqq + dot(gp, yp[7:14])
 
     elif index == 2:
