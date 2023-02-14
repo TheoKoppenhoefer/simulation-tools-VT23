@@ -194,7 +194,7 @@ class Seven_bar_mechanism_indx1(Seven_bar_mechanism_indx2):
     problem_name = 'Woodpecker w/o friction (index 1)'
 
     def res(self, t, y, yp):
-        return res_general(t, y, yp, 2)
+        return res_general(t, y, yp, 1)
 
 
 class Seven_bar_mechanism_expl(ap.Explicit_Problem):

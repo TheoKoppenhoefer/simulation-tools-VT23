@@ -108,6 +108,7 @@ if __name__ == '__main__':
         for i in range(4):
             _, _, soln = run_seven_bar_problem(False, i)
             if i <= 0:
+                # Do some padding in the case of the explicit problem
                 soln[1] = np.hstack((soln[1], np.zeros((len(soln[0]), 6))))
             all_solns.append(soln)
 
@@ -119,10 +120,10 @@ if __name__ == '__main__':
 
         # Plot soln
         plot_soln(all_solns[1][0], all_solns[1][1], savefig=True, plotnumber=510)
-        plot_soln(t, all_solns_interp[2, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
-        plot_soln(t, all_solns_interp[2, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
-        plot_soln(t, all_solns_interp[2, :, :] - all_solns_interp[3, :, :], savefig=True, plotnumber=540)
-        mpl.show()
+        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
+        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
+        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
+        # mpl.show()
 
     if False:
         # This compares the index=1,2,3 formulations
