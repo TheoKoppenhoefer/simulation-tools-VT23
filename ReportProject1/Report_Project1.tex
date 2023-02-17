@@ -576,7 +576,26 @@ All in all we see that none of the (admittedly crude) tweaking of the parameters
 
 \chapter*{Project 2}
 
+In this project we used the implementation of the seven body mechanism as described in \cite{HW_SolvingODEs} to test Assimulo's implicit solvers. The problem formulation leads to an index 3 problem of the form
+\begin{align}
+	M(q)\,q''&= f(q,q')-G(q)^\top\,\lambda\label{eq:sevenBody} \\
+	0 &= g(q) \label{eq:condition_indx3}
+\end{align}
+where $q\in\R^7$, $\lambda\in\R^6$ and $G=Dg$. If we differentiate condition \eqref{eq:condition_indx3} we obtain the index 2 condtition
+\begin{align*}
+	0&=G(q)\,q'
+\end{align*}
+and differentiating this again we obtain the index 1 formulation
+\begin{align*}
+	0&= \partial_q^2g(q)\,(q',q')+G(q)\,q''\,.  \label{eq:condition_indx1}
+\end{align*}
+Note that condition \eqref{eq:condition_indx1} and \eqref{eq:sevenBody} can be uniquely solved for $q''$ and $\lambda$ and we then obtain an ODE in the explicit formulation.
+For the implementation we rewrite this second order system as a first order system by the usual trick of introducing the variable $v=q'$ so that in the implicit formulation the problem depends on the variable
+\begin{align*}
+	y = \vect{q \\ v \\ \lambda}
+\end{align*}
 
+A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl:indx2_soln_angles} to \ref{pl:indx2_soln_lambdas}.
 
 \begin{figure}[h]
 \centering
@@ -601,7 +620,30 @@ All in all we see that none of the (admittedly crude) tweaking of the parameters
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_512}
 \caption{The Lagrange parameter of the solution to the index 2 problem.}
+\label{pl:indx2_soln_lambdas}
+\end{minipage}
+\end{figure}
+
+\section*{A comparison of the index 1, 2 and 3 formulations}
+
+We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver (TODO: hyperlink). However, to get the problem to run we had to set the \pyth{atol} parameter to a large number and the \pyth{alg_var} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchainged and in the following we only vary the index of the problem.
+
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_510}
+\caption{The angles of the solution to the index 2 problem.}
 \label{pl:indx2_soln_angles}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_511}
+\caption{The angle speed of the solution to the index 2 problem.}
+\label{pl:indx2_soln_anglesdot}
 \end{minipage}
 \end{figure}
 

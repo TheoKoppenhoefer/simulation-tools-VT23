@@ -102,7 +102,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False):
 if __name__ == '__main__':
     # run_seven_bar_problem(True, 0, 1E5, 1E5, False, False, True)
 
-    if False:
+    if True:
         # This plots comparisons of the index 1,2,3 formulations
         all_solns = []
         for i in range(4):
@@ -120,6 +120,7 @@ if __name__ == '__main__':
 
         # Plot soln
         plot_soln(all_solns[1][0], all_solns[1][1], savefig=True, plotnumber=510)
+        plot_soln(all_solns[3][0], all_solns[3][1], savefig=True, plotnumber=515)
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
