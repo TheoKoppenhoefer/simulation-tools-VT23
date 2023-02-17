@@ -10,6 +10,8 @@ var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\
               r'$\dot{\Omega}$', r'$\dot{\epsilon}$', r'$\lambda_1$', r'$\lambda_2$', r'$\lambda_3$',
               r'$\lambda_4$', r'$\lambda_5$', r'$\lambda_6$', r'$\lambda_7$']
 
+tab_headers = ['experiment', 'index', 'atol_v', 'atol_lambda', 'algvar_v', 'algvar_lambda', 'suppress_alg']
+
 
 def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lambda=1E5,
                           algvar_v=False, algvar_lambda=False, suppress_alg=True):
@@ -168,6 +170,11 @@ if __name__ == '__main__':
                        [1, 1E-6, 1E5, True, True, False],
                        [1, 1E-6, 1E-6, False, False, True]]
 
+
+        # print(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='fancy_grid'))
+        with open('../Plots/Tables/Overview_Index1Experiment.tex', 'w') as output:
+            output.write(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='latex'))
+
         nsteps = []
         nfcns = []
         njacs = []
@@ -215,20 +222,3 @@ if __name__ == '__main__':
 
         plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True, figsize=(2,2))
     # mpl.show()
-
-    if False:
-        # This exports the experiment configuration as a latex table
-        # tab_headers = ['experiment', r'\pyth{problem_index}', r'\pyth{atol_v}', r'\pyth{atol_lambda}', r'\pyth{algvar_v}',
-        #                r'\pyth{algvar_lambda}', r'\pyth{suppress_alg}']
-        tab_headers = ['experiment', 'index', 'atol_v', 'atol_lambda', 'algvar_v', 'algvar_lambda', 'suppress_alg']
-        experiments = [[1, 1.E5, 1.E5, False, False, True],
-                       [1, 1E-6, 1.E5, False, True, True],
-                       [1, 1E-6, 1.E5, True, False, True],
-                       [1, 1E-6, 1.E5, True, True, False],
-                       [1, 1E-6, 1E-6, False, False, True]]
-        # for i, line in enumerate(experiments):
-        #    for j, obj in enumerate(line):
-        #        experiments[i][j] = f'\pyth{{{obj}}}'
-        print(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='fancy_grid'))
-        with open('../Plots/Tables/Overview_Index1Experiment.tex', 'w') as output:
-            output.write(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='latex'))
