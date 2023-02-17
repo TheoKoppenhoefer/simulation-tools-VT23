@@ -595,7 +595,7 @@ For the implementation we rewrite this second order system as a first order syst
 	y = \vect{q \\ v \\ \lambda}
 \end{align*}
 
-A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl:indx2_soln_angles} to \ref{pl:indx2_soln_lambdas}.
+A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl:indx3_soln_angles} to \ref{pl:indx3_soln_lambdas}.
 
 \begin{figure}[h]
 \centering
@@ -603,14 +603,14 @@ A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_510}
 \caption{The angles of the solution to the index 2 problem.}
-\label{pl:indx2_soln_angles}
+\label{pl:indx3_soln_angles}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_511}
 \caption{The angle speed of the solution to the index 2 problem.}
-\label{pl:indx2_soln_anglesdot}
+\label{pl:indx3_soln_anglesdot}
 \end{minipage}
 \end{figure}
 
@@ -620,32 +620,113 @@ A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_512}
 \caption{The Lagrange parameter of the solution to the index 2 problem.}
-\label{pl:indx2_soln_lambdas}
+\label{pl:indx3_soln_lambdas}
 \end{minipage}
 \end{figure}
 
 \section*{A comparison of the index 1, 2 and 3 formulations}
 
-We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver (TODO: hyperlink). However, to get the problem to run we had to set the \pyth{atol} parameter to a large number and the \pyth{alg_var} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchainged and in the following we only vary the index of the problem.
-
+We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver (TODO: hyperlink). However, to get the problem to run we had to set the \pyth{atol} parameter to a large number and the \pyth{alg_var} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchainged and in the following we only vary the index of the problem. We can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas} the difference of the index 1 solution subtraced from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
 
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_510}
-\caption{The angles of the solution to the index 2 problem.}
-\label{pl:indx2_soln_angles}
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_530}
+\caption{The difference of angles of the index 1 and the index 3 solution.}
+\label{pl:indx1_solndiff_angles}
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_511}
-\caption{The angle speed of the solution to the index 2 problem.}
-\label{pl:indx2_soln_anglesdot}
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_531}
+\caption{The difference in angle speeds of the index 1 and the index 3 solution.}
+\label{pl:indx1_solndiff_anglesdot}
 \end{minipage}
 \end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_532}
+\caption{The difference of lambdas of the index 1 and the index 3 solution.}
+\label{pl:indx1_solndiff_lambdas}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_540}
+\caption{The difference of angles of the index 2 and the index 3 solution.}
+\label{pl:indx2_solndiff_angles}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_541}
+\caption{The difference in angle speeds of the index 2 and the index 3 solution.}
+\label{pl:indx2_solndiff_anglesdot}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_542}
+\caption{The difference of lambdas of the index 2 and the index 3 solution.}
+\label{pl:indx2_solndiff_lambdas}
+\end{minipage}
+\end{figure}
+
+Rather unexpectedly however the difference of the index 1 to the index 3 solution is in general greater than the difference of the index 2 to the index 3 solutions. Also unexpectedly these differences are noticable in the plots of the Lagrange parameter $\lambda$ as shown in figures \ref{pl:indx1_soln_lambdas}, \ref{pl:indx2_soln_lambdas} and \ref{pl:indx3_soln_lambdas}. Here we see that the solution becomes increasingly rough as the index increases.
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_515}
+\caption{The Lagrange parameter of the index 2 problem.}
+\label{pl:indx1_soln_lambdas}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_518}
+\caption{The Lagrange parameter of the index 3 problem.}
+\label{pl:indx2_soln_lambdas}
+\end{minipage}
+\end{figure}
+
+The performance of the IDA solver for the various indexes can be seen in figures \ref{pl:nsteps_indx123} to \ref{pl:nerrfails_nsteps_indx123}. We see figure \ref{pl:nsteps_indx123} that the number of steps of the solver increases with the index. As the number of function evaluations per step stays roughly constant by figure \ref{pl:nfcns_nsteps_indx123} this means that the number of function evaluations increases with the index. One other other notable statistic regards the number of error test failures for the different problems which can be seen in figure \ref{pl:nerrfails_nsteps_indx123} where we see a larger difference between the problems though this is probably not statistically significant as the total number of error test failures is approximately a dozen.
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_600}
+\caption{\pyth{nsteps} in relation to the index.}
+\label{pl:nsteps_indx123}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_610}
+\caption{\pyth{nfcns/nsteps} in relation to the index.}
+\label{pl:nfcns_nsteps_indx123}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_612}
+\caption{\pyth{nerrfails/nsteps} in relation to the index.}
+\label{pl:nerrfails_nsteps_indx123}
+\end{minipage}
+\end{figure}
+
 
 \chapter*{Appendix}
 

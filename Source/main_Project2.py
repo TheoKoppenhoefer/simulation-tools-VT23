@@ -81,20 +81,24 @@ def plot_soln(t, y, savefig=False, plotnumber=500):
             mpl.savefig(f'../Plots/Project2_main/Figure_{plotnumber + 2}.pdf')
 
 
-def plot_stats(xdata, ydata, plotnumber=500, savefig=False):
+def plot_stats(xdata, ydata, plotnumber=500, savefig=False, xlabel='', figsize=(6.4,4.8)):
     ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails']
     for i in range(4):
-        mpl.figure(plotnumber + i, clear=False)
+        mpl.figure(plotnumber + i, figsize, clear=False)
         # fig, ax = mpl.subplots(plotnumber + i, clear=False)
         mpl.bar(xdata, ydata[i])
+        mpl.xlabel(xlabel)
         mpl.ylabel(ylabels[i])
+        mpl.tight_layout()
         if savefig:
             mpl.savefig(f'../Plots/Project2_main/Figure_{plotnumber + i}.pdf')
     ylabels = ['nfcns / nsteps', 'njacs / nsteps', 'nerrfails / nsteps']
     for i in range(3):
-        mpl.figure(plotnumber + 10 + i, clear=False)
+        mpl.figure(plotnumber + 10 + i, figsize, clear=False)
         mpl.bar(xdata, np.asarray(ydata[i + 1]) / np.asarray(ydata[0]))
+        mpl.xlabel(xlabel)
         mpl.ylabel(ylabels[i])
+        mpl.tight_layout()
         if savefig:
             mpl.savefig(f'../Plots/Project2_main/Figure_{plotnumber + 10 + i}.pdf')
 
@@ -102,7 +106,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False):
 if __name__ == '__main__':
     # run_seven_bar_problem(True, 0, 1E5, 1E5, False, False, True)
 
-    if True:
+    if False:
         # This plots comparisons of the index 1,2,3 formulations
         all_solns = []
         for i in range(4):
@@ -120,7 +124,8 @@ if __name__ == '__main__':
 
         # Plot soln
         plot_soln(all_solns[1][0], all_solns[1][1], savefig=True, plotnumber=510)
-        plot_soln(all_solns[3][0], all_solns[3][1], savefig=True, plotnumber=515)
+        plot_soln(all_solns[2][0], all_solns[2][1], savefig=True, plotnumber=513)
+        plot_soln(all_solns[3][0], all_solns[3][1], savefig=True, plotnumber=516)
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
@@ -143,7 +148,7 @@ if __name__ == '__main__':
                 mod, sim, _ = run_seven_bar_problem(False, *exp)
 
                 stats = sim.get_statistics()
-                xdata.append(f'index {exp[0]}')
+                xdata.append(f'{exp[0]}')
                 nsteps.append(stats.__getitem__('nsteps'))
                 nfcns.append(stats.__getitem__('nfcns'))
                 njacs.append(stats.__getitem__('njacs'))
@@ -151,7 +156,7 @@ if __name__ == '__main__':
             except:
                 print(f'There seems to be a problem in the experiment {exp}')
 
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=600, savefig=True)
+        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=600, savefig=True, xlabel='index', figsize=(2,2))
 
     if False:
         # This tests the index=1 problem
