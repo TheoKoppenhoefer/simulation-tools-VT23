@@ -104,7 +104,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False, xlabel='', figsize=(
 
 
 if __name__ == '__main__':
-    # run_seven_bar_problem(True, 0, 1E5, 1E5, False, False, True)
+    # run_seven_bar_problem(True, 2, 1E-6, 1E-6, False, False, True)
 
     if False:
         # This plots comparisons of the index 1,2,3 formulations
@@ -162,7 +162,10 @@ if __name__ == '__main__':
         # This tests the index=1 problem
         # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
         experiments = [[1, 1E5, 1E5, False, False, True],
-                       [1, 1E-6, 1E5, False, True, True]]
+                       [1, 1E-6, 1E5, False, True, True],
+                       [1, 1E-6, 1E5, True, False, True],
+                       [1, 1E-6, 1E5, True, True, False],
+                       [1, 1E-6, 1E-6, False, False, True]]
 
         nsteps = []
         nfcns = []
@@ -174,7 +177,7 @@ if __name__ == '__main__':
                 mod, sim, _ = run_seven_bar_problem(False, *exp)
 
                 stats = sim.get_statistics()
-                xdata.append(f'problem {counter}')
+                xdata.append(f'{counter}')
                 nsteps.append(stats.__getitem__('nsteps'))
                 nfcns.append(stats.__getitem__('nfcns'))
                 njacs.append(stats.__getitem__('njacs'))
@@ -182,7 +185,7 @@ if __name__ == '__main__':
             except:
                 print(f'There seems to be a problem in the experiment {exp}')
 
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True)
+        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True, xlabel='experiment', figsize=(2,2))
 
     if False:
         # This tests the index=2 problem
@@ -209,5 +212,5 @@ if __name__ == '__main__':
             except:
                 print(f'There seems to be a problem in the experiment {exp}')
 
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True)
+        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True, figsize=(2,2))
     # mpl.show()
