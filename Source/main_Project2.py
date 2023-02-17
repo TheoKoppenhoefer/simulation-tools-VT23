@@ -3,6 +3,7 @@ from assimulo.solvers import IDA, RungeKutta4, CVode
 from squeezer import Seven_bar_mechanism_indx3, Seven_bar_mechanism_indx2, Seven_bar_mechanism_indx1, \
     Seven_bar_mechanism_expl
 import matplotlib.pyplot as mpl
+from tabulate import tabulate
 
 var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega$', r'$\epsilon$',
               r'$\dot{\beta}$', r'$\dot{\Theta}$', r'$\dot{\phi}$', r'$\dot{\delta}$', r'$\dot{\omega}$',
@@ -104,7 +105,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False, xlabel='', figsize=(
 
 
 if __name__ == '__main__':
-    # run_seven_bar_problem(True, 2, 1E-6, 1E-6, False, False, True)
+    # run_seven_bar_problem(True, 1, 1E-6, 1E-6, False, False, False)
 
     if False:
         # This plots comparisons of the index 1,2,3 formulations
@@ -214,3 +215,20 @@ if __name__ == '__main__':
 
         plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True, figsize=(2,2))
     # mpl.show()
+
+    if False:
+        # This exports the experiment configuration as a latex table
+        # tab_headers = ['experiment', r'\pyth{problem_index}', r'\pyth{atol_v}', r'\pyth{atol_lambda}', r'\pyth{algvar_v}',
+        #                r'\pyth{algvar_lambda}', r'\pyth{suppress_alg}']
+        tab_headers = ['experiment', 'index', 'atol_v', 'atol_lambda', 'algvar_v', 'algvar_lambda', 'suppress_alg']
+        experiments = [[1, 1.E5, 1.E5, False, False, True],
+                       [1, 1E-6, 1.E5, False, True, True],
+                       [1, 1E-6, 1.E5, True, False, True],
+                       [1, 1E-6, 1.E5, True, True, False],
+                       [1, 1E-6, 1E-6, False, False, True]]
+        # for i, line in enumerate(experiments):
+        #    for j, obj in enumerate(line):
+        #        experiments[i][j] = f'\pyth{{{obj}}}'
+        print(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='fancy_grid'))
+        with open('../Plots/Tables/Overview_Index1Experiment.tex', 'w') as output:
+            output.write(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='latex'))

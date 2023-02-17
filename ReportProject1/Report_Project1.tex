@@ -626,7 +626,7 @@ A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl
 
 \section*{A comparison of the index 1, 2 and 3 formulations}
 
-We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver (TODO: hyperlink). However, to get the problem to run we had to set the \pyth{atol} parameter to a large number and the \pyth{alg_var} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchainged and in the following we only vary the index of the problem. We can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas} the difference of the index 1 solution subtraced from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
+We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver (TODO: hyperlink). However, to get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchainged and in the following we only vary the index of the problem. We can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas} the difference of the index 1 solution subtraced from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
 
 
 \begin{figure}[h]
@@ -739,9 +739,47 @@ The performance of the IDA solver for the various indexes can be seen in figures
 \end{minipage}
 \end{figure}
 
-\section*{Dependence on the parameters \pyth{alg_var} and \pyth{atol}}
+\section*{Dependence on the parameters \pyth{algvar} and \pyth{atol}}
 
-As previously indicated the problem 
+As previously indicated the IDA solver will throw an error
+\begin{python}
+assimulo.solvers.sundials.IDAError: 'Convergence test failures occurred too many times during one internal time step or minimum step size was reached. At time 0.000000.'
+\end{python}
+This can be resolved by declaring the entries of $y$ corresponding to $v$ and or $\lambda$ to be algebraic variables with the parameter \pyth{algvar} and to set the parameter \pyth{atol} to a large variable. In the following we would like to check how these parameters impact the performance of the solver in the case of the index 1 formulation. For this we denote by \pyth{algvar_v} and \pyth{algvar_lambda} the value of the \pyth{algvar} parameter for $v$ and $\lambda$. The default value of \pyth{algvar} is set to \pyth{True}. Analogously we denote the components of \pyth{atol} corresponding to $v$ and $\lambda$ with \pyth{atol_v} and \pyth{atol_lambda} and set the default value to \pyth{1E-6}. We now run a series of 5 experiments as depicted in table
+
+
+\begin{figure}[h]
+\centering
+\input{../Plots/Tables/Overview_Index1Experiment.tex}
+\caption{Parameters in the experiments}
+\label{tb:indx1_experiment_params}
+\end{figure}
+
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_700}
+\caption{\pyth{nsteps} in relation to the index.}
+\label{pl:nsteps_indx1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_710}
+\caption{\pyth{nfcns/nsteps} in relation to the index.}
+\label{pl:nfcns_nsteps_indx1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_703}
+\caption{\pyth{nerrfails} in relation to the index.}
+\label{pl:nerrfails_indx1}
+\end{minipage}
+\end{figure}
 
 
 \chapter*{Appendix}
