@@ -624,6 +624,37 @@ A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl
 \end{minipage}
 \end{figure}
 
+\section*{Generation of consistent initial values}
+
+Given the restrictions imposed over the system the generation of initial values is not a trivial task. To do this we follow the steps presented in the literature, we start with $q$ and $v$.
+
+First we take $\theta=0$ which can be done given that the system is undetermined and we assume a solution exists (this makes sense as a physical model of the system was presented in class). We then use \textit{Newton Iteration} to solve the equations obtaining values for the remaining angles
+
+\begin{figure}[h]
+\centering
+\input{../Plots/Tables/Initial_Angles.tex}
+\caption{Consistent Initial Angles}
+%\label{tb:indx1_experiment_params}
+\end{figure}
+
+We also take the initial value of $v$ to be $0$ as we assume the system starts at rest. Now for $w$ and $\lambda$ using the Index 1 formulation we have to solve a linear system which is presented in the literature. Doing this we get the values
+
+\begin{figure}[h]
+\centering
+\input{../Plots/Tables/Initial_Accelerations.tex}
+\caption{Consistent Initial Accelerations}
+%\label{tb:indx1_experiment_params}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\input{../Plots/Tables/Initial_Lambdas.tex}
+\caption{Consistent Initial Lambdas}
+%\label{tb:indx1_experiment_params}
+\end{figure}
+
+Many of the values are minute bu non-zero. This is given because of a rounding error, but in theory these small values equal zero.
+
 \section*{A comparison of the index 1, 2 and 3 formulations}
 
 We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver (TODO: hyperlink). However, to get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchainged and in the following we only vary the index of the problem. We can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas} the difference of the index 1 solution subtraced from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
@@ -780,6 +811,10 @@ This can be resolved by declaring the entries of $y$ corresponding to $v$ and or
 \label{pl:nerrfails_indx1}
 \end{minipage}
 \end{figure}
+
+\section*{Using an explicit method}
+
+As part of the final task we used an explicit RK4 method to solve the index 1 problem. We firstly tested the method using the default step size of $h=0.1$ which turned out 
 
 
 \chapter*{Appendix}

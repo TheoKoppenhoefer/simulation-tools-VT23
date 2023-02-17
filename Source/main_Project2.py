@@ -4,11 +4,16 @@ from squeezer import Seven_bar_mechanism_indx3, Seven_bar_mechanism_indx2, Seven
     Seven_bar_mechanism_expl
 import matplotlib.pyplot as mpl
 from tabulate import tabulate
+from consistent_IVs import calculate_consistent_initial
 
-var_labels = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega$', r'$\epsilon$',
-              r'$\dot{\beta}$', r'$\dot{\Theta}$', r'$\dot{\phi}$', r'$\dot{\delta}$', r'$\dot{\omega}$',
-              r'$\dot{\Omega}$', r'$\dot{\epsilon}$', r'$\lambda_1$', r'$\lambda_2$', r'$\lambda_3$',
-              r'$\lambda_4$', r'$\lambda_5$', r'$\lambda_6$', r'$\lambda_7$']
+angles = [r'$\beta$', r'$\Theta$', r'$\gamma$', r'$\phi$', r'$\delta$', r'$\Omega$', r'$\epsilon$']
+velocities = [r'$\dot{\beta}$', r'$\dot{\Theta}$', r'$\dot{\phi}$', r'$\dot{\delta}$',
+                 r'$\dot{\omega}$', r'$\dot{\Omega}$', r'$\dot{\epsilon}$'] 
+accelerations = [r'$\ddot{\beta}$', r'$\ddot{\Theta}$', r'$\ddot{\phi}$', r'$\ddot{\delta}$',
+                 r'$\ddot{\omega}$', r'$\ddot{\Omega}$', r'$\ddot{\epsilon}$'] 
+lambdas = [r'$\lambda_1$', r'$\lambda_2$', r'$\lambda_3$', r'$\lambda_4$', r'$\lambda_5$', r'$\lambda_6$',
+           r'$\lambda_7$']
+var_labels = angles + velocities + lambdas
 
 
 def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lambda=1E5,
@@ -28,7 +33,8 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lam
 
     if problem_index <= 0:
         # Define an explicit solver
-        sim = CVode(mod)
+        sim = RungeKutta4(mod)
+        sim.h = 0.001
 
         # Set the parameters
 
@@ -232,3 +238,44 @@ if __name__ == '__main__':
         print(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='fancy_grid'))
         with open('../Plots/Tables/Overview_Index1Experiment.tex', 'w') as output:
             output.write(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='latex'))
+
+    if False:
+        # This tests the RK4 method
+        # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
+        experiments = [[0, 1E-6, 1E-6, False, False, False]]
+
+        nsteps = []
+        nfcns = []
+        njacs = []
+        nerrfails = []
+        xdata = []
+        for counter, exp in enumerate(experiments):
+            try:
+                mod, sim, _ = run_seven_bar_problem(True, *exp)
+
+                stats = sim.get_statistics()
+                xdata.append(f'{counter}')
+                nsteps.append(stats.__getitem__('nsteps'))
+                nfcns.append(stats.__getitem__('nfcns'))
+                njacs.append(stats.__getitem__('njacs'))
+                nerrfails.append(stats.__getitem__('nerrfails'))
+            except:
+                print(f'There seems to be a problem in the experiment {exp}')
+
+        #plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True, xlabel='experiment', figsize=(2,2))
+
+    #TODO
+    if True:
+        # This exports the generated initial values as a latex table
+
+        y = calculate_consistent_initial()        
+
+        print(tabulate(list(zip(angles, y[:7])), headers='firstrow', tablefmt='fancy_grid'))
+        print(tabulate(list(zip(accelerations, y[7:14])), headers='firstrow', tablefmt='fancy_grid'))
+        print(tabulate(list(zip(lambdas, y[14:])), headers='firstrow', tablefmt='fancy_grid'))
+        with open('../Plots/Tables/Initial_Angles.tex', 'w') as output:
+            output.write(tabulate(list(zip(angles, y[:7])), tablefmt='latex'))
+        with open('../Plots/Tables/Initial_Accelerations.tex', 'w') as output:
+            output.write(tabulate(list(zip(accelerations, y[7:14])), tablefmt='latex'))
+        with open('../Plots/Tables/Initial_Lambdas.tex', 'w') as output:
+            output.write(tabulate(list(zip(lambdas, y[14:])), tablefmt='latex'))

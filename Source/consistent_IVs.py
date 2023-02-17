@@ -4,7 +4,7 @@ import scipy.linalg
 from BDFk_Assimulo import classical_newton_optimisation
 from numpy import array, zeros, dot, hstack, sin, cos, sqrt
 from tabulate import tabulate
-from main_Project2 import var_labels
+
 
 
 def squeezer_g(p):
@@ -143,7 +143,7 @@ def squeezer_M_Gp_f(p, pp):
     return m, gp, ff
 
 
-if __name__ == '__main__':
+def calculate_consistent_initial():
     """
     Calculate consistent initial values according to Hairer, p.535f
     """
@@ -160,5 +160,4 @@ if __name__ == '__main__':
     A[7:, :7] = Gp
     b = hstack((f, zeros((6,))))
     y[7:] = scipy.linalg.solve(A, b)
-    print(f'We have determined the following initial values in {its} iterations:')
-    print(tabulate(list(zip(var_labels, y)), headers='firstrow', tablefmt='fancy_grid'))
+    return y
