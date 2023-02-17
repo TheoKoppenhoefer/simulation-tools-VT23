@@ -776,7 +776,7 @@ As previously indicated the IDA solver will throw an error
 \begin{python}
 assimulo.solvers.sundials.IDAError: 'Convergence test failures occurred too many times during one internal time step or minimum step size was reached. At time 0.000000.'
 \end{python}
-This can be resolved by declaring the entries of $y$ corresponding to $v$ and or $\lambda$ to be algebraic variables with the parameter \pyth{algvar} and to set the parameter \pyth{atol} to a large variable. In the following we would like to check how these parameters impact the performance of the solver in the case of the index 1 formulation. For this we denote by \pyth{algvar_v} and \pyth{algvar_lambda} the value of the \pyth{algvar} parameter for $v$ and $\lambda$. The default value of \pyth{algvar} is set to \pyth{True}. Analogously we denote the components of \pyth{atol} corresponding to $v$ and $\lambda$ with \pyth{atol_v} and \pyth{atol_lambda} and set the default value to \pyth{1E-6}. We now run a series of 5 experiments as depicted in table
+This can be resolved by declaring the entries of $y$ corresponding to $v$ and or $\lambda$ to be algebraic variables with the parameter \pyth{algvar} and to set the parameter \pyth{atol} to a large variable. In the following we would like to check how these parameters impact the performance of the solver in the case of the index 1 formulation. For this we denote by \pyth{algvar_v} and \pyth{algvar_lambda} the value of the \pyth{algvar} parameter for $v$ and $\lambda$. The default value of \pyth{algvar} is set to \pyth{True}. Analogously we denote the components of \pyth{atol} corresponding to $v$ and $\lambda$ with \pyth{atol_v} and \pyth{atol_lambda} and set the default value to \pyth{1E-6}. We now run a series of 5 experiments as depicted in table \ref{tb:indx1_experiment_params}.
 
 
 \begin{figure}[h]
@@ -786,37 +786,65 @@ This can be resolved by declaring the entries of $y$ corresponding to $v$ and or
 \label{tb:indx1_experiment_params}
 \end{figure}
 
-
+As all experiments deliver more or less the same result we will be comparing the statistics of IDA as depicted in figures \ref{pl:nsteps_indx1} to \ref{pl:nerrfails_nsteps_indx1}. Once again we observe in figure \ref{pl:nfcns_nsteps_indx1} that the total number of function evaluations is roughly proportional to the number of steps needed. Here experiments 1 and 4 stick out for requiring comparatively more function evaluations per step. However in figure \ref{pl:nsteps_indx1} we see that these are also precisely the experiments in which the total number of steps taken is by far the least. Experiments 1 and 4 are also precisely those experiments that have the most stringent requirements on the $v$ part of $y$. Both have set \pyth{atol_v=1E-6} and declare $v$ to not be an algebraic variable. We see in figures \ref{pl:njacs_indx1} and \ref{pl:nerrfails_nsteps_indx1} that experiment 0 is an outlier in requiring comparitively many jacobian evaluations and having relatively few error test failures.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[t]{0.3\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_700}
-\caption{\pyth{nsteps} in relation to the index.}
+\caption{\pyth{nsteps} of the experiments.}
 \label{pl:nsteps_indx1}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.3\textwidth}
 \centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_701}
+\caption{\pyth{nfcns}  of the experiments.}
+\label{pl:nfcns_indx1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_702}
+\caption{\pyth{njacs}  of the experiments.}
+\label{pl:njacs_indx1}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.3\textwidth}
+\centering
 \includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_710}
-\caption{\pyth{nfcns/nsteps} in relation to the index.}
+\caption{\pyth{nfcns/nsteps} of the experiments.}
 \label{pl:nfcns_nsteps_indx1}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.3\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_703}
-\caption{\pyth{nerrfails} in relation to the index.}
-\label{pl:nerrfails_indx1}
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_711}
+\caption{\pyth{njacs/nsteps} of the experiments.}
+\label{pl:njacs_nsteps_indx1}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.3\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project2_main/Figure_712}
+\caption{\pyth{nerrfails/nsteps} of the experiments.}
+\label{pl:nerrfails_nsteps_indx1}
 \end{minipage}
 \end{figure}
 
+<<<<<<< HEAD
 \section*{Using an explicit method}
 
 As part of the final task we used an explicit RK4 method to solve the index 1 problem. We firstly tested the method using the default step size of $h=0.1$ which turned out 
 
 
+=======
+>>>>>>> e6e48a73ffdc769b026ce3ffddd0bcf012c9ef1e
 \chapter*{Appendix}
 
 % here come some stability regions
