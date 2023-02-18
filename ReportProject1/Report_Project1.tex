@@ -837,14 +837,23 @@ As all experiments deliver more or less the same result we will be comparing the
 \end{minipage}
 \end{figure}
 
-<<<<<<< HEAD
 \section*{Using an explicit method}
 
-As part of the final task we used an explicit RK4 method to solve the index 1 problem. We firstly tested the method using the default step size of $h=0.1$ which turned out 
+As part of the final task we used an explicit RK4 method to solve the index 1 problem. As a result of the method exploding for $h=0.01$, the default step value, the method was tested for various values of $h$.
+
+In particular in Figure ... the $L_2$ norm of each angle over time is plotted with respect to $h \in [0.001, 0.002)$ with $\Delta h = 5\mathrm{e}{-6}$.
+
+\begin{figure}[h]
+\begin{minipage}[t]{0.7\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/L2_0.001<h<0.002_delta=0.000005.png}
+\end{minipage}
+\end{figure}
 
 
-=======
->>>>>>> e6e48a73ffdc769b026ce3ffddd0bcf012c9ef1e
+The explicit method can then be tested with individual step sizes and as expected, the method explodes for $h \in \{0.001446, 0.0018, 0.00195\}$ and is stable for $h \in \{0.00185, 0.0012, 0.0016\}$.
+
+
 \chapter*{Appendix}
 
 % here come some stability regions
