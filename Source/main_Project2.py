@@ -19,7 +19,7 @@ tab_headers = ['experiment', 'index', 'atol_v', 'atol_lambda', 'algvar_v', 'algv
 
 
 def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lambda=1E5,
-                          algvar_v=False, algvar_lambda=False, suppress_alg=True):
+                          algvar_v=False, algvar_lambda=False, suppress_alg=True, step=0):
     """
     """
     tfinal = 0.03  # Specify the final time
@@ -36,7 +36,9 @@ def run_seven_bar_problem(with_plots=True, problem_index=3, atol_v=1E5, atol_lam
     if problem_index <= 0:
         # Define an explicit solver
         sim = RungeKutta4(mod)
-        sim.h = 0.001
+
+        if step:
+            sim.h = step
 
         # Set the parameters
 
@@ -113,7 +115,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False, xlabel='', figsize=(
 
 
 if __name__ == '__main__':
-    run_seven_bar_problem(True, 0, 1E-6, 1E-6, False, False, False)
+    # run_seven_bar_problem(True, 1, 1E-6, 1E-6, False, False, False)
 
     if False:
         # This plots comparisons of the index 1,2,3 formulations
@@ -202,9 +204,11 @@ if __name__ == '__main__':
         plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True, xlabel='experiment', figsize=(2,2))
 
     if False:
-        # This tests the RK4 method
+        # This tests the index=2 problem
         # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
-        experiments = [[0, 1E-6, 1E-6, False, False, False]]
+        experiments = [[2, 1E-6, 1E5, False, False, True],
+                       [2, 1E-6, 1E5, False, True, True],
+                       [2, 1E-6, 1E5, False, True, True]]
 
         nsteps = []
         nfcns = []
@@ -213,10 +217,10 @@ if __name__ == '__main__':
         xdata = []
         for counter, exp in enumerate(experiments):
             try:
-                mod, sim, _ = run_seven_bar_problem(True, *exp)
+                mod, sim, _ = run_seven_bar_problem(False, *exp)
 
                 stats = sim.get_statistics()
-                xdata.append(f'{counter}')
+                xdata.append(f'prblm {counter}')
                 nsteps.append(stats.__getitem__('nsteps'))
                 nfcns.append(stats.__getitem__('nfcns'))
                 njacs.append(stats.__getitem__('njacs'))
@@ -224,9 +228,56 @@ if __name__ == '__main__':
             except:
                 print(f'There seems to be a problem in the experiment {exp}')
 
-        #plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True, xlabel='experiment', figsize=(2,2))
+        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True, figsize=(2,2))
+    # mpl.show()
 
-    #TODO
+    if False:
+        # This exports the experiment configuration as a latex table
+        # tab_headers = ['experiment', r'\pyth{problem_index}', r'\pyth{atol_v}', r'\pyth{atol_lambda}', r'\pyth{algvar_v}',
+        #                r'\pyth{algvar_lambda}', r'\pyth{suppress_alg}']
+        tab_headers = ['experiment', 'index', 'atol_v', 'atol_lambda', 'algvar_v', 'algvar_lambda', 'suppress_alg']
+        experiments = [[1, 1.E5, 1.E5, False, False, True],
+                       [1, 1E-6, 1.E5, False, True, True],
+                       [1, 1E-6, 1.E5, True, False, True],
+                       [1, 1E-6, 1.E5, True, True, False],
+                       [1, 1E-6, 1E-6, False, False, True]]
+        # for i, line in enumerate(experiments):
+        #    for j, obj in enumerate(line):
+        #        experiments[i][j] = f'\pyth{{{obj}}}'
+        print(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='fancy_grid'))
+        with open('../Plots/Tables/Overview_Index1Experiment.tex', 'w') as output:
+            output.write(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='latex'))
+
+    if False:
+        # This tests the RK4 method for different values of h
+        exp = [0, 1E-6, 1E-6, False, False, False]
+
+        norms = []
+        t = np.array(np.arange(0.001, 0.002, 0.000005))
+
+        for step in t:
+            try:
+                mod, sim, [_, y] = run_seven_bar_problem(False, *exp, step)
+                norms.append(np.linalg.norm(np.array(y)[:, :7], axis=0))
+            except:
+                print(f'There seems to be a problem in the experiment {exp} with step {step}')
+
+        mpl.plot(t, norms)
+        mpl.legend(var_labels[:7])
+        mpl.xlabel('h')
+        mpl.ylabel('L2')
+        mpl.show()
+
+    if False:
+        # This tests the RK4 method
+        exp = [0, 1E-6, 1E-6, False, False, False]
+
+        try:
+            mod, sim, _= run_seven_bar_problem(True, *exp, step=0.00195)
+        except:
+            print(f'There seems to be a problem in the experiment {exp}')
+
+
     if False:
         # This exports the generated initial values as a latex table
 
@@ -241,6 +292,3 @@ if __name__ == '__main__':
             output.write(tabulate(list(zip(accelerations, y[7:14])), tablefmt='latex'))
         with open('../Plots/Tables/Initial_Lambdas.tex', 'w') as output:
             output.write(tabulate(list(zip(lambdas, y[14:])), tablefmt='latex'))
-
-
-    # mpl.show()
