@@ -35,7 +35,8 @@ def res_general(t, y, yp, index=3):
     # Initial computations and assignments
     beta, theta, gamma, phi, delta, omega, epsilon = y[0:7]
     bep, thp, gap, php, dep, omp, epp = y[7:14]
-    lamb = y[14:20]
+    if index > 0:
+        lamb = y[14:20]
     sibe, sith, siga, siph, side, siom, siep = sin(y[0:7])
     cobe, coth, coga, coph, code, coom, coep = cos(y[0:7])
     sibeth = sin(beta + theta)
@@ -118,10 +119,10 @@ def res_general(t, y, yp, index=3):
                 # We have yd = x[:7], lambda = x[7:]
                 return hstack((dot(m, x[:7]) - ff[0:7] + dot(gp.T, x[7:]), gqq + dot(gp, x[:7])))
 
-            yp = fsolve(g, hstack((y[7:], zeros((6,)))))
+            yp_temp = fsolve(g, hstack((y[7:14], zeros((6,)))))
 
             #     Construction of the rhs
-            return hstack((y[7:14], yp[:7]))
+            return hstack((y[7:14], yp_temp[:7]))
         res_3 = gqq + dot(gp, yp[7:14])
 
     elif index == 2:
@@ -227,12 +228,4 @@ class Seven_bar_mechanism_expl(ap.Explicit_Problem):
         return y, yp
 
     def rhs(self, t, y):
-        """
-		Residual function of the 7-bar mechanism in
-		Hairer, Vol. II, p. 533 ff, see also formula (7.11)
-		written in residual form
-		y,yp vector of dim 20, t scalar
-		"""
-        yp_temp = hstack((y, zeros(6)))
-        y_temp = hstack((y[:7], zeros(13)))
-        return res_general(t, y_temp, yp_temp)
+        return res_general(t, y, y[7:], 0)

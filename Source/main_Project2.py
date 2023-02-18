@@ -113,7 +113,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False, xlabel='', figsize=(
 
 
 if __name__ == '__main__':
-    # run_seven_bar_problem(True, 1, 1E-6, 1E-6, False, False, False)
+    run_seven_bar_problem(True, 0, 1E-6, 1E-6, False, False, False)
 
     if False:
         # This plots comparisons of the index 1,2,3 formulations
@@ -202,52 +202,6 @@ if __name__ == '__main__':
         plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True, xlabel='experiment', figsize=(2,2))
 
     if False:
-        # This tests the index=2 problem
-        # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
-        experiments = [[2, 1E-6, 1E5, False, False, True],
-                       [2, 1E-6, 1E5, False, True, True],
-                       [2, 1E-6, 1E5, False, True, True]]
-
-        nsteps = []
-        nfcns = []
-        njacs = []
-        nerrfails = []
-        xdata = []
-        for counter, exp in enumerate(experiments):
-            try:
-                mod, sim, _ = run_seven_bar_problem(False, *exp)
-
-                stats = sim.get_statistics()
-                xdata.append(f'prblm {counter}')
-                nsteps.append(stats.__getitem__('nsteps'))
-                nfcns.append(stats.__getitem__('nfcns'))
-                njacs.append(stats.__getitem__('njacs'))
-                nerrfails.append(stats.__getitem__('nerrfails'))
-            except:
-                print(f'There seems to be a problem in the experiment {exp}')
-
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True, figsize=(2,2))
-    # mpl.show()
-<<<<<<< HEAD
-
-    if False:
-        # This exports the experiment configuration as a latex table
-        # tab_headers = ['experiment', r'\pyth{problem_index}', r'\pyth{atol_v}', r'\pyth{atol_lambda}', r'\pyth{algvar_v}',
-        #                r'\pyth{algvar_lambda}', r'\pyth{suppress_alg}']
-        tab_headers = ['experiment', 'index', 'atol_v', 'atol_lambda', 'algvar_v', 'algvar_lambda', 'suppress_alg']
-        experiments = [[1, 1.E5, 1.E5, False, False, True],
-                       [1, 1E-6, 1.E5, False, True, True],
-                       [1, 1E-6, 1.E5, True, False, True],
-                       [1, 1E-6, 1.E5, True, True, False],
-                       [1, 1E-6, 1E-6, False, False, True]]
-        # for i, line in enumerate(experiments):
-        #    for j, obj in enumerate(line):
-        #        experiments[i][j] = f'\pyth{{{obj}}}'
-        print(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='fancy_grid'))
-        with open('../Plots/Tables/Overview_Index1Experiment.tex', 'w') as output:
-            output.write(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='latex'))
-
-    if False:
         # This tests the RK4 method
         # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
         experiments = [[0, 1E-6, 1E-6, False, False, False]]
@@ -273,7 +227,7 @@ if __name__ == '__main__':
         #plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True, xlabel='experiment', figsize=(2,2))
 
     #TODO
-    if True:
+    if False:
         # This exports the generated initial values as a latex table
 
         y = calculate_consistent_initial()        
@@ -287,5 +241,6 @@ if __name__ == '__main__':
             output.write(tabulate(list(zip(accelerations, y[7:14])), tablefmt='latex'))
         with open('../Plots/Tables/Initial_Lambdas.tex', 'w') as output:
             output.write(tabulate(list(zip(lambdas, y[14:])), tablefmt='latex'))
-=======
->>>>>>> e6e48a73ffdc769b026ce3ffddd0bcf012c9ef1e
+
+
+    # mpl.show()
