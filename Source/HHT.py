@@ -6,7 +6,7 @@ from scipy.optimize import fsolve
 import numpy.linalg as nl
 import math
 
-class 2nd_Order(Explicit_ODE):
+class Newmark_implicit(Explicit_ODE):
     """
     Base class for the HHT-alpha and the Newmark method solvers
     """
@@ -14,10 +14,6 @@ class 2nd_Order(Explicit_ODE):
     maxit = 100
     maxsteps = 50000
 
-    h = property(_get_h, _set_h)
-    alpha = property(_get_alpha, _set_alpha)
-    beta = property(_get_beta, _set_beta)
-    gamma = property(_get_gamma, _set_gamma)
 
     def __init__(self, problem):
         Explicit_ODE.__init__(self, problem)  # Calls the base class
@@ -56,34 +52,36 @@ class 2nd_Order(Explicit_ODE):
     def _get_gamma(self):
         return self.options["gamma"]
 
+    h = property(_get_h, _set_h)
+    alpha = property(_get_alpha, _set_alpha)
+    beta = property(_get_beta, _set_beta)
+    gamma = property(_get_gamma, _set_gamma)
+
     def integrate(self, t, y, tf, opts):
         """
         _integrates (t,y) values until t > tf
         """
-        h = self.options["h"]
-        M = self.problem.M
-        C = self.problem.C
-        K = self.problem.K
-        f = self.problem.f
 
         u = self.problem.u0
         ud = self.problem.ud0
-        udd = get_udd0(u, ud)
+        udd = self.get_udd0(t, u, ud)
 
         # Lists for storing the result
         tres = []
         yres = []
 
+        h = self.options["h"]
+
         for i in range(self.maxsteps):
             tres.append(t)
-            yres.append(np.concatenate((u,ud))
+            yres.append(np.concatenate((u,ud)))
 
             if t >= tf:
                 break
             self.statistics["nsteps"] += 1
-            h = min(h, np.abs(tf - t_np1))
+            h = min(h, np.abs(tf - t))
 
-            u, ud, udd= self.step_HHT(t, u, ud, udd)
+            u, ud, udd= self.step(t, u, ud, udd)
             t += h
 
         else:
@@ -91,15 +89,15 @@ class 2nd_Order(Explicit_ODE):
 
         return ID_PY_OK, tres, yres
 
-    def step_HHT(self, t, u_nm1, ud_nm1, udd_nm1):
+    def step(self, t, u_nm1, ud_nm1, udd_nm1):
         
-        u_n = self.get_u_n(u_nm1, ud_nm1, udd_nm1)
+        u_n = self.get_u_n(t, u_nm1, ud_nm1, udd_nm1)
         ud_n = self.get_ud_n(u_n, u_nm1, ud_nm1, udd_nm1)
         udd_n = self.get_udd_n(u_n, u_nm1, ud_nm1, udd_nm1)
         
-        return u_n, ud_n, udd_np1
+        return u_n, ud_n, udd_n
 
-    def get_udd0(self, u_0, u_d0):
+    def get_udd0(self, t, u_0, ud_0):
         h = self.options["h"]
         alpha = self.options["alpha"]
         beta = self.options["beta"]
@@ -112,9 +110,9 @@ class 2nd_Order(Explicit_ODE):
         # Update statistics
         self.statistics["nfcns"] += 1
 
-        return np.linalg.solve(M, f(t)-np.dot(C,ud0)-np.dot(K,u0))
+        return np.linalg.solve(M, f(t)-np.dot(C,ud_0)-np.dot(K,u_0))
 
-    def get_u_n(self, u_nm1, ud_nm1, udd_nm1):
+    def get_u_n(self, t, u_nm1, ud_nm1, udd_nm1):
         h = self.options["h"]
         alpha = self.options["alpha"]
         beta = self.options["beta"]
@@ -123,15 +121,16 @@ class 2nd_Order(Explicit_ODE):
         C = self.problem.C
         K = self.problem.K
         f = self.problem.f
+        lhs_Matrix = M/(beta*h**2)+gamma/(beta*h)*C+(1+alpha)*K
 
         # Update statistics
         self.statistics["nfcns"] += 1
 
         # Solve (8'') to get u_np1
         return np.linalg.solve(lhs_Matrix, f(t) \
-                         np.dot(M, u_nm1/(beta*h**2)+ud_nm1/(beta*h)+(1/(2*beta)-1)*udd_nm1) \
+                        + np.dot(M, u_nm1/(beta*h**2)+ud_nm1/(beta*h)+(1/(2*beta)-1)*udd_nm1) \
                         + np.dot(C, gamma*u_nm1/(beta*h)-(1-gamma/beta)*ud_nm1-(1-gamma/(2*beta))*h*udd_nm1)
-                        + alpha*np.dot(K, u_nm1)
+                        + alpha*np.dot(K, u_nm1))
 
     def get_ud_n(self, u_n, u_nm1, ud_nm1, udd_nm1):
         h = self.options["h"]
@@ -171,18 +170,18 @@ class 2nd_Order(Explicit_ODE):
         self.log_message(' Solver            : BDF2', verbose)
         self.log_message(' Solver type       : Fixed step\n', verbose)
 
-class Newmark_explicit(2nd_Order):
+class Newmark_explicit(Newmark_implicit):
     alpha = None
     
-    def step_HHT(self, t, u_nm1, ud_nm1, udd_nm1):
+    def step(self, t, u_nm1, ud_nm1, udd_nm1):
         
-        u_n = self.get_u_n(u_nm1, ud_nm1, udd_nm1)
-        udd_n = self.get_udd_n(u_n, ud_n)
+        u_n = self.get_u_n(t, u_nm1, ud_nm1, udd_nm1)
+        udd_n = self.get_udd_n(t, u_n)
         ud_n = self.get_ud_n(ud_nm1, udd_n, udd_nm1)
         
         return u_n, ud_n, udd_n
 
-    def get_u_n(self, u_nm1, ud_nm1, udd_nm1):
+    def get_u_n(self, t, u_nm1, ud_nm1, udd_nm1):
         h = self.options["h"]
         return u_nm1+ud_nm1*h+udd_nm1*h**2/2
 
@@ -190,7 +189,7 @@ class Newmark_explicit(2nd_Order):
         h = self.options["h"]
         return ud_nm1+udd_nm1*h/2+udd_n*h/2
 
-    def get_udd_n(self, u_n, ud_n):
+    def get_udd_n(self, t, u_n):
         h = self.options["h"]
         M = self.problem.M
         C = self.problem.C
@@ -201,23 +200,15 @@ class Newmark_explicit(2nd_Order):
         self.statistics["nfcns"] += 1
 
         # Solve (8'') to get u_np1
-        return np.linalg.solve(M, f(t)-np.dot(C,ud_n)-np.dot(K,u_n))
+        return np.linalg.solve(M, f(t)-np.dot(K,u_n))
 
-class HHT(2nd_Order):
-
-    alpha = property(_get_alpha, _set_alpha)
+class HHT(Newmark_implicit):
     beta = None
     gamma = None
-
-    def __init__(self, problem):
-        2nd_Order.__init__(self, problem)
     
     def _set_alpha(self, alpha):
         self.options["alpha"] = alpha
         self.options["beta"] = ((1-alpha)/2)**2
         self.options["gamma"] = 1/2-alpha
 
-
-
-class Newmark_implicit(2nd_Order):
-    alpha = None
+    alpha = property(Newmark_implicit._get_alpha, _set_alpha)

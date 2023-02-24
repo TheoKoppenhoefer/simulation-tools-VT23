@@ -7,7 +7,7 @@ import math
 
 
 # Define the rhs
-def rhs(t, y):
+def f_pendulum(t, y, k):
     yd = np.zeros(np.shape(y))
     yd[0:2] = y[2:4]
     norm_y = np.linalg.norm(y[0:2])
@@ -23,6 +23,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, ma
     t0 = 0.0
     tfinal = 10.0  # Specify the final time
     # Define an Assimulo problem
+    rhs = lambda t,y: f_pendulum(t, y, k)
     mod = Explicit_Problem(rhs, y0, t0, name=r'Elastic Pendulum Problem')
 
     # Define an explicit solver
@@ -37,43 +38,48 @@ def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, ma
     # Simulate
     t, y = sim.simulate(tfinal)
 
+    pot_energy, kin_energy, elast_energy, total_energy, stability_index = pendulum_energies(y, k)
+
+    # Plot
+    if with_plots:
+        plot_pendulum(t, y, pot_energy, kin_energy, elast_energy, total_energy)
+    return mod, sim, stability_index
+
+def pendulum_energies(y, k):
     # calculate the energy
     pot_energy = 1 + y[:, 1]
     kin_energy = np.linalg.norm(y[:, 2:4], axis=1) ** 2 / 2.
     elast_energy = k * (1 - np.linalg.norm(y[:, 0:2], axis=1)) ** 2 / 2.
     total_energy = pot_energy + kin_energy + elast_energy
     stability_index = (np.max(total_energy) - np.min(total_energy)) / np.mean(total_energy)
-
-    # Plot
-    if with_plots:
-        for i in range(y.shape[1]):
-            mpl.plot(t, y[:, i])
-        mpl.legend([r'$y_1$', r'$y_2$', r'$\dot{y}_1$', r'$\dot{y}_2$'])
-        mpl.title('Cartesian Coordinates')
-        mpl.show()
-        mpl.plot(y[:, 0], y[:, 1])
-        mpl.xlabel(r'$y_1$')
-        mpl.ylabel(r'$y_2$')
-        # mpl.title('phase portrait')
-        mpl.show()
-        # Energy plot
-        mpl.plot(t, pot_energy, label='potential energy')
-        mpl.plot(t, kin_energy, label='kinetic energy')
-        mpl.plot(t, elast_energy, label='elastic energy')
-        mpl.plot(t, total_energy, label='total energy')
-        mpl.xlabel(r'$t$')
-        mpl.ylabel(r'Energy')
-        mpl.legend()
-        mpl.show()
-        # Polar Coordiantes
-        mpl.plot(t, np.sqrt(y[:, 0] ** 2 + y[:, 1] ** 2))
-        mpl.plot(t, np.arctan2(y[:, 1], y[:, 0]) + math.pi / 2)
-        mpl.xlabel(r'$t$')
-        mpl.legend([r'$r$', r'$theta$'])
-        mpl.title('Polar Coordinates')
-        mpl.show()
-    return mod, sim, stability_index
-
+    return pot_energy, kin_energy, elast_energy, total_energy, stability_index
+def plot_pendulum(t, y, pot_energy, kin_energy, elast_energy, total_energy):
+    for i in range(y.shape[1]):
+        mpl.plot(t, y[:, i])
+    mpl.legend([r'$y_1$', r'$y_2$', r'$\dot{y}_1$', r'$\dot{y}_2$'])
+    mpl.title('Cartesian Coordinates')
+    mpl.show()
+    mpl.plot(y[:, 0], y[:, 1])
+    mpl.xlabel(r'$y_1$')
+    mpl.ylabel(r'$y_2$')
+    # mpl.title('phase portrait')
+    mpl.show()
+    # Energy plot
+    mpl.plot(t, pot_energy, label='potential energy')
+    mpl.plot(t, kin_energy, label='kinetic energy')
+    mpl.plot(t, elast_energy, label='elastic energy')
+    mpl.plot(t, total_energy, label='total energy')
+    mpl.xlabel(r'$t$')
+    mpl.ylabel(r'Energy')
+    mpl.legend()
+    mpl.show()
+    # Polar Coordiantes
+    mpl.plot(t, np.sqrt(y[:, 0] ** 2 + y[:, 1] ** 2))
+    mpl.plot(t, np.arctan2(y[:, 1], y[:, 0]) + math.pi / 2)
+    mpl.xlabel(r'$t$')
+    mpl.legend([r'$r$', r'$theta$'])
+    mpl.title('Polar Coordinates')
+    mpl.show()
 
 def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=False, savefig=False):
     ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails', 'instability index']
