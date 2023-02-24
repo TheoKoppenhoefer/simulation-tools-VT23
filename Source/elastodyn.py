@@ -132,6 +132,9 @@ class elastodynamic_beam:
                                       - self.Dampening_mat @ y[self.ndofs:]
                                       + Ft)))
 
+    def f_Newmark(self, t):
+        return t * self.F if t < self.cutoff_Tc else np.zeros(self.ndofs)
+
     def evaluateAt(self, y, position):
         from dune.common import FieldVector
         from dune.fem.utility import pointSample
@@ -206,8 +209,8 @@ def run_beam_problem_HHT():
     ud0 = u0
     M = beam_class.Mass_mat
     K = beam_class.Stiffness_mat
-    C = beam_class.Damping_mat
-    f = beam_class.F
+    C = beam_class.Dampening_mat
+    f = beam_class.f_Newmark
     beam_problem = Explicit_Problem_2nd(M, C, K, u0, ud0, t0, f,
                                         name='Modified Elastodyn example from DUNE-FEM')
 
