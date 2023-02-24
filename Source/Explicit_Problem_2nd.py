@@ -2,6 +2,7 @@
 
 import numpy as np
 from assimulo.problem import Explicit_Problem
+from scipy.sparse.linalg import spsolve
 
 
 class Explicit_Problem_2nd(Explicit_Problem):
@@ -22,5 +23,5 @@ class Explicit_Problem_2nd(Explicit_Problem):
         K = self.K
         C = self.C
         f = self.f
-        return np.concatenate((v, f(t) - np.linalg.solve(M, np.dot(K, u))
-                               - np.linalg.solve(M, np.dot(C, v))))
+        return np.concatenate((v, f(t) - spsolve(M, K@ u)
+                               - spsolve(M, C@ v)))

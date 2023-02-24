@@ -5,6 +5,7 @@ import matplotlib.pyplot as mpl
 from scipy.optimize import fsolve
 import numpy.linalg as nl
 import math
+from scipy.sparse.linalg import spsolve
 
 class Newmark_implicit(Explicit_ODE):
     """
@@ -110,7 +111,7 @@ class Newmark_implicit(Explicit_ODE):
         # Update statistics
         self.statistics["nfcns"] += 1
 
-        return np.linalg.solve(M, f(t)-np.dot(C,ud_0)-np.dot(K,u_0))
+        return spsolve(M, f(t)-C@ud_0-K@u_0)
 
     def get_u_n(self, t, u_nm1, ud_nm1, udd_nm1):
         h = self.options["h"]
@@ -127,10 +128,10 @@ class Newmark_implicit(Explicit_ODE):
         self.statistics["nfcns"] += 1
 
         # Solve (8'') to get u_np1
-        return np.linalg.solve(lhs_Matrix, f(t) \
-                        + np.dot(M, u_nm1/(beta*h**2)+ud_nm1/(beta*h)+(1/(2*beta)-1)*udd_nm1) \
-                        + np.dot(C, gamma*u_nm1/(beta*h)-(1-gamma/beta)*ud_nm1-(1-gamma/(2*beta))*h*udd_nm1)
-                        + alpha*np.dot(K, u_nm1))
+        return spsolve(lhs_Matrix, f(t) \
+                        + M@ u_nm1/(beta*h**2+ud_nm1/(beta*h)+(1/(2*beta)-1)*udd_nm1) \
+                        + C@ u_nm1* gamma/(beta*h) -(1-gamma/beta)*ud_nm1-(1-gamma/(2*beta))*h*udd_nm1
+                        + alpha*K@ u_nm1)
 
     def get_ud_n(self, u_n, u_nm1, ud_nm1, udd_nm1):
         h = self.options["h"]
@@ -200,7 +201,7 @@ class Newmark_explicit(Newmark_implicit):
         self.statistics["nfcns"] += 1
 
         # Solve (8'') to get u_np1
-        return np.linalg.solve(M, f(t)-np.dot(K,u_n))
+        return spsolve(M, f(t)-K@u_n)
 
 class HHT(Newmark_implicit):
     beta = None
