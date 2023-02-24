@@ -68,19 +68,15 @@ class 2nd_Order(Explicit_ODE):
 
         u = self.problem.u0
         ud = self.problem.ud0
-        udd = np.linalg.solve(M, f(t)-np.dot(C,ud)-np.dot(K,u))
+        udd = get_udd0(u, ud)
 
         # Lists for storing the result
         tres = []
-        ures = []
-        udres = []
-        uddres = []
+        yres = []
 
         for i in range(self.maxsteps):
             tres.append(t)
-            ures.append(u)
-            udres.append(ud)
-            uddres.append(udd)
+            yres.append(np.concatenate((u,ud))
 
             if t >= tf:
                 break
@@ -88,13 +84,22 @@ class 2nd_Order(Explicit_ODE):
             h = min(h, np.abs(tf - t_np1))
 
             u, ud, udd= self.step_HHT(t, u, ud, udd)
+            t += h
 
         else:
             raise Explicit_ODE_Exception('Final time not reached within maximum number of steps')
 
         return ID_PY_OK, tres, yres
 
-    def step_HHT(self, t, u_n, ud_n, udd_n):
+    def step_HHT(self, t, u_nm1, ud_nm1, udd_nm1):
+        
+        u_n = self.get_u_n(u_nm1, ud_nm1, udd_nm1)
+        ud_n = self.get_ud_n(u_n, u_nm1, ud_nm1, udd_nm1)
+        udd_n = self.get_udd_n(u_n, u_nm1, ud_nm1, udd_nm1)
+        
+        return u_n, ud_n, udd_np1
+
+    def get_udd0(self, u_0, u_d0):
         h = self.options["h"]
         alpha = self.options["alpha"]
         beta = self.options["beta"]
@@ -104,21 +109,57 @@ class 2nd_Order(Explicit_ODE):
         K = self.problem.K
         f = self.problem.f
 
-        # Solve (8'') to get u_np1
-        u_np1 = np.linalg.solve(lhs_Matrix, f(t) \
-                        + np.dot(M, u_n/(beta*h**2)+ud_n/(beta*h)+(1/(2*beta)-1)*udd_n) \
-                        + np.dot(C, gamma*u_n/(beta*h)-(1-gamma/beta)*ud_n-(1-gamma/(2*beta))*h*udd_n)
-                        + alpha*np.dot(K, u_n)
+        # Update statistics
+        self.statistics["nfcns"] += 1
 
-        # solve (6') to get udd_np1
-        udd_np1 = (u_np1-u_n)/(beta*h**2)-ud_n/(beta*h)-(1/(2*beta)-1)*udd_n
+        return np.linalg.solve(M, f(t)-np.dot(C,ud0)-np.dot(K,u0))
 
-        # solve (7') to get ud_np1
-        ud_np1 = gamma/beta*(u_np1-u_n)/h+(1-gamma/beta)*ud_n+(1-gamma/(2*beta))*h*udd_n
+    def get_u_n(self, u_nm1, ud_nm1, udd_nm1):
+        h = self.options["h"]
+        alpha = self.options["alpha"]
+        beta = self.options["beta"]
+        gamma = self.options["gamma"]
+        M = self.problem.M
+        C = self.problem.C
+        K = self.problem.K
+        f = self.problem.f
 
         # Update statistics
         self.statistics["nfcns"] += 1
-        return u_np1, ud_np1, udd_np1
+
+        # Solve (8'') to get u_np1
+        return np.linalg.solve(lhs_Matrix, f(t) \
+                         np.dot(M, u_nm1/(beta*h**2)+ud_nm1/(beta*h)+(1/(2*beta)-1)*udd_nm1) \
+                        + np.dot(C, gamma*u_nm1/(beta*h)-(1-gamma/beta)*ud_nm1-(1-gamma/(2*beta))*h*udd_nm1)
+                        + alpha*np.dot(K, u_nm1)
+
+    def get_ud_n(self, u_n, u_nm1, ud_nm1, udd_nm1):
+        h = self.options["h"]
+        alpha = self.options["alpha"]
+        beta = self.options["beta"]
+        gamma = self.options["gamma"]
+        M = self.problem.M
+        C = self.problem.C
+        K = self.problem.K
+        f = self.problem.f
+
+        # solve (7') to get ud_np1
+        return gamma/beta*(u_n-u_nm1)/h+(1-gamma/beta)*ud_nm1+(1-gamma/(2*beta))*h*udd_nm1
+
+    def get_udd_n(self, u_n, u_nm1, ud_nm1, udd_nm1):
+        h = self.options["h"]
+        alpha = self.options["alpha"]
+        beta = self.options["beta"]
+        gamma = self.options["gamma"]
+        M = self.problem.M
+        C = self.problem.C
+        K = self.problem.K
+        f = self.problem.f
+
+        # solve (6') to get udd_np1
+        return (u_n-u_nm1)/(beta*h**2)-ud_nm1/(beta*h)-(1/(2*beta)-1)*udd_nm1
+
+
 
     def print_statistics(self, verbose=NORMAL):
         self.log_message('Final Run Statistics            : {name} \n'.format(name=self.problem.name), verbose)
@@ -130,6 +171,37 @@ class 2nd_Order(Explicit_ODE):
         self.log_message(' Solver            : BDF2', verbose)
         self.log_message(' Solver type       : Fixed step\n', verbose)
 
+class Newmark_explicit(2nd_Order):
+    alpha = None
+    
+    def step_HHT(self, t, u_nm1, ud_nm1, udd_nm1):
+        
+        u_n = self.get_u_n(u_nm1, ud_nm1, udd_nm1)
+        udd_n = self.get_udd_n(u_n, ud_n)
+        ud_n = self.get_ud_n(ud_nm1, udd_n, udd_nm1)
+        
+        return u_n, ud_n, udd_n
+
+    def get_u_n(self, u_nm1, ud_nm1, udd_nm1):
+        h = self.options["h"]
+        return u_nm1+ud_nm1*h+udd_nm1*h**2/2
+
+    def get_ud_n(self, ud_nm1, udd_n, udd_nm1):
+        h = self.options["h"]
+        return ud_nm1+udd_nm1*h/2+udd_n*h/2
+
+    def get_udd_n(self, u_n, ud_n):
+        h = self.options["h"]
+        M = self.problem.M
+        C = self.problem.C
+        K = self.problem.K
+        f = self.problem.f
+
+        # Update statistics
+        self.statistics["nfcns"] += 1
+
+        # Solve (8'') to get u_np1
+        return np.linalg.solve(M, f(t)-np.dot(C,ud_n)-np.dot(K,u_n))
 
 class HHT(2nd_Order):
 
@@ -147,5 +219,5 @@ class HHT(2nd_Order):
 
 
 
-class Newmark(2nd_Order):
+class Newmark_implicit(2nd_Order):
     alpha = None

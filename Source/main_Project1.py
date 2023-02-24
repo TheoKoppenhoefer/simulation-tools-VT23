@@ -5,20 +5,20 @@ import matplotlib.pyplot as mpl
 import math
 
 
+
+# Define the rhs
+def rhs(t, y):
+    yd = np.zeros(np.shape(y))
+    yd[0:2] = y[2:4]
+    norm_y = np.linalg.norm(y[0:2])
+    lam = k * (norm_y - 1) / norm_y
+    yd[2] = -y[0] * lam
+    yd[3] = -y[1] * lam - 1
+    return yd
+
 def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
     """
     """
-
-    # Define the rhs
-    def rhs(t, y):
-        yd = np.zeros(np.shape(y))
-        yd[0:2] = y[2:4]
-        norm_y = np.linalg.norm(y[0:2])
-        lam = k * (norm_y - 1) / norm_y
-        yd[2] = -y[0] * lam
-        yd[3] = -y[1] * lam - 1
-        return yd
-
     y0 = np.array([1.1, 0, 0, 0])
     t0 = 0.0
     tfinal = 10.0  # Specify the final time

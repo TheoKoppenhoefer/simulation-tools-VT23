@@ -4,7 +4,7 @@ import numpy as np
 from assimulo.problem import Explicit_Problem
 
 class Explicit_Problem_2nd(Explicit_Problem):
-    def __init__(self, M, C, K, u0, ud0, t0, f, params):
+    def __init__(self, M, C, K, u0, ud0, t0, f, rhs=self.rhs, params):
         self.M = M
         self.C = C
         self.K = M

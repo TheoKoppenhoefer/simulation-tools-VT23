@@ -1,46 +1,37 @@
 import numpy as np
 from assimulo.problem import Explicit_Problem
 from Explicit_Problem_2nd import Explicit_Problem_2nd
+from HHT import HHT, Newmark_explicit, Newmark_implicit
 from assimulo.solvers import CVode
 import matplotlib.pyplot as mpl
 import math
+from main_Problem1 import rhs
 
 
 def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
     """
     """
+    def get_udd_n(u_n, ud_n):
+        return rhs(0, np.concatenate((u_n,ud_n)))[2:]
 
-    # Define the rhs
-    def rhs(t, y):
-        yd = np.zeros(np.shape(y))
-        yd[0:2] = y[2:4]
-        norm_y = np.linalg.norm(y[0:2])
-        lam = k * (norm_y - 1) / norm_y
-        yd[2] = -y[0] * lam
-        yd[3] = -y[1] * lam - 1
-        return yd
+    def get_udd0(u0, ud0):
+        return rhs(0, np.concatenate((u0,ud0)))[2:]
 
     y0 = np.array([1.1, 0, 0, 0])
     t0 = 0.0
     tfinal = 10.0  # Specify the final time
     # Define an Assimulo problem
-    M =
     u0 = np.array([1.1, 0])
     ud0 = np.zeros(2)
-    M = np.eye(2)
-    C = np.eye(2)
 
-
-    mod = Explicit_Problem_2nd(rhs, y0, t0, name=r'Elastic Pendulum Problem')
+    mod = Explicit_Problem_2nd(None, None, None, u0, ud0, t0, None, name=r'Elastic Pendulum Problem')
 
     # Define an explicit solver
-    sim = CVode(mod)  # Create a CVode solver
+    sim = Newmark_explicit(mod)
 
     # Sets the parameters
-    sim.discr = discr
-    sim.maxord = maxord
-    sim.rtol = rtol
-    sim.atol = [atol]
+    sim.get_udd0 = get_udd0
+    sim.get_udd_n = get_udd_n
 
     # Simulate
     t, y = sim.simulate(tfinal)
