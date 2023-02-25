@@ -129,7 +129,7 @@ class Newmark_implicit(Explicit_ODE):
 
         # Solve (8'') to get u_np1
         return spsolve(lhs_Matrix, f(t) \
-                        + M@( u_nm1/(beta*h**)2+ud_nm1/(beta*h)+(1/(2*beta)-1)*udd_nm1 ) \
+                        + M@( u_nm1/(beta*h**2)+ud_nm1/(beta*h)+(1/(2*beta)-1)*udd_nm1 ) \
                         + C@( u_nm1* gamma/(beta*h) -(1-gamma/beta)*ud_nm1-(1-gamma/(2*beta))*h*udd_nm1 )
                         + alpha*K@ u_nm1)
 
