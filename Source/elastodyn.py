@@ -214,8 +214,10 @@ def run_beam_problem_HHT():
     beam_problem = Explicit_Problem_2nd(M, C, K, u0, ud0, t0, f,
                                         name='Modified Elastodyn example from DUNE-FEM')
 
-    beamCV = HHT(beam_problem)
-    # beamCV = aso.ImplicitEuler(beam_problem) # CVode solver instance
+    import assimulo.solvers as aso
+    import assimulo.ode as aode
+    # beamCV = HHT(beam_problem)
+    beamCV = aso.ImplicitEuler(beam_problem) # CVode solver instance
     # beamCV = aso.Radau5ODE(beam_problem)
     beamCV.h = 0.05  # constant step size here
     tt, y = beamCV.simulate(t_end)
@@ -238,5 +240,5 @@ def run_beam_problem_HHT():
 
 
 if __name__ == '__main__':
-    run_beam_problem_HHT()
-    # run_beam_problem_assimulo()
+    # run_beam_problem_HHT()
+    run_beam_problem_assimulo()

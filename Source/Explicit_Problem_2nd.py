@@ -17,11 +17,10 @@ class Explicit_Problem_2nd(Explicit_Problem):
         Explicit_Problem.__init__(self, self.rhs, np.concatenate((u0, ud0)), t0, **params)
 
     def rhs(self, t, y):
-        n = y.size / 2
+        n = y.size // 2
         u, v = y[:n], y[n:]
         M = self.M
         K = self.K
         C = self.C
         f = self.f
-        return np.concatenate((v, f(t) - spsolve(M, K@ u)
-                               - spsolve(M, C@ v)))
+        return np.concatenate((v, f(t) - spsolve(M, K@ u+ C@ v)))
