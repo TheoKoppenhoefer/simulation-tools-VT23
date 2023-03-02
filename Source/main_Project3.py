@@ -49,3 +49,5 @@ def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, ma
 if __name__ == '__main__':
     run_elastic_pendulum_problem()
     # mpl.show()
+
+    # TODO: generate experiments testing elastodyn.py

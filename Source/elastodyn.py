@@ -196,7 +196,10 @@ def run_beam_problem_assimulo():
     print(f"times: {tt}")
 
 
-def run_beam_problem_HHT():
+def run_beam_problem_HHT(solverType='HHT', alpha=0., beta=0.5, gamma=0.5, plotBeam=True, plotDisplacement=True):
+    """
+    solverType: the choices are HHT, Newmark_implicit, Newmark_explicit, Radau50DE, ImplicitEuler, CVode
+    """
     # test section using build-in ODE solver from Assimulo
     t_end = 8
     beam_class = elastodynamic_beam(4, T=t_end)
@@ -216,10 +219,24 @@ def run_beam_problem_HHT():
                                         name='Modified Elastodyn example from DUNE-FEM')
 
     import assimulo.solvers as aso
-    import assimulo.ode as aode
-    beamCV = HHT(beam_problem)
-    # beamCV = aso.ImplicitEuler(beam_problem) # CVode solver instance
-    # beamCV = aso.Radau5ODE(beam_problem)
+
+    if solverType == 'HHT':
+        beamCV = HHT(beam_problem)
+        beamCV.alpha = alpha
+    elif solverType == 'Newmark_implicit':
+        beamCV = Newmark_implicit(beam_problem)
+        beamCV.alpha = alpha
+        beamCV.beta = beta
+        beamCV.gamma = gamma
+    elif solverType == 'Newmark_explicit':
+        beamCV = Newmark_explicit(beam_problem)
+    elif solverType == 'ImplicitEuler':
+        beamCV = aso.ImplicitEuler(beam_problem)
+    elif solverType == 'Radau5ODE':
+        beamCV = aso.Radar5ODE(beam_problem)
+    else:
+        beamCV = aso.CVode(beam_problem)
+
     beamCV.h = 0.05  # constant step size here
     tt, y = beamCV.simulate(t_end)
 
@@ -229,15 +246,24 @@ def run_beam_problem_HHT():
     for i, t in enumerate(tt):
         disp_tip.append(beam_class.evaluateAt(y[i], [1, 0.05]))
         if t > plottime:
-            print(f"Beam position at t={t}")
-            beam_class.plotBeam(y[i])
+            if plotBeam:
+                print(f"Beam position at t={t}")
+                beam_class.plotBeam(y[i])
             plottime += plotstep
 
-    pl.figure()
+    if plotDisplacement:
+        plot_displacement(tt, disp_tip)
+
+    # TODO: return a load of runtime statistics, including energy etc.
+
+def plot_displacement(tt, disp_tip, savefig=False, plotnumber=900):
+    pl.figure(plotnumber)
     pl.plot(tt, disp_tip, '-b')
     pl.title('Displacement of beam tip over time')
     pl.xlabel('t')
-    pl.savefig('displacement.png', dpi=200)
+    if savefig:
+        pl.savefig(f'../Plots/Project2_main/Figure_{plotnumber}.pdf')
+
 
 
 if __name__ == '__main__':
