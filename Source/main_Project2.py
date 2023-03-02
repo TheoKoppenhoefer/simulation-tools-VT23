@@ -115,7 +115,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False, xlabel='', figsize=(
 
 
 if __name__ == '__main__':
-    # run_seven_bar_problem(True, 1, 1E-6, 1E-6, False, False, False)
+    run_seven_bar_problem(True, 1, 1E5, 1E5, False, False, True)
 
     if False:
         # This plots comparisons of the index 1,2,3 formulations

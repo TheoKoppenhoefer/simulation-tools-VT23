@@ -9,7 +9,7 @@ class Explicit_Problem_2nd(Explicit_Problem):
     def __init__(self, M, C, K, u0, ud0, t0, f, **params):
         self.M = M
         self.C = C
-        self.K = M
+        self.K = K
         self.u0 = u0
         self.ud0 = ud0
         self.t0 = t0

@@ -173,8 +173,8 @@ def run_beam_problem_assimulo():
     beam_problem = aode.Explicit_Problem(beam_class.rhs, y0=np.zeros((2 * beam_class.ndofs,)))
     beam_problem.name = 'Modified Elastodyn example from DUNE-FEM'
 
-    beamCV = aso.ImplicitEuler(beam_problem)  # CVode solver instance
-    # beamCV = aso.Radau5ODE(beam_problem)
+    # beamCV = aso.ImplicitEuler(beam_problem)  # CVode solver instance
+    beamCV = aso.Radau5ODE(beam_problem)
     beamCV.h = 0.05  # constant step size here
     tt, y = beamCV.simulate(t_end)
 
@@ -193,6 +193,7 @@ def run_beam_problem_assimulo():
     pl.title('Displacement of beam tip over time')
     pl.xlabel('t')
     pl.savefig('displacement.png', dpi=200)
+    print(f"times: {tt}")
 
 
 def run_beam_problem_HHT():
@@ -216,8 +217,8 @@ def run_beam_problem_HHT():
 
     import assimulo.solvers as aso
     import assimulo.ode as aode
-    # beamCV = HHT(beam_problem)
-    beamCV = aso.ImplicitEuler(beam_problem) # CVode solver instance
+    beamCV = HHT(beam_problem)
+    # beamCV = aso.ImplicitEuler(beam_problem) # CVode solver instance
     # beamCV = aso.Radau5ODE(beam_problem)
     beamCV.h = 0.05  # constant step size here
     tt, y = beamCV.simulate(t_end)
@@ -240,5 +241,5 @@ def run_beam_problem_HHT():
 
 
 if __name__ == '__main__':
-    # run_beam_problem_HHT()
-    run_beam_problem_assimulo()
+    run_beam_problem_HHT()
+    # run_beam_problem_assimulo()
