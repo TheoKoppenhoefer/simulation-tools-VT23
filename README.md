@@ -5,6 +5,7 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 - [ ] refer to stability regions
 - [ ] change the stability index to the variation
 - [ ] remove the noise in the last energy plot
+- [ ] revise conclusion
 
 
 ## Some TODO's for project 2
@@ -18,9 +19,9 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 
 
 ## Some TODO's for project 3
-- [ ] Task 1
-- [ ] Task 2
-- [ ] Task 3
-- [ ] Task 4
-- [ ] Task 5
-- [ ] Task 6
+- [ ] Task 4: Comparison plots
+- [ ] check the damping behaviour
+- [ ] Write the report
+
+## General TODO's
+- [ ] make repository public
