@@ -53,6 +53,7 @@ def pendulum_energies(y, k):
     total_energy = pot_energy + kin_energy + elast_energy
     stability_index = (np.max(total_energy) - np.min(total_energy)) / np.mean(total_energy)
     return pot_energy, kin_energy, elast_energy, total_energy, stability_index
+
 def plot_pendulum(t, y, pot_energy, kin_energy, elast_energy, total_energy):
     for i in range(y.shape[1]):
         mpl.plot(t, y[:, i])

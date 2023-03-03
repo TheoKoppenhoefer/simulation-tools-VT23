@@ -161,47 +161,11 @@ class elastodynamic_beam:
         beam.plot()
 
 
-def run_beam_problem_assimulo():
-    # test section using build-in ODE solver from Assimulo
-    t_end = 8
-    beam_class = elastodynamic_beam(4, T=t_end)
-
-    import assimulo.solvers as aso
-    import assimulo.ode as aode
-
-    # y , ydot
-    beam_problem = aode.Explicit_Problem(beam_class.rhs, y0=np.zeros((2 * beam_class.ndofs,)))
-    beam_problem.name = 'Modified Elastodyn example from DUNE-FEM'
-
-    # beamCV = aso.ImplicitEuler(beam_problem)  # CVode solver instance
-    beamCV = aso.Radau5ODE(beam_problem)
-    beamCV.h = 0.05  # constant step size here
-    tt, y = beamCV.simulate(t_end)
-
-    disp_tip = []
-    plottime = 0
-    plotstep = 0.25
-    for i, t in enumerate(tt):
-        disp_tip.append(beam_class.evaluateAt(y[i], [1, 0.05]))
-        if t > plottime:
-            print(f"Beam position at t={t}")
-            beam_class.plotBeam(y[i])
-            plottime += plotstep
-
-    pl.figure()
-    pl.plot(tt, disp_tip, '-b')
-    pl.title('Displacement of beam tip over time')
-    pl.xlabel('t')
-    pl.savefig('displacement.png', dpi=200)
-    print(f"times: {tt}")
-
-
-def run_beam_problem_HHT(solverType='HHT', alpha=0., beta=0.5, gamma=0.5, plotBeam=True, plotDisplacement=True):
+def run_beam_problem_HHT(solverType='HHT', alpha=0., beta=0.5, gamma=0.5, with_plots=False, t_end=8):
     """
     solverType: the choices are HHT, Newmark_implicit, Newmark_explicit, Radau50DE, ImplicitEuler, CVode
     """
     # test section using build-in ODE solver from Assimulo
-    t_end = 8
     beam_class = elastodynamic_beam(4, T=t_end)
 
     from Explicit_Problem_2nd import Explicit_Problem_2nd
@@ -240,21 +204,36 @@ def run_beam_problem_HHT(solverType='HHT', alpha=0., beta=0.5, gamma=0.5, plotBe
     beamCV.h = 0.05  # constant step size here
     tt, y = beamCV.simulate(t_end)
 
+    # calculate the energies
+    n = y.shape[1] // 2
+    u, v = y[:,:n], y[:,n:]
+    elastic_energy = 0.5*(np.einsum('ij,ji->i',u,K@u.transpose()))
+    kinetic_energy = 0.5*(np.einsum('ij,ji->i',v,M@v.transpose()))
+    total_energy = elastic_energy + kinetic_energy
+    stability_index = np.var(total_energy[(len(tt)//5):]) # compute the variance of the solution
+
+    if with_plots:
+        plot_energies(tt, elastic_energy, kinetic_energy)
+        pl.show()
+
     disp_tip = []
     plottime = 0
     plotstep = 0.25
     for i, t in enumerate(tt):
         disp_tip.append(beam_class.evaluateAt(y[i], [1, 0.05]))
         if t > plottime:
-            if plotBeam:
+            if with_plots:
                 print(f"Beam position at t={t}")
                 beam_class.plotBeam(y[i])
             plottime += plotstep
 
-    if plotDisplacement:
+    if with_plots:
         plot_displacement(tt, disp_tip)
+        pl.show()
 
-    # TODO: return a load of runtime statistics, including energy etc.
+
+    # return mod, sim, soln
+    return beam_problem, beamCV, [tt, y, disp_tip, elastic_energy, kinetic_energy, total_energy, stability_index]
 
 def plot_displacement(tt, disp_tip, savefig=False, plotnumber=900):
     pl.figure(plotnumber)
@@ -264,8 +243,17 @@ def plot_displacement(tt, disp_tip, savefig=False, plotnumber=900):
     if savefig:
         pl.savefig(f'../Plots/Project2_main/Figure_{plotnumber}.pdf')
 
-
+def plot_energies(t, elast_energy, kin_energy, savefig=False, plotnumber=950):
+    # Energy plot
+    total_energy = elast_energy + kin_energy
+    pl.plot(t, kin_energy, label='kinetic energy')
+    pl.plot(t, elast_energy, label='elastic energy')
+    pl.plot(t, total_energy, label='total energy')
+    pl.xlabel(r'$t$')
+    pl.ylabel(r'Energy')
+    pl.legend()
+    if savefig:
+        pl.savefig(f'../Plots/Project2_main/Figure_{plotnumber}.pdf')
 
 if __name__ == '__main__':
-    run_beam_problem_HHT()
-    # run_beam_problem_assimulo()
+    run_beam_problem_HHT(with_plots=True)
