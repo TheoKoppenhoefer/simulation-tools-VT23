@@ -880,9 +880,64 @@ for this we implemented an Assimulo problem class, the HHT solver and the Newmar
 
 \section*{An elastic beam}
 
-
+In the second part of the project we tested the implicit Newmark and the HHT method on a discretised beam as seen in figure \ref{pl:beam_soln_initial}. The beam is displaced by a force until it is deformed as in figure \ref{pl:beam_soln_position1}. With time it then swings back and forth between the positions in figures \ref{pl:beam_soln_initial}-\ref{pl:beam_soln_position3}. Figure \ref{pl:beam_soln_displacement} shows the displacement of the tip of the beam in dependence of time.
 
 \begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_1.pdf}
+\caption{Beam position at $t\approx$.}
+\label{pl:beam_soln_initial}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_5.pdf}
+\caption{Beam position at $t\approx1$.}
+\label{pl:beam_soln_position1}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_10.pdf}
+\caption{Beam position at $t\approx$.}
+\label{pl:beam_soln_position2}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_12.pdf}
+\caption{Beam position at $t\approx3$.}
+\label{pl:beam_soln_position3}
+\end{minipage}
+
+\end{figure} We can calculate the elastic and kinetic energies according to the formulas
+\begin{align*}
+	E_{\text{kin}} = \frac{1}{2}v^\top Mv
+	\qquad\qquad E_{\text{elast}} = \frac{1}{2}u^\top Cu
+\end{align*}
+which add up to the total energy
+\begin{align*}
+	E_{\text{tot}}=E_{\text{kin}}+E_{\text{elast}}
+\end{align*}
+The development of the energy of the system can be seen in figure \ref{pl:beam_soln_energy}. Here we see in particular that after the initial application of an external force to the system the energy stays almost constant. We use this to construct as in Project 1 a \pyth{stability_index} by setting
+\begin{align*}
+	\text{stability index}=\text{Variance}\big(E_{\text{tot}}(t)\big)
+\end{align*}
+With an ideal solver this quantity vanishes for the latter part of the simulation where no external force is applied.
+
+\begin{figure}[h]
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_905.pdf}
+\caption{Displacement of the tip of the beam of the solution.}
+\label{pl:beam_soln_displacement}
+\end{minipage}
+\hfill
 \centering
 \begin{minipage}[t]{0.45\textwidth}
 \centering
@@ -890,12 +945,45 @@ for this we implemented an Assimulo problem class, the HHT solver and the Newmar
 \caption{Energy in dependence of time of the solution.}
 \label{pl:beam_soln_energy}
 \end{minipage}
-\hfill
+\end{figure}
+
+\subsubsection*{A brief comparison of solvers}
+
+In a first experiment we compare the performance of our implementation of the HHT solver and the implicit Euler solver from Assimulo. The HHT method was applied with the parameter $\alpha=0$ and the stepsize was the same for all methods. The results are plotted in figure \ref{tb:beam_exp_solverComparison}. Here one sees that for all solvers the value \pyth{stability_index} is small. There is however a big difference in the performance of the various methods. On my computer the implicit Euler solver takes roughly two orders of magnitude longer than the HHT method.
+
+\begin{figure}[h]
+\centering
+\input{../Plots/Tables/Statistics_beam_solvers.tex}
+\caption{Performance of various solvers for the beam problem}
+\label{tb:beam_exp_solverComparison}
+\end{figure}
+
+
+\subsubsection*{Testing the implicit Newmark solver}
+
+In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the parameter $\alpha=0$ and the stepsize $h=0.05$ constant. The plot of the \pyth{stability_index} can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}
+
+\begin{figure}[h]
+\centering
 \begin{minipage}[t]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_905.pdf}
-\caption{Displacement of the tip of the beam of the solution.}
-\label{pl:beam_soln_displacement}
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_910.pdf}
+\caption{Dependence of the \pyth{stability_index} on the parameter $\alpha$.}
+\label{pl:beam_exp_betagamma_alpha0}
+\end{minipage}
+\end{figure}
+
+\subsubsection*{Testing the HHT solver}
+
+In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. A plot of the \pyth{stability_index} can be seen in figure \ref{pl:beam_exp_HHTalpha} where it is noticable that the value decreases as $\alpha$ increases albeit from a small level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as can be seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. It is also astonishing that despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size, like the almost constant total energy and the eventual periodic behaviour of the kinetic and elastic energies.
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_920.pdf}
+\caption{Dependence of the \pyth{stability_index} on the parameter $\alpha$.}
+\label{pl:beam_exp_HHTalpha}
 \end{minipage}
 \end{figure}
 
@@ -905,23 +993,15 @@ for this we implemented an Assimulo problem class, the HHT solver and the Newmar
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_900.pdf}
 \caption{Energy f1or the HHT method with $\alpha=0$ and stepsize $h=1$.}
-\label{pl:}
+\label{pl:beam_exp_HHTalpha_0}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_901.pdf}
 \caption{Energy for the HHT method with $\alpha=-1/3$ and stepsize $h=1$.}
-\label{pl:}
+\label{pl:beam_exp_HHTalpha_minimal}
 \end{minipage}
-\end{figure}
-
-
-\begin{figure}[h]
-\centering
-\input{../Plots/Tables/Statistics_beam_solvers.tex}
-\caption{Performance of various solvers for the beam problem}
-%\label{tb:indx1_experiment_params}
 \end{figure}
 
 

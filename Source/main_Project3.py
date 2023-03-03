@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # run_beam_problem_HHT('HHT', alpha=-1/3, with_plots=True, h=1)
     # mpl.show()
 
-    run_beam_problem_HHT('HHT', with_plots=True)
+    # run_beam_problem_HHT('HHT', with_plots=True)
     mpl.show()
 
     if False:
@@ -90,52 +90,44 @@ if __name__ == '__main__':
     
     if False:
         # Test the beta and gamma parameter on the implicit Newmark method
-        stability_indxs = []
-        alpha = 0
-        n = 6
-        m = n
-        betas = np.linspace(0.1,0.49,n)
-        gammas = np.linspace(0.2,0.99,m)
-        for i, beta in enumerate(betas):
-            stability_indxs.append([])
-            for gamma in gammas:
-                mod, sim, soln = run_beam_problem_HHT('Newmark_implicit', alpha, beta, gamma)
-                stability_indxs[i].append(soln[6])
-            # [tt, y, disp_tip, elastic_energy, kinetic_energy, total_energy, stability_index]
-        max_stab = 1E2
-        stability_indxs = np.nan_to_num(np.asarray(stability_indxs))
-        stability_indxs[stability_indxs >= max_stab] = max_stab
-        stability_indxs[stability_indxs <= 0] = max_stab
-        # fig = mpl.figure()
-        fig, ax = mpl.subplots()
-        # fig, ax = mpl.subplots(subplot_kw={"projection": "3d"})
+        # experiments are of the form [alpha, betas, gammas]
+        experiments = [[0, np.linspace(0.1,0.49,8), np.linspace(0.5,0.99,8)],
+                       [-0.1, np.linspace(0.1,0.49,8), np.linspace(0.5,0.99,8)]]
+        
+        for i, experiment in enumerate(experiments):
+            stability_indxs = []
+            alpha = experiment[0]
+            betas = experiment[1]
+            gammas = experiment[2]
 
-        X, Y = np.meshgrid(betas, gammas)
-        # Plot the surface.
-        # color_matr = stability_indxs
-        # color_matr[stability_indxs <= 0] = 1E2
-        # colors = mpl.cm.jet(stability_indxs/float(stability_indxs.max()))
-        # # colors[stability_indxs <0,:] = np.array([0., 1., 1., 1.])
-        # surf = ax.plot_surface(X, Y, stability_indxs, facecolors=colors)
-        surf = mpl.contourf(X, Y, stability_indxs)
-        ax.set_xlabel(r'$\beta$')
-        ax.set_ylabel(r'$\gamma$')
-        # mpl.xlabel(r'$\beta$')
-        # mpl.ylabel(r'$\gamma$')
-        # ax.set_zlabel('stability_index')
-        fig.colorbar(surf, shrink=0.5, aspect=5, label='stability_index')
-        mpl.savefig(f'../Plots/Project3_main/Figure_910.pdf')
-        mpl.show()
+            for j, beta in enumerate(betas):
+                stability_indxs.append([])
+                for gamma in gammas:
+                    mod, sim, soln = run_beam_problem_HHT('Newmark_implicit', alpha, beta, gamma)
+                    stability_indxs[j].append(soln[6])
+
+            max_stab = 1E2
+            stability_indxs = np.nan_to_num(np.asarray(stability_indxs))
+            stability_indxs[stability_indxs >= max_stab] = max_stab
+            stability_indxs[stability_indxs <= 0] = max_stab
+
+            fig, ax = mpl.subplots()
+            X, Y = np.meshgrid(betas, gammas)
+            surf = mpl.contourf(X, Y, stability_indxs)
+            ax.set_xlabel(r'$\beta$')
+            ax.set_ylabel(r'$\gamma$')
+            fig.colorbar(surf, label='stability_index')
+            mpl.savefig(f'../Plots/Project3_main/Figure_{910+i}.pdf')
     
     if False:
         # compare the different solver methods
-        solvers = ['solver', 'HHT' , 'ImplicitEuler', 'Radau5ODE']
+        solvers = ['solver', 'HHT' , 'ImplicitEuler']
         stability_indxs = ['stability_index']
         solving_times = ['Elapsed simulation time [s]']
         for solver in solvers[1:]:
             mod, sim, soln = run_beam_problem_HHT(solver)
-            stability_indxs.append(soln[6])
-            solving_times.append(soln[7])
+            stability_indxs.append(round(soln[6], 1))
+            solving_times.append(np.around(soln[7], 1))
             
         # print(tabulate([solvers, stability_indxs, solving_times], headers='firstrow', tablefmt='fancy_grid'))
         with open('../Plots/Tables/Statistics_beam_solvers.tex', 'w') as output:
