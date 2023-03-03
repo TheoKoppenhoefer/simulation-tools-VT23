@@ -53,7 +53,7 @@ if __name__ == '__main__':
     # run_beam_problem_HHT('HHT', alpha=-1/3, with_plots=True, h=1)
     # mpl.show()
 
-    if True:
+    if False:
         # generate a bunch of images to be included in the report
         # show damping in dependence of the alpha parameter
         _, _, soln = run_beam_problem_HHT('HHT', 0, h=1)
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         _, _, soln = run_beam_problem_HHT()
         plot_displacement(soln[0], soln[2], savefig=True, plotnumber=905)
 
-    if False:
+    if True:
         # Test the alpha parameter on the HHT solver
         stability_indxs = []
         alphas = np.linspace(-1/3,0,10)
@@ -89,7 +89,7 @@ if __name__ == '__main__':
         # Test the beta and gamma parameter on the implicit Newmark method
         stability_indxs = []
         alpha = 0
-        n = 5
+        n = 6
         m = n
         betas = np.linspace(0.01,0.49,n)
         gammas = np.linspace(0.01,0.99,m)

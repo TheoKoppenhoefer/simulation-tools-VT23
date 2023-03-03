@@ -278,7 +278,7 @@ if __name__ == '__main__':
             print(f'There seems to be a problem in the experiment {exp}')
 
 
-    if False:
+    if True:
         # This exports the generated initial values as a latex table
 
         y = calculate_consistent_initial()        
@@ -287,8 +287,8 @@ if __name__ == '__main__':
         print(tabulate(list(zip(accelerations, y[7:14])), headers='firstrow', tablefmt='fancy_grid'))
         print(tabulate(list(zip(lambdas, y[14:])), headers='firstrow', tablefmt='fancy_grid'))
         with open('../Plots/Tables/Initial_Angles.tex', 'w') as output:
-            output.write(tabulate(list(zip(angles, y[:7])), tablefmt='latex'))
+            output.write(tabulate(list(zip(angles, y[:7])), tablefmt='latex_raw'))
         with open('../Plots/Tables/Initial_Accelerations.tex', 'w') as output:
-            output.write(tabulate(list(zip(accelerations, y[7:14])), tablefmt='latex'))
+            output.write(tabulate(list(zip(accelerations, y[7:14])), tablefmt='latex_raw'))
         with open('../Plots/Tables/Initial_Lambdas.tex', 'w') as output:
-            output.write(tabulate(list(zip(lambdas, y[14:])), tablefmt='latex'))
+            output.write(tabulate(list(zip(lambdas, y[14:])), tablefmt='latex_raw'))

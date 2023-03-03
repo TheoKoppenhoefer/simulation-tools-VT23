@@ -846,7 +846,7 @@ In particular in Figure ... the $L_2$ norm of each angle over time is plotted wi
 \begin{figure}[h]
 \begin{minipage}[t]{0.7\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/L2_0.001<h<0.002_delta=0.000005.png}
+%\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/L2_0.001<h<0.002_delta=0.000005.png}
 \end{minipage}
 \end{figure}
 
@@ -866,6 +866,15 @@ In Figures ... and ... it can be observerd the aproximation using the explicit R
 \end{minipage}
 \end{figure}
 
+\chapter*{Project 3}
+
+In this project we consider an initial value problem of the form
+\begin{align*}
+	M \ddot{u}+C\dot{u}+Ku = f(t) \\
+	u(0) = u_0 \\
+	\dot{u}(0) = v_0
+\end{align*}
+for this we implemented an Assimulo problem class, the HHT solver and the Newmark implicit and explicit solvers. The explicit solver was tested on teh 
 
 \chapter*{Appendix}
 

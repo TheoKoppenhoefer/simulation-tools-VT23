@@ -16,6 +16,7 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 - [ ] compare solution plots of the explicit solver
 - [ ] find out more in the documentation of IDA on the parameters algvar and atol.
 - [ ] Compare the solution of RK4 with the other solutions 
+- [ ] check the tabulate function
 
 
 ## Some TODO's for project 3
