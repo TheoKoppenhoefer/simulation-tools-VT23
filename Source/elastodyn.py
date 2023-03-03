@@ -198,7 +198,7 @@ def run_beam_problem_HHT(solverType='HHT', alpha=0., beta=0.5, gamma=0.5, with_p
     elif solverType == 'ImplicitEuler':
         beamCV = aso.ImplicitEuler(beam_problem)
     else:
-        beamCV = aso.Radar5ODE(beam_problem)
+        beamCV = aso.Radau5ODE(beam_problem)
 
     beamCV.h = h  # constant step size here
 

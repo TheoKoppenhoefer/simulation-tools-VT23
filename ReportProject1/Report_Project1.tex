@@ -874,7 +874,57 @@ In this project we consider an initial value problem of the form
 	u(0) = u_0 \\
 	\dot{u}(0) = v_0
 \end{align*}
-for this we implemented an Assimulo problem class, the HHT solver and the Newmark implicit and explicit solvers. The explicit solver was tested on teh 
+for this we implemented an Assimulo problem class, the HHT solver and the Newmark implicit and explicit solvers. The explicit solver was tested on the pendulum 
+
+\section*{The pendulum revisited}
+
+\section*{An elastic beam}
+
+
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_902.pdf}
+\caption{Energy in dependence of time of the solution.}
+\label{pl:beam_soln_energy}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_905.pdf}
+\caption{Displacement of the tip of the beam of the solution.}
+\label{pl:beam_soln_displacement}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_900.pdf}
+\caption{Energy f1or the HHT method with $\alpha=0$ and stepsize $h=1$.}
+\label{pl:}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_901.pdf}
+\caption{Energy for the HHT method with $\alpha=-1/3$ and stepsize $h=1$.}
+\label{pl:}
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
+\input{../Plots/Tables/Statistics_beam_solvers.tex}
+\caption{Performance of various solvers for the beam problem}
+%\label{tb:indx1_experiment_params}
+\end{figure}
+
+
 
 \chapter*{Appendix}
 

@@ -278,7 +278,7 @@ if __name__ == '__main__':
             print(f'There seems to be a problem in the experiment {exp}')
 
 
-    if True:
+    if False:
         # This exports the generated initial values as a latex table
 
         y = calculate_consistent_initial()        
