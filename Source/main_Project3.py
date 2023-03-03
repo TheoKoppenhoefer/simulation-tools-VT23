@@ -7,6 +7,7 @@ import matplotlib.pyplot as mpl
 import math
 from main_Project1 import f_pendulum, plot_pendulum, pendulum_energies
 from elastodyn import *
+from tabulate import tabulate
 
 
 def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
@@ -48,13 +49,100 @@ def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, ma
     return mod, sim, stability_index
 
 if __name__ == '__main__':
-    run_elastic_pendulum_problem()
-    run_beam_problem_HHT('HHT', 0, 0.5, 0.5, True, 8)
+    # run_elastic_pendulum_problem()
+    # run_beam_problem_HHT('HHT', alpha=-1/3, with_plots=True, h=1)
     # mpl.show()
 
+    if True:
+        # generate a bunch of images to be included in the report
+        # show damping in dependence of the alpha parameter
+        _, _, soln = run_beam_problem_HHT('HHT', 0, h=1)
+        plot_energies(soln[0], soln[3], soln[4], savefig=True, plotnumber=900)
+        _, _, soln = run_beam_problem_HHT('HHT', -1/3, h=1)
+        plot_energies(soln[0], soln[3], soln[4], savefig=True, plotnumber=901)
+        # exact energy plot
+        _, _, soln = run_beam_problem_HHT()
+        plot_energies(soln[0], soln[3], soln[4], savefig=True, plotnumber=902)
+        # exact displacement plot
+        _, _, soln = run_beam_problem_HHT()
+        plot_displacement(soln[0], soln[2], savefig=True, plotnumber=905)
+
     if False:
-        # TODO: change this to compare solns
-        
+        # Test the alpha parameter on the HHT solver
+        stability_indxs = []
+        alphas = np.linspace(-1/3,0,10)
+        for alpha in alphas:
+            mod, sim, soln = run_beam_problem_HHT('HHT', alpha)
+            stability_indxs.append(soln[6])
+            # plot_displacement(soln[0],soln[2])
+            # mpl.show()
+            # [tt, y, disp_tip, elastic_energy, kinetic_energy, total_energy, stability_index]
+        # print(stability_indxs)
+        mpl.figure()
+        mpl.plot(alphas, stability_indxs)
+        mpl.xlabel(r'$\alpha$')
+        mpl.ylabel('stability_index')
+        mpl.savefig(f'../Plots/Project3_main/Figure_920.pdf')
+        mpl.show()
+    
+    if True:
+        # Test the beta and gamma parameter on the implicit Newmark method
+        stability_indxs = []
+        alpha = 0
+        n = 5
+        m = n
+        betas = np.linspace(0.01,0.49,n)
+        gammas = np.linspace(0.01,0.99,m)
+        for i, beta in enumerate(betas):
+            stability_indxs.append([])
+            for gamma in gammas:
+                mod, sim, soln = run_beam_problem_HHT('Newmark_implicit', alpha, beta, gamma)
+                stability_indxs[i].append(soln[6])
+            # plot_displacement(soln[0],soln[2])
+            # mpl.show()
+            # [tt, y, disp_tip, elastic_energy, kinetic_energy, total_energy, stability_index]
+        # print(stability_indxs)
+        max_stab = 1E2
+        stability_indxs = np.nan_to_num(np.asarray(stability_indxs))
+        stability_indxs[stability_indxs >= max_stab] = max_stab
+        stability_indxs[stability_indxs <= 0] = max_stab
+        mpl.figure()
+        fig, ax = mpl.subplots(subplot_kw={"projection": "3d"})
+
+        X, Y = np.meshgrid(betas, gammas)
+        # Plot the surface.
+        color_matr = stability_indxs
+        color_matr[stability_indxs <= 0] = 1E2
+        colors = mpl.cm.jet(stability_indxs/float(stability_indxs.max()))
+        # colors[stability_indxs <0,:] = np.array([0., 1., 1., 1.])
+        surf = ax.plot_surface(X, Y, stability_indxs, facecolors=colors)
+        ax.set_xlabel(r'$\beta$')
+        ax.set_ylabel(r'$\gamma$')
+        ax.set_zlabel('stability_index')
+        fig.colorbar(surf, shrink=0.5, aspect=5)
+        mpl.savefig(f'../Plots/Project3_main/Figure_910.pdf')
+        mpl.show()
+    
+    if False:
+        # compare the different solver methods
+        solvers = ['solver', 'HHT' , 'ImplicitEuler', 'Radau5ODE']
+        stability_indxs = ['stability_index']
+        solving_times = ['Elapsed simulation time [s]']
+        for solver in solvers[1:]:
+            mod, sim, soln = run_beam_problem_HHT(solver)
+            stability_indxs.append(soln[6])
+            solving_times.append(soln[7])
+            
+        # print(tabulate([solvers, stability_indxs, solving_times], headers='firstrow', tablefmt='fancy_grid'))
+        with open('../Plots/Tables/Statistics_beam_solvers.tex', 'w') as output:
+            output.write(tabulate([solvers, stability_indxs, solving_times], headers='firstrow', tablefmt='latex'))
+
+
+
+
+    if False:
+        # TODO: change this to compare solns of elastodyn
+
         # This plots comparisons of the index 1,2,3 formulations
         all_solns = []
         for i in range(4):
@@ -78,92 +166,3 @@ if __name__ == '__main__':
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
         plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
         # mpl.show()
-
-    if False:
-        # This compares the index=1,2,3 formulations
-        # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
-        experiments = [[1, 1E5, 1E5, False, False, True],
-                       [2, 1E5, 1E5, False, False, True],
-                       [3, 1E5, 1E5, False, False, True]]
-
-        nsteps = []
-        nfcns = []
-        njacs = []
-        nerrfails = []
-        xdata = []
-        for counter, exp in enumerate(experiments):
-            try:
-                mod, sim, _ = run_seven_bar_problem(False, *exp)
-
-                stats = sim.get_statistics()
-                xdata.append(f'{exp[0]}')
-                nsteps.append(stats.__getitem__('nsteps'))
-                nfcns.append(stats.__getitem__('nfcns'))
-                njacs.append(stats.__getitem__('njacs'))
-                nerrfails.append(stats.__getitem__('nerrfails'))
-            except:
-                print(f'There seems to be a problem in the experiment {exp}')
-
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=600, savefig=True, xlabel='index', figsize=(2,2))
-
-    if False:
-        # This tests the index=1 problem
-        # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
-        experiments = [[1, 1E5, 1E5, False, False, True],
-                       [1, 1E-6, 1E5, False, True, True],
-                       [1, 1E-6, 1E5, True, False, True],
-                       [1, 1E-6, 1E5, True, True, False],
-                       [1, 1E-6, 1E-6, False, False, True]]
-
-
-        # print(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='fancy_grid'))
-        with open('../Plots/Tables/Overview_Index1Experiment.tex', 'w') as output:
-            output.write(tabulate(experiments, headers=tab_headers, showindex='always', tablefmt='latex'))
-
-        nsteps = []
-        nfcns = []
-        njacs = []
-        nerrfails = []
-        xdata = []
-        for counter, exp in enumerate(experiments):
-            try:
-                mod, sim, _ = run_seven_bar_problem(False, *exp)
-
-                stats = sim.get_statistics()
-                xdata.append(f'{counter}')
-                nsteps.append(stats.__getitem__('nsteps'))
-                nfcns.append(stats.__getitem__('nfcns'))
-                njacs.append(stats.__getitem__('njacs'))
-                nerrfails.append(stats.__getitem__('nerrfails'))
-            except:
-                print(f'There seems to be a problem in the experiment {exp}')
-
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=700, savefig=True, xlabel='experiment', figsize=(2,2))
-
-    if False:
-        # This tests the index=2 problem
-        # list of experiments in the form [problem_index, atol_v, atol_lambda, algvar_v, algvar_lambda, suppress_alg]
-        experiments = [[2, 1E-6, 1E5, False, False, True],
-                       [2, 1E-6, 1E5, False, True, True],
-                       [2, 1E-6, 1E5, False, True, True]]
-
-        nsteps = []
-        nfcns = []
-        njacs = []
-        nerrfails = []
-        xdata = []
-        for counter, exp in enumerate(experiments):
-            try:
-                mod, sim, _ = run_seven_bar_problem(False, *exp)
-
-                stats = sim.get_statistics()
-                xdata.append(f'prblm {counter}')
-                nsteps.append(stats.__getitem__('nsteps'))
-                nfcns.append(stats.__getitem__('nfcns'))
-                njacs.append(stats.__getitem__('njacs'))
-                nerrfails.append(stats.__getitem__('nerrfails'))
-            except:
-                print(f'There seems to be a problem in the experiment {exp}')
-
-        plot_stats(xdata, [nsteps, nfcns, njacs, nerrfails], plotnumber=800, savefig=True, figsize=(2,2))
-    # mpl.show()
