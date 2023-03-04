@@ -1,6 +1,6 @@
 import numpy as np
 from assimulo.problem import Explicit_Problem
-from assimulo.solvers import CVode
+from assimulo.solvers import RungeKutta4, ExplicitEuler
 import matplotlib.pyplot as mpl
 import math
 
@@ -16,24 +16,24 @@ def f_pendulum(t, y, k):
     yd[3] = -y[1] * lam - 1
     return yd
 
-def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
+def run_elastic_pendulum_problem(solver=RungeKutta4, with_plots=True, k=100., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
     """
     """
     y0 = np.array([1.1, 0, 0, 0])
     t0 = 0.0
-    tfinal = 10.0  # Specify the final time
+    tfinal = 100.0  # Specify the final time
     # Define an Assimulo problem
     rhs = lambda t,y: f_pendulum(t, y, k)
     mod = Explicit_Problem(rhs, y0, t0, name=r'Elastic Pendulum Problem')
 
     # Define an explicit solver
-    sim = CVode(mod)  # Create a CVode solver
+    sim = solver(mod)  # Create a CVode solver
 
     # Sets the parameters
-    sim.discr = discr
-    sim.maxord = maxord
-    sim.rtol = rtol
-    sim.atol = [atol]
+    #sim.discr = discr
+    #sim.maxord = maxord
+    #sim.rtol = rtol
+    #sim.atol = [atol]
 
     # Simulate
     t, y = sim.simulate(tfinal)
@@ -43,7 +43,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, ma
     # Plot
     if with_plots:
         plot_pendulum(t, y, pot_energy, kin_energy, elast_energy, total_energy)
-    return mod, sim, stability_index
+    return mod, sim, stability_index, [t, y]
 
 def pendulum_energies(y, k):
     # calculate the energy
@@ -125,7 +125,7 @@ if __name__ == '__main__':
                 for k in np.linspace(1,2E3,20):
                     # Test ATOL
                     ks.append(k)
-                    mod, sim, stability_index = run_elastic_pendulum_problem(discr=discr, maxord=maxord, k=k,
+                    mod, sim, stability_index, _ = run_elastic_pendulum_problem(discr=discr, maxord=maxord, k=k,
                                                                              with_plots=False)
                     stats = sim.get_statistics()
                     nsteps.append(stats.__getitem__('nsteps'))
@@ -148,7 +148,7 @@ if __name__ == '__main__':
             stability_indexs = []
             for rtol in rtols:
                 # Test RTOL
-                mod, sim, stability_index = run_elastic_pendulum_problem(k=1E3, discr=discr, rtol=rtol, with_plots=False)
+                mod, sim, stability_index, _ = run_elastic_pendulum_problem(k=1E3, discr=discr, rtol=rtol, with_plots=False)
                 stats = sim.get_statistics()
                 nsteps.append(stats.__getitem__('nsteps'))
                 nfcns.append(stats.__getitem__('nfcns'))
@@ -170,7 +170,7 @@ if __name__ == '__main__':
             stability_indexs = []
             for atol in atols:
                 # Test ATOL
-                mod, sim, stability_index = run_elastic_pendulum_problem(k=1E3, discr=discr, atol=atol, with_plots=False)
+                mod, sim, stability_index, _ = run_elastic_pendulum_problem(k=1E3, discr=discr, atol=atol, with_plots=False)
                 stats = sim.get_statistics()
                 nsteps.append(stats.__getitem__('nsteps'))
                 nfcns.append(stats.__getitem__('nfcns'))
@@ -182,7 +182,7 @@ if __name__ == '__main__':
             plot_stats(atols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
                        xlabel='atol', plotlabel=f'discr={discr}', plotnumber=400, semilogx=True,
                        savefig=True)
-    if False:
-        run_elastic_pendulum_problem(k=1E3, atol=1E-2)
+    if True:
+        mod, sim, stability_index, _ = run_elastic_pendulum_problem(k=1E3, atol=1E-2)
         run_elastic_pendulum_problem(k=1E3)
     # mpl.show()

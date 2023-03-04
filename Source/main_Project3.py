@@ -2,15 +2,16 @@ import numpy as np
 from assimulo.problem import Explicit_Problem
 from Explicit_Problem_2nd import Explicit_Problem_2nd
 from HHT import HHT, Newmark_explicit, Newmark_implicit
-from assimulo.solvers import CVode
+from assimulo.solvers import ExplicitEuler, RungeKutta4
 import matplotlib.pyplot as mpl
 import math
 from main_Project1 import f_pendulum, plot_pendulum, pendulum_energies
 from elastodyn import *
 from tabulate import tabulate
+from main_Project1 import run_elastic_pendulum_problem
 
 
-def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
+def run_elastic_pendulum_problem_newmark(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
     """
     """
     rhs = lambda t,y: f_pendulum(t, y, k)
@@ -23,7 +24,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, ma
 
     y0 = np.array([1.1, 0, 0, 0])
     t0 = 0.0
-    tfinal = 10.0  # Specify the final time
+    tfinal = 100.0  # Specify the final time
     # Define an Assimulo problem
     u0 = np.array([1.1, 0])
     ud0 = np.zeros(2)
@@ -46,7 +47,7 @@ def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, ma
     # Plot
     if with_plots:
         plot_pendulum(t, y, pot_energy, kin_energy, elast_energy, total_energy)
-    return mod, sim, stability_index
+    return mod, sim, stability_index, [t, y]
 
 if __name__ == '__main__':
     # run_elastic_pendulum_problem()
@@ -54,7 +55,7 @@ if __name__ == '__main__':
     # mpl.show()
 
     # run_beam_problem_HHT('HHT', with_plots=True)
-    mpl.show()
+    #mpl.show()
 
     if False:
         # generate a bunch of images to be included in the report
@@ -88,7 +89,7 @@ if __name__ == '__main__':
         mpl.savefig(f'../Plots/Project3_main/Figure_920.pdf')
         mpl.show()
     
-    if True:
+    if False:
         # Test the beta and gamma parameter on the implicit Newmark method
         # experiments are of the form [alpha, betas, gammas]
         experiments = [[0., np.linspace(0.01,0.49,8), np.linspace(0.5,0.99,8)]]
@@ -137,29 +138,33 @@ if __name__ == '__main__':
 
 
 
-    if False:
-        # TODO: change this to compare solns of elastodyn
+    if True:
 
-        # This plots comparisons of the index 1,2,3 formulations
+        # This plots compare the explicit version of Newmarks Method with classical methods
         all_solns = []
-        for i in range(4):
-            _, _, soln = run_seven_bar_problem(False, i)
-            if i <= 0:
-                # Do some padding in the case of the explicit problem
-                soln[1] = np.hstack((soln[1], np.zeros((len(soln[0]), 6))))
-            all_solns.append(soln)
+        methods = []
+
+        _, _, _, soln = run_elastic_pendulum_problem_newmark(k=10, with_plots=False)
+        all_solns.append(soln)
+        _, _, _, soln = run_elastic_pendulum_problem(solver=ExplicitEuler, k=10, with_plots=False)
+        all_solns.append(soln)
+        _, _, _, soln = run_elastic_pendulum_problem(solver=RungeKutta4, k=10, with_plots=False)
+        all_solns.append(soln)
 
         t = np.linspace(0, 0.03, 500)
-        all_solns_interp = np.zeros((4, t.size, 20))
+        all_solns_interp = np.zeros((3, t.size, 2))
         for i, soln in enumerate(all_solns):
-            for j in range(20):
+            for j in range(2):
                 all_solns_interp[i, :, j] = np.interp(t, soln[0], soln[1][:, j])
 
         # Plot soln
-        plot_soln(all_solns[1][0], all_solns[1][1], savefig=True, plotnumber=510)
-        plot_soln(all_solns[2][0], all_solns[2][1], savefig=True, plotnumber=513)
-        plot_soln(all_solns[3][0], all_solns[3][1], savefig=True, plotnumber=516)
-        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
-        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
-        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
+        mpl.plot(all_solns[0][0], all_solns[0][1])
+        mpl.show()
+        mpl.plot(all_solns[1][0], all_solns[1][1])
+        mpl.show()
+        mpl.plot(all_solns[2][0], all_solns[2][1])
+        mpl.show()
+        #plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
+        #plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
+        #plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
         # mpl.show()
