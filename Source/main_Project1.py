@@ -51,7 +51,7 @@ def pendulum_energies(y, k):
     kin_energy = np.linalg.norm(y[:, 2:4], axis=1) ** 2 / 2.
     elast_energy = k * (1 - np.linalg.norm(y[:, 0:2], axis=1)) ** 2 / 2.
     total_energy = pot_energy + kin_energy + elast_energy
-    stability_index = (np.max(total_energy) - np.min(total_energy)) / np.mean(total_energy)
+    stability_index = np.var(total_energy)
     return pot_energy, kin_energy, elast_energy, total_energy, stability_index
 
 def plot_pendulum(t, y, pot_energy, kin_energy, elast_energy, total_energy):

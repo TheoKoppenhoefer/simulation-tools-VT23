@@ -88,11 +88,11 @@ if __name__ == '__main__':
         mpl.savefig(f'../Plots/Project3_main/Figure_920.pdf')
         mpl.show()
     
-    if False:
+    if True:
         # Test the beta and gamma parameter on the implicit Newmark method
         # experiments are of the form [alpha, betas, gammas]
-        experiments = [[0, np.linspace(0.1,0.49,8), np.linspace(0.5,0.99,8)],
-                       [-0.1, np.linspace(0.1,0.49,8), np.linspace(0.5,0.99,8)]]
+        experiments = [[0., np.linspace(0.01,0.49,8), np.linspace(0.5,0.99,8)]]
+                        #   [0., np.linspace(0.01,0.49,8), np.linspace(0.7,0.99,8)]]
         
         for i, experiment in enumerate(experiments):
             stability_indxs = []
@@ -106,17 +106,18 @@ if __name__ == '__main__':
                     mod, sim, soln = run_beam_problem_HHT('Newmark_implicit', alpha, beta, gamma)
                     stability_indxs[j].append(soln[6])
 
-            max_stab = 1E2
+            max_stab = 1E1
             stability_indxs = np.nan_to_num(np.asarray(stability_indxs))
             stability_indxs[stability_indxs >= max_stab] = max_stab
             stability_indxs[stability_indxs <= 0] = max_stab
 
+            mpl.figure(i)
             fig, ax = mpl.subplots()
             X, Y = np.meshgrid(betas, gammas)
-            surf = mpl.contourf(X, Y, stability_indxs)
+            surf = mpl.contourf(X, Y, np.log10(stability_indxs))
             ax.set_xlabel(r'$\beta$')
             ax.set_ylabel(r'$\gamma$')
-            fig.colorbar(surf, label='stability_index')
+            fig.colorbar(surf, label=r'log(stability_index)')
             mpl.savefig(f'../Plots/Project3_main/Figure_{910+i}.pdf')
     
     if False:
