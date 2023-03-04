@@ -21,6 +21,5 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 ## Some TODO's for project 3
 - [ ] Task 4: Comparison plots
 - [ ] check the damping behaviour
-- [ ] Fix false accuracy in the table
 - [ ] rename stability index
 - [ ] write introduction

@@ -54,8 +54,8 @@ if __name__ == '__main__':
     # run_beam_problem_HHT('HHT', alpha=-1/3, with_plots=True, h=1)
     # mpl.show()
 
-    run_beam_problem_HHT('Newmark_implicit', 0, 0.25, 0.7,  with_plots=True)
-    mpl.show()
+    # run_beam_problem_HHT('Newmark_implicit', 0, 0.25, 0.7,  with_plots=True)
+    # mpl.show()
 
     if False:
         # generate a bunch of images to be included in the report
@@ -123,7 +123,7 @@ if __name__ == '__main__':
         solving_times = ['Elapsed simulation time [s]']
         for solver in solvers[1:]:
             mod, sim, soln = run_beam_problem_HHT(solver)
-            stability_indxs.append(round(soln[6], 1))
+            stability_indxs.append(f'{soln[6]:0.1e}')
             solving_times.append(np.around(soln[7], 1))
             
         # print(tabulate([solvers, stability_indxs, solving_times], headers='firstrow', tablefmt='fancy_grid'))
