@@ -54,8 +54,8 @@ if __name__ == '__main__':
     # run_beam_problem_HHT('HHT', alpha=-1/3, with_plots=True, h=1)
     # mpl.show()
 
-    # run_beam_problem_HHT('HHT', with_plots=True)
-    #mpl.show()
+    run_beam_problem_HHT('Newmark_implicit', 0, 0.25, 0.7,  with_plots=True)
+    mpl.show()
 
     if False:
         # generate a bunch of images to be included in the report
@@ -78,21 +78,16 @@ if __name__ == '__main__':
         for alpha in alphas:
             mod, sim, soln = run_beam_problem_HHT('HHT', alpha)
             stability_indxs.append(soln[6])
-            # plot_displacement(soln[0],soln[2])
-            # mpl.show()
-            # [tt, y, disp_tip, elastic_energy, kinetic_energy, total_energy, stability_index]
-        # print(stability_indxs)
         mpl.figure()
         mpl.plot(alphas, stability_indxs)
         mpl.xlabel(r'$\alpha$')
-        mpl.ylabel('stability_index')
+        mpl.ylabel('Variance($E_{tot}$)')
         mpl.savefig(f'../Plots/Project3_main/Figure_920.pdf')
-        mpl.show()
     
     if False:
         # Test the beta and gamma parameter on the implicit Newmark method
         # experiments are of the form [alpha, betas, gammas]
-        experiments = [[0., np.linspace(0.01,0.49,8), np.linspace(0.5,0.99,8)]]
+        experiments = [[0., np.linspace(0.01,0.49,20), np.linspace(0.5,0.99,20)]]
                         #   [0., np.linspace(0.01,0.49,8), np.linspace(0.7,0.99,8)]]
         
         for i, experiment in enumerate(experiments):
@@ -118,13 +113,13 @@ if __name__ == '__main__':
             surf = mpl.contourf(X, Y, np.log10(stability_indxs))
             ax.set_xlabel(r'$\beta$')
             ax.set_ylabel(r'$\gamma$')
-            fig.colorbar(surf, label=r'log(stability_index)')
+            fig.colorbar(surf, label=r'$log_{10}$(Variance($E_{tot}$))')
             mpl.savefig(f'../Plots/Project3_main/Figure_{910+i}.pdf')
     
-    if False:
+    if True:
         # compare the different solver methods
         solvers = ['solver', 'HHT' , 'ImplicitEuler']
-        stability_indxs = ['stability_index']
+        stability_indxs = [r'Variance($E_{\text{tot}}$)']
         solving_times = ['Elapsed simulation time [s]']
         for solver in solvers[1:]:
             mod, sim, soln = run_beam_problem_HHT(solver)
@@ -133,7 +128,7 @@ if __name__ == '__main__':
             
         # print(tabulate([solvers, stability_indxs, solving_times], headers='firstrow', tablefmt='fancy_grid'))
         with open('../Plots/Tables/Statistics_beam_solvers.tex', 'w') as output:
-            output.write(tabulate([solvers, stability_indxs, solving_times], headers='firstrow', tablefmt='latex'))
+            output.write(tabulate([solvers, stability_indxs, solving_times], headers='firstrow', tablefmt='latex_raw'))
 
 
 

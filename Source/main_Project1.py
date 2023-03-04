@@ -83,7 +83,7 @@ def plot_pendulum(t, y, pot_energy, kin_energy, elast_energy, total_energy):
     mpl.show()
 
 def plot_stats(xdata, ydata, xlabel='x', plotlabel='', plotnumber=100, semilogx=False, savefig=False):
-    ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails', 'instability index']
+    ylabels = ['nsteps', 'nfcns', 'njacs', 'nerrfails', r'Variance$(E_{tot})$']
     for i in range(5):
         mpl.figure(plotnumber + i, clear=False)
         if semilogx:
@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
     maxords = {'BDF': [3, 4, 5], 'Adams': [3, 6, 12]}
     for discr in ['BDF', 'Adams']:
-        if False:
+        if True:
             for maxord in maxords[discr]:
                 ks = []
                 nsteps = []
@@ -139,7 +139,7 @@ if __name__ == '__main__':
                            xlabel=r'$k$', plotlabel=f'discr={discr}, maxord={maxord}', plotnumber=200,
                            savefig=True)
 
-        if False:
+        if True:
             rtols = np.logspace(1E-10, 1, 30)
             nsteps = []
             nfcns = []
@@ -161,7 +161,7 @@ if __name__ == '__main__':
                        xlabel='rtol', plotlabel=f'discr={discr}', plotnumber=300, semilogx=True,
                        savefig=True)
 
-        if False:
+        if True:
             atols = np.logspace(1E-8, 0.5, 30)
             nsteps = []
             nfcns = []

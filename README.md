@@ -4,7 +4,9 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 ## Some TODO's for project 1
 - [ ] refer to stability regions
 - [ ] remove the noise in the last energy plot
+- [ ] remove reference to stability index
 - [ ] revise conclusion
+- [ ] write introduction
 
 
 ## Some TODO's for project 2
@@ -19,7 +21,6 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 ## Some TODO's for project 3
 - [ ] Task 4: Comparison plots
 - [ ] check the damping behaviour
-- [ ] Write the report
 - [ ] Fix false accuracy in the table
-- [ ] rename stability index to instability index
-- [ ] Check the solution for the Radau-5 solver
+- [ ] rename stability index
+- [ ] write introduction
