@@ -117,7 +117,7 @@ def plot_stats(xdata, ydata, plotnumber=500, savefig=False, xlabel='', figsize=(
 if __name__ == '__main__':
     run_seven_bar_problem(True, 1, 1E5, 1E5, False, False, True)
 
-    if True:
+    if False:
         # This plots comparisons of the index 1,2,3 formulations
         all_solns = []
         for i in range(4):
@@ -134,20 +134,13 @@ if __name__ == '__main__':
                 all_solns_interp[i, :, j] = np.interp(t, soln[0], soln[1][:, j])
 
         # Plot soln
-        #plot_soln(all_solns[1][0], all_solns[1][1], savefig=True, plotnumber=510)
-        #plot_soln(all_solns[2][0], all_solns[2][1], savefig=True, plotnumber=513)
-        #plot_soln(all_solns[3][0], all_solns[3][1], savefig=True, plotnumber=516)
-        #plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
-        #plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
-        #plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
-        mpl.plot(t, all_solns_interp[0, :, :])
-        mpl.show()
-        mpl.plot(t, all_solns_interp[1, :, :])
-        mpl.show()
-        mpl.plot(t, all_solns_interp[2, :, :])
-        mpl.show()
-        mpl.plot(t, all_solns_interp[3, :, :])
-        mpl.show()
+        plot_soln(all_solns[1][0], all_solns[1][1], savefig=True, plotnumber=510)
+        plot_soln(all_solns[2][0], all_solns[2][1], savefig=True, plotnumber=513)
+        plot_soln(all_solns[3][0], all_solns[3][1], savefig=True, plotnumber=516)
+        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[0, :, :], savefig=True, plotnumber=520)
+        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[1, :, :], savefig=True, plotnumber=530)
+        plot_soln(t, all_solns_interp[3, :, :] - all_solns_interp[2, :, :], savefig=True, plotnumber=540)
+        # mpl.show()
 
     if False:
         # This compares the index=1,2,3 formulations
