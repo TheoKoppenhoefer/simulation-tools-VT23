@@ -30,6 +30,7 @@ def run_elastic_pendulum_problem(solver=RungeKutta4, with_plots=True, k=100., at
     sim = solver(mod)  # Create a CVode solver
 
     # Sets the parameters
+    sim.h = 0.01
     #sim.discr = discr
     #sim.maxord = maxord
     #sim.rtol = rtol

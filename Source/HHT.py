@@ -13,7 +13,7 @@ class Newmark_implicit(Explicit_ODE):
     """
     tol = 1.e-4
     maxit = 100
-    maxsteps = 50000
+    maxsteps = 5000000
 
 
     def __init__(self, problem):

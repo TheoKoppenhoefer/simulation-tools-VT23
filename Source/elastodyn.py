@@ -161,7 +161,7 @@ class elastodynamic_beam:
         beam.plot()
 
 
-def run_beam_problem_HHT(solverType='HHT', alpha=0., beta=0.5, gamma=0.5, with_plots=False, t_end=8, h=0.05):
+def run_beam_problem_HHT(solverType='HHT', alpha=0., beta=0.5, gamma=0.5, with_plots=False, t_end=8, h=0.01):
     """
     solverType: the choices are HHT, Newmark_implicit, Newmark_explicit, Radau50DE, ImplicitEuler, CVode
     """
