@@ -283,10 +283,7 @@ Adding these up we get the approximate total energy
 	E_{\text{tot}}=E_{\text{pot}}+E_{\text{kin}}+E_{\text{elast}}\,.
 \end{align*}
 We expect the approximate total energy to be constant which indeed can be seen in Figure \ref{pl:EnergyPlot1} for that previously calculated numerical solution.
-Because of this property we can use the variation of the approximate total energy as an index to measure the stability of the method. Specifically we set
-\begin{align*}
-	\text{instability index} = \text{Variation}\big(E_{\text{tot}}\big)
-\end{align*}
+Because of this property we can use the variance of the approximate total energy as an index to measure the stability of the method. 
 In the ideal world this index almost vanishes.
 
 \begin{figure}[h]
@@ -312,8 +309,17 @@ For linear problems, explicit methods present a much reduced stability region wh
 For the problem of the elastic pendulum, approximated by explicit methods, when the value of $k$ is increased we are expected to see the approximation blow up showing oscillations of unbounded amplitude.
 This unstable behavior will be attenuated by reducing the value of the step $h$.
 
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Drawings/Runge_Kutter_stability_regions}
+\caption{Stability regions of the Runge-Kutta-methods, taken from \cite{Stab_RK}[p.238]}
+\end{minipage}
+\end{figure}
+
 The problem was simulated using Explicit Euler and RK4.
-All the experiments in this section, if not otherwise stated, take as initial value $y_0 = [1.1, 0, 0, 0]$ and have $[0, 20]$ for domain.
+All the experiments in this section are simulated on the domain $[0,20]$ and have initial the initial value $y_0 = [1.1, 0, 0, 0]$ if not otherwise stated.
 The graphs are presented in polar coordinates where $r$ refers to the length of the spring and $\theta$ refers to the angle conformed between the pendulum and the vertical axis.
 
 It can be observed that for a step size of $h=0.01$ Explicit Eurler (Figure \ref{exp_euler_k=50_h=0.01_c}) already shows instability for values of $k=50$ while RK4 (Figure \ref{rk4_h=0.01_k=3000_c}) with that same step size remains stable for values up to $k=3000$.
@@ -370,7 +376,7 @@ This behavior cannot be observed in the other explicit methods.
 
 \section*{Testing Implicit Methods}
 
-Opposite to the case of explicit methods, for linear problems implicit methods count with an extensive stability region which doesn’t make their stability dependent on the value of the step $k$.
+Opposite to the case of explicit methods, for linear problems implicit methods count with an extensive stability region which does not make their stability dependent on the value of the step $k$.
 The problem was simulated using Implicit Euler, BDF2 with Fixed Point as corrector and BDFk with Newton as corrector for $k$ between $1$ and $4$. All the following experiments take as initial value $y_0 = [1.1, 0, 0, 0]$ and have $[0, 20]$ for time domain.
 It is interesting to see how the oscillation of the spring decays for implicit methods. This decay can be attenuated by reducing the step size or accelerated by increasing the value of the spring constant.
 
@@ -425,11 +431,15 @@ To better observe this decay (Figure \ref{bdf2_h=0.01_h=100_tf=100} and Figure \
 It is interesting to see how the relation between the speed of decay of the spring oscillation in inversely proportional to the size of the stability region of the methods tested.
 
 
+\newpage
+\newpage
+
+
 \section*{Testing CVODE}
 \subsection*{A first test series}
 
 In the first specific test of CVODE we solve our toy problem for increasing $k$. Here we switch between the BDF and Adam-Moultons discretisation method. We also vary the \pyth{maxorder} parameter for both methods.
-A higher $k$ reflects a problem which is more stiff. As a stiff problem requires smaller steps the number of steps \pyth{nsteps} increases as $k$ increases which  can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per stepsize \pyth{nfcns/nsteps} hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase analogously to \pyth{nsteps} with $k$ as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. And the general trend is that the number of steps increases as \pyth{maxord} is reduced. 
+A higher $k$ reflects a problem which is more stiff. As a stiff problem requires smaller steps the number of steps \pyth{nsteps} increases as $k$ increases which  can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per stepsize \pyth{nfcns/nsteps} hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase proportionally to \pyth{nsteps} with $k$ as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. And the general trend is that the number of steps increases as \pyth{maxord} is reduced. 
 
 \begin{figure}[h]
 \centering
@@ -628,32 +638,35 @@ A plot of the solution of the index 1 formulation can be seen in Figures \ref{pl
 
 Given the restrictions imposed over the system the generation of initial values is not a trivial task. To do this we follow the steps presented in the literature, we start with $q$ and $v$.
 
-First we take $\theta=0$ which can be done given that the system is undetermined and we assume a solution exists (this makes sense as a physical model of the system was presented in class). We then use \textit{Newton Iteration} to solve the equations obtaining values for the remaining angles
+First we take $\theta=0$ which can be done given that the system is undetermined and we assume a solution exists (this makes sense as a physical model of the system was presented in class). We then use \textit{Newton Iteration} to solve the equations obtaining values for the remaining angles.
+We also take the initial value of $v$ to be $0$ as we assume the system starts at rest. Now for $w$ and $\lambda$ using the Index 1 formulation we have to solve a linear system which is presented in the literature. Doing this we get the values given in tables \ref{tb:initial_accelerations}-\ref{tb:initial_lambdas}.
+
 
 \begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.3\textwidth}
 \centering
 \input{../Plots/Tables/Initial_Angles.tex}
-\caption{Consistent Initial Angles}
-%\label{tb:indx1_experiment_params}
-\end{figure}
-
-We also take the initial value of $v$ to be $0$ as we assume the system starts at rest. Now for $w$ and $\lambda$ using the Index 1 formulation we have to solve a linear system which is presented in the literature. Doing this we get the values
-
-\begin{figure}[h]
+\caption{Consistent initial angles}
+\label{tb:initial_angles}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.3\textwidth}
 \centering
 \input{../Plots/Tables/Initial_Accelerations.tex}
-\caption{Consistent Initial Accelerations}
-%\label{tb:indx1_experiment_params}
-\end{figure}
-
-\begin{figure}[h]
+\caption{Consistent initial accelerations}
+\label{tb:initial_accelerations}
+\end{minipage}
+\hfill
+\begin{minipage}[b]{0.3\textwidth}
 \centering
 \input{../Plots/Tables/Initial_Lambdas.tex}
-\caption{Consistent Initial Lambdas}
-%\label{tb:indx1_experiment_params}
+\caption{Consistent initial lambdas}
+\label{tb:initial_lambdas}
+\end{minipage}
 \end{figure}
 
-Many of the values are minute bu non-zero. This is given because of a rounding error, but in theory these small values equal zero.
+Many of the values are minute but non-zero. This is due to rounding errors, but in theory these small values equal zero.
 
 \section*{A comparison of the index 1, 2 and 3 formulations}
 
@@ -887,14 +900,14 @@ In the second part of the project we tested the implicit Newmark and the HHT met
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_1.pdf}
-\caption{Beam position at $t\approx$.}
+\caption{Beam position at $t\approx0$.}
 \label{pl:beam_soln_initial}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_5.pdf}
-\caption{Beam position at $t\approx1$.}
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_8.pdf}
+\caption{Beam position at $t\approx1.7$.}
 \label{pl:beam_soln_position1}
 \end{minipage}
 \end{figure}
@@ -904,14 +917,14 @@ In the second part of the project we tested the implicit Newmark and the HHT met
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_10.pdf}
-\caption{Beam position at $t\approx$.}
+\caption{Beam position at $t\approx2.4$.}
 \label{pl:beam_soln_position2}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_12.pdf}
-\caption{Beam position at $t\approx3$.}
+\caption{Beam position at $t\approx2.7$.}
 \label{pl:beam_soln_position3}
 \end{minipage}
 
@@ -924,11 +937,8 @@ which add up to the total energy
 \begin{align*}
 	E_{\text{tot}}=E_{\text{kin}}+E_{\text{elast}}
 \end{align*}
-The development of the energy of the system can be seen in figure \ref{pl:beam_soln_energy}. Here we see in particular that after the initial application of an external force to the system the energy stays almost constant. We use this to construct as in Project 1 a \pyth{stability_index} by setting
-\begin{align*}
-	\text{stability index}=\text{Variance}\big(E_{\text{tot}}(t)\big)
-\end{align*}
-With an ideal solver this quantity vanishes for the latter part of the simulation where no external force is applied.
+The development of the energy of the system can be seen in figure \ref{pl:beam_soln_energy}. Here we see in particular that after the initial application of an external force to the system the energy stays almost constant. As in project 1 the variance of the total energy serves as a measure of the instability of the solver. Here we calculate this variance only for the latter $4/5$ of the simulation because in the first part the applied force changes the total energy.
+With an ideal solver this quantity vanishes.
 
 \begin{figure}[h]
 \begin{minipage}[t]{0.45\textwidth}
@@ -949,7 +959,7 @@ With an ideal solver this quantity vanishes for the latter part of the simulatio
 
 \subsubsection*{A brief comparison of solvers}
 
-In a first experiment we compare the performance of our implementation of the HHT solver and the implicit Euler solver from Assimulo. The HHT method was applied with the parameter $\alpha=0$ and the stepsize was the same for all methods. The results are plotted in figure \ref{tb:beam_exp_solverComparison}. Here one sees that for all solvers the value \pyth{stability_index} is small. There is however a big difference in the performance of the various methods. On my computer the implicit Euler solver takes roughly two orders of magnitude longer than the HHT method.
+In a first experiment we compare the performance of our implementation of the HHT solver and the implicit Euler solver from Assimulo. The HHT method was applied with the parameter $\alpha=0$ and the stepsize was the same for all methods. The results are plotted in figure \ref{tb:beam_exp_solverComparison}. Here one sees that for all solvers the variance of the total energy is small. There is however a big difference in the performance of the various methods. On my computer the implicit Euler solver takes roughly two orders of magnitude longer than the HHT method.
 
 \begin{figure}[h]
 \centering
@@ -961,35 +971,35 @@ In a first experiment we compare the performance of our implementation of the HH
 
 \subsubsection*{Testing the implicit Newmark solver}
 
-In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the parameter $\alpha\in\{0,-0.1\}$ and the stepsize $h=0.05$ constant. The plot of the \pyth{stability_index} can be seen in figures  \ref{pl:beam_exp_betagamma_alpha0} and \ref{pl:beam_exp_betagamma_alpha0.1}. It should be noted that we cut off the value of \pyth{stability_index} at $10^2$ because this value shows that the solution is instable for the specific choice of $\beta$ and $\gamma$.
+In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the parameter $\alpha=0$ and the stepsize $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is instable for the specific choice of $\beta$ and $\gamma$. One can observe that the problem becomes more stable with decreasing $\beta$ and and that the region of stability increases with decreasing $\gamma$. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_910.pdf}
-\caption{Dependence of the \pyth{stability_index} on the parameters $\beta$ and $\gamma$ for $\alpha=0$.}
+\caption{Dependence of the variance of the total energy on the parameters $\beta$ and $\gamma$ for $\alpha=0$.}
 \label{pl:beam_exp_betagamma_alpha0}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_911.pdf}
-\caption{Dependence of the \pyth{stability_index} on the parameters $\beta$ and $\gamma$ for $\alpha=-0.1$.}
-\label{pl:beam_exp_betagamma_alpha0.1}
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_50.pdf}
+\caption{The parameter choice $\beta=0.25$ and $\gamma=0.7$ yields rather peculiar beam configurations.}
+\label{pl:beam_exp_betagamma_instable1}
 \end{minipage}
 \end{figure}
 
 \subsubsection*{Testing the HHT solver}
 
-In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. A plot of the \pyth{stability_index} can be seen in figure \ref{pl:beam_exp_HHTalpha} where it is noticable that the value decreases as $\alpha$ increases albeit from a small level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as can be seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. It is also astonishing that despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size, like the almost constant total energy and the eventual periodic behaviour of the kinetic and elastic energies.
+In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. The variance of the total energy can be seen in figure \ref{pl:beam_exp_HHTalpha} where it is noticable that the value decreases as $\alpha$ increases albeit from a small level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as can be seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. It is also astonishing that despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size, like the almost constant total energy and the eventual periodic behaviour of the kinetic and elastic energies.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_920.pdf}
-\caption{Dependence of the \pyth{stability_index} on the parameter $\alpha$.}
+\caption{Dependence of the variance of the total energy on the parameter $\alpha$.}
 \label{pl:beam_exp_HHTalpha}
 \end{minipage}
 \end{figure}
@@ -1015,24 +1025,13 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 
 \chapter*{Appendix}
 
-% here come some stability regions
-
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[b]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../Drawings/Runge_Kutter_stability_regions}
-\caption{Stability regions of the Runge-Kutta-methods, taken from \cite{Stab_RK}[p.238]}
-\end{minipage}
-\end{figure}
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \hspace*{-1cm}
-\scalebox{0.42}{
+\scalebox{0.32}{
 \input{../Drawings/Stability_region_for_BDF1.pdf_tex}
 }
 \caption{Stability region for BDF1, taken from \cite{Stab_BDF}}
@@ -1041,19 +1040,20 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \hspace*{-1cm}
-\scalebox{0.42}{
+\scalebox{0.32}{
 \input{../Drawings/Stability_region_for_BDF2.pdf_tex}
 }
 \caption{Stability region for BDF2, taken from \cite{Stab_BDF}}
 \end{minipage}
 \end{figure}
 
+
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \hspace*{-1cm}
-\scalebox{0.42}{
+\scalebox{0.32}{
 \input{../Drawings/Stability_region_for_BDF3.pdf_tex}
 }
 \caption{Stability region for BDF3, taken from \cite{Stab_BDF}}
@@ -1062,19 +1062,20 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \hspace*{-1cm}
-\scalebox{0.42}{
+\scalebox{0.32}{
 \input{../Drawings/Stability_region_for_BDF4.pdf_tex}
 }
 \caption{Stability region for BDF4, taken from \cite{Stab_BDF}}
 \end{minipage}
 \end{figure}
 
+
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \hspace*{-1cm}
-\scalebox{0.42}{
+\scalebox{0.32}{
 \input{../Drawings/Stability_region_for_BDF5.pdf_tex}
 }
 \caption{Stability region for BDF5, taken from \cite{Stab_BDF}}
@@ -1083,12 +1084,15 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \hspace*{-1cm}
-\scalebox{0.42}{
+\scalebox{0.32}{
 \input{../Drawings/Stability_region_for_BDF6.pdf_tex}
 }
 \caption{Stability region for BDF6, taken from \cite{Stab_BDF}}
 \end{minipage}
 \end{figure}
+
+% here come some stability regions
+
 
 %\nocite{*}
 \printbibliography
