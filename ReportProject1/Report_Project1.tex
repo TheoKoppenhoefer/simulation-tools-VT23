@@ -491,7 +491,7 @@ From figure \ref{pl:njacs_nsteps1} it can be seen that the number of jacobian ev
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_204}
-\caption{instability index in relation to the parameter $k$.}
+\caption{Variance of the energy in relation to the parameter $k$.}
 \label{pl:stability1}
 \end{minipage}
 \end{figure}
@@ -501,7 +501,7 @@ Perhaps surprisingly the Adams-Moulton-method seems to perform better on this pr
 This experiment also highlights that a lower \pyth{maxord} parameter tends to be more computationally expensive though it reduces the number of error test failures \pyth{nerrfails}.
 
 \subsection*{Testing the parameter rtol}
-We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). If one compares figures the instability index for $k\approx10^3$ in figure \ref{pl:stability1} with the instability index in figure \ref{pl:stability2} one sees that changing the \pyth{rtol} parameter from the default makes the result significantly worse in terms of energy conservation.
+We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). If one compares the variance of the energy for $k\approx10^3$ in figure \ref{pl:stability1} with the variance of the energy in figure \ref{pl:stability2} one sees that changing the \pyth{rtol} parameter from the default makes the result significantly worse in terms of energy conservation.
 
 \begin{figure}[h]
 \centering
@@ -544,14 +544,14 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_304}
-\caption{instability index in relation to the parameter \pyth{rtol}.}
+\caption{Variance of the energy in relation to the parameter \pyth{rtol}.}
 \label{pl:stability2}
 \end{minipage}
 \end{figure}
 
 \subsection*{Testing the parameter atol}
 
-If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we once again get an instability index that is significantly above the value for the method in which we did not specify this value as can be seen in Figure \ref{pl:stability3}. In either case we observe that fixing the tolerance seems to come at the cost of energy conversation as is dramatically visualised in Figures \ref{pl:energy2} and \ref{pl:energy3}.
+If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we once again get a variance of the energy that is significantly above the value for the method in which we did not specify this value as can be seen in Figure \ref{pl:stability3}. In either case we observe that fixing the tolerance seems to come at the cost of energy conversation as is dramatically visualised in Figures \ref{pl:energy2} and \ref{pl:energy3}.
 
 
 \begin{figure}[h]
@@ -559,7 +559,7 @@ If we test the \pyth{atol} parameter on the Adams and Newton method analogously 
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_404}
-\caption{instability index in relation to the parameter \pyth{atol}.}
+\caption{Variance of the energy in relation to the parameter \pyth{atol}.}
 \label{pl:stability3}
 \end{minipage}
 \end{figure}

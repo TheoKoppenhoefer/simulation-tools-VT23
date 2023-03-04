@@ -116,7 +116,7 @@ if __name__ == '__main__':
             fig.colorbar(surf, label=r'$log_{10}$(Variance($E_{tot}$))')
             mpl.savefig(f'../Plots/Project3_main/Figure_{910+i}.pdf')
     
-    if True:
+    if False:
         # compare the different solver methods
         solvers = ['solver', 'HHT' , 'ImplicitEuler']
         stability_indxs = [r'Variance($E_{\text{tot}}$)']

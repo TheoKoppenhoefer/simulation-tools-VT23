@@ -1,6 +1,6 @@
 import numpy as np
 from assimulo.problem import Explicit_Problem
-from assimulo.solvers import RungeKutta4, ExplicitEuler
+from assimulo.solvers import RungeKutta4, ExplicitEuler, CVode
 import matplotlib.pyplot as mpl
 import math
 
@@ -16,12 +16,11 @@ def f_pendulum(t, y, k):
     yd[3] = -y[1] * lam - 1
     return yd
 
-def run_elastic_pendulum_problem(solver=RungeKutta4, with_plots=True, k=100., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF'):
+def run_elastic_pendulum_problem(with_plots=True, k=1., atol=1E-6, rtol=1E-6, maxord=5, discr='BDF', solver=CVode, tfinal = 10.0):
     """
     """
     y0 = np.array([1.1, 0, 0, 0])
     t0 = 0.0
-    tfinal = 100.0  # Specify the final time
     # Define an Assimulo problem
     rhs = lambda t,y: f_pendulum(t, y, k)
     mod = Explicit_Problem(rhs, y0, t0, name=r'Elastic Pendulum Problem')
@@ -30,11 +29,13 @@ def run_elastic_pendulum_problem(solver=RungeKutta4, with_plots=True, k=100., at
     sim = solver(mod)  # Create a CVode solver
 
     # Sets the parameters
-    sim.h = 0.01
-    #sim.discr = discr
-    #sim.maxord = maxord
-    #sim.rtol = rtol
-    #sim.atol = [atol]
+    if solver == CVode:
+        sim.discr = discr
+        sim.maxord = maxord
+        sim.rtol = rtol
+        sim.atol = [atol]
+    else:
+        sim.h = 0.01
 
     # Simulate
     t, y = sim.simulate(tfinal)
@@ -115,7 +116,7 @@ if __name__ == '__main__':
 
     maxords = {'BDF': [3, 4, 5], 'Adams': [3, 6, 12]}
     for discr in ['BDF', 'Adams']:
-        if True:
+        if False:
             for maxord in maxords[discr]:
                 ks = []
                 nsteps = []
@@ -140,7 +141,7 @@ if __name__ == '__main__':
                            xlabel=r'$k$', plotlabel=f'discr={discr}, maxord={maxord}', plotnumber=200,
                            savefig=True)
 
-        if True:
+        if False:
             rtols = np.logspace(1E-10, 1, 30)
             nsteps = []
             nfcns = []
@@ -162,7 +163,7 @@ if __name__ == '__main__':
                        xlabel='rtol', plotlabel=f'discr={discr}', plotnumber=300, semilogx=True,
                        savefig=True)
 
-        if True:
+        if False:
             atols = np.logspace(1E-8, 0.5, 30)
             nsteps = []
             nfcns = []
@@ -183,7 +184,7 @@ if __name__ == '__main__':
             plot_stats(atols, [nsteps, nfcns, njacs, nerrfails, stability_indexs],
                        xlabel='atol', plotlabel=f'discr={discr}', plotnumber=400, semilogx=True,
                        savefig=True)
-    if True:
+    if False:
         mod, sim, stability_index, _ = run_elastic_pendulum_problem(k=1E3, atol=1E-2)
         run_elastic_pendulum_problem(k=1E3)
     # mpl.show()
