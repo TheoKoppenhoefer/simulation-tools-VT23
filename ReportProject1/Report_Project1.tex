@@ -854,28 +854,35 @@ As all experiments deliver more or less the same result we will be comparing the
 
 As part of the final task we used an explicit RK4 method to solve the index 1 problem. As a result of the method exploding for $h=0.01$, the default step value, the method was tested for various values of $h$.
 
-In particular in Figure ... the $L_2$ norm of each angle over time is plotted with respect to $h \in [0.001, 0.002)$ with $\Delta h = 5\mathrm{e}{-6}$.
+In particular in Figure \ref{pl:L2_norm_explicit} the $L_2$ norm of each angle over time is plotted with respect to $h \in [0.001, 0.002)$ with $\Delta h = 5\mathrm{e}{-6}$.
 
 \begin{figure}[h]
-\begin{minipage}[t]{0.5	\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4_Proj2/L2_norm_different_k.pdf}
+\caption{Value of $L_2$ norms depending on $h$}
+\label{pl:L2_norm_explicit}
 \end{minipage}
 \end{figure}
 
 
 The explicit method can then be tested with individual step sizes and as expected, the method explodes for $h \in \{0.001446, 0.0018, 0.00195\}$ and is stable for $h \in \{0.00185, 0.0012, 0.0016\}$.
 
-In Figures ... and ... it can be observerd the aproximation using the explicit RK4 for a value of the stes size which makes the approximation stable, in particular we are taking $h=1\mathrm{e}{-4}$.
+In Figures \ref{pl:explicit_angles} and \ref{pl:explicit_angles_dot} it can be observerd the aproximation using the explicit RK4 for a value of the stes size which makes the approximation stable, in particular we are taking $h=1\mathrm{e}{-4}$.
 
 \begin{figure}[h]
-\begin{minipage}[t]{0.4\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/angles.png}
+\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/angles}
+\caption{Approximation of angles using explicit method}
+\label{pl:explicit_angles}
 \end{minipage}
-\begin{minipage}[t]{0.4\textwidth}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/derivatives.png}
+\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/derivatives}
+\caption{Approximation of angles derivatives using explicit method}
+\label{pl:explicit_angles_dot}
 \end{minipage}
 \end{figure}
 
@@ -1021,9 +1028,67 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 \end{minipage}
 \end{figure}
 
-\section*{The Elastic Pendulum}
+\section*{The elastic pendulum}
 
-In this section we will use the developed methods to solve the problem of the elastic spring presented in Project 1. In particular we will compare the performance of different explicit methods solving the problem.
+In this section we will use the developed methods to solve the problem of the elastic spring presented in Project 1. In particular we will compare the performance of different explicit methods solving the problem. The method we will be comparing are Newmark Explicit against Explicit Euler and Newmark Explicit againts RK4.
+\bigbreak
+It is common to both methods that the simulations start at the same point and rapidly drift away. This drif will continuate in different ways depending on the method tested.
+
+\subsubsection*{Newmark - RK4}
+
+This is probably the most interesting of both cases given that RK4 doesn't lose stability as fast as Explici Euler does. As mentioned, the distance between the approximations will drift away in an oscillating fashion with an increasing amplitude. This can be observed in Figure \ref{pl:new_rk4_k=10} for $y$ and in Figure \ref{pl:new_rk4_k=10_dot} for $\dot{y}$.
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E1_t=1E5_y}
+\caption{Difference of $y$ with $h=0.01$ and $k=10$.}
+\label{pl:new_rk4_k=10}
+\end{minipage}
+\hfill	
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E1_t=1E5_ydot}
+\caption{Difference of $\dot{y}$ with $h=0.01$ and $k=10$.}\label{pl:new_rk4_k=10_dot}
+\end{minipage}
+\end{figure}
+
+The amplitude of the oscillations will eventualy converge to a value which appears to depend on the value of $k$. For bigger values of $k$ the amplitude appeats to converge faster. Convergence of the amplitudes can be observed in Figure \ref{pl:new_rk4_k=1000} for $y$ and in Figure \ref{pl:new_rk4_k=1000_dot} for $\dot{y}$.
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E3_t=1E5_y}
+\caption{Difference of $y$ with $h=0.01$ and $k=1\mathrm{e}{3}$.}
+\label{pl:new_rk4_k=1000}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E3_t=1E5_ydot}
+\caption{Difference of $\dot{y}$ with $h=0.01$ and $k=1\mathrm{e}{3}$.}
+\label{pl:new_rk4_k=1000_dot}
+\end{minipage}
+\end{figure}
+
+With regards to performance, Newmark's method is faster than RK4 being for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
+
+\subsubsection*{Newmark - Euler}
+Not much can be said about the relation between Newmark's and Euler's methods given the unstable nature of Explicit Euler. It is common to see how Euler's method explodes to infinity while Newmark's remains stable. This can be observed in Figure \ref{pl:new_eul}.
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-Eul_k=1E1_t=1E3_y}
+\caption{Difference of $y$ with $h=0.01$ and $k=10$.}
+\label{pl:new_eul}
+\end{minipage}
+\end{figure}
+
+With regard to performance, Euler's method is faster than Newmark's for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
 
 
 

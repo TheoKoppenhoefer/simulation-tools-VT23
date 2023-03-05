@@ -24,7 +24,7 @@ def run_elastic_pendulum_problem_newmark(with_plots=True, k=1., atol=1E-6, rtol=
 
     y0 = np.array([1.1, 0, 0, 0])
     t0 = 0.0
-    tfinal = 10.0  # Specify the final time
+    tfinal = 10000.0  # Specify the final time
     # Define an Assimulo problem
     u0 = np.array([1.1, 0])
     ud0 = np.zeros(2)
@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
 
 
-    if True:
+    if False:
 
         # This plots compare the explicit version of Newmarks Method with classical methods
         all_solns = []
@@ -141,11 +141,11 @@ if __name__ == '__main__':
         solvers = [Newmark_explicit, ExplicitEuler, RungeKutta4]
         methods = []
 
-        _, sim, _, soln = run_elastic_pendulum_problem_newmark(k=10, with_plots=False)
+        _, sim, _, soln = run_elastic_pendulum_problem_newmark(k=1000, with_plots=False)
         all_solns.append(soln)
-        _, sim, _, soln = run_elastic_pendulum_problem(solver=solvers[1], k=10, with_plots=False, tfinal=10)
+        _, sim, _, soln = run_elastic_pendulum_problem(solver=solvers[1], k=1000, with_plots=False, tfinal=10000)
         all_solns.append(soln)
-        _, _, _, soln = run_elastic_pendulum_problem(solver=solvers[2], k=10, with_plots=False, tfinal=10)
+        _, _, _, soln = run_elastic_pendulum_problem(solver=solvers[2], k=1000, with_plots=False, tfinal=10000)
         all_solns.append(soln)
 
         # Plot soln
@@ -158,13 +158,13 @@ if __name__ == '__main__':
         mpl.show()
         mpl.plot(all_solns[2][0], all_solns[2][1])
         mpl.show()
-        mpl.plot(all_solns[1][0], (a-b)[:, :2])
+        mpl.plot(all_solns[1][0], (a-b)[:, 2:])
         mpl.xlabel(r'$t$')
-        mpl.legend([r'$y_1$', r'$y_2$', r'$\dot{y}_1$', r'$\dot{y}_2$'])
+        mpl.legend([r'$\dot{y}_1$', r'$\dot{y}_2$'])
         mpl.title("Explicit Newmark - Explicit Euler")
         mpl.show()
-        mpl.plot(all_solns[1][0], (a-c)[:, :2])
+        mpl.plot(all_solns[1][0], (a-c)[:, 2:])
         mpl.xlabel(r'$t$')
-        mpl.legend([r'$y_1$', r'$y_2$', r'$\dot{y}_1$', r'$\dot{y}_2$'])
+        mpl.legend([r'$\dot{y}_1$', r'$\dot{y}_2$'])
         mpl.title("Explicit Newmark - RK4")
         mpl.show()
