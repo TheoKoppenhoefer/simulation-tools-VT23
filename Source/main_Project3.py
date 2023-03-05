@@ -84,7 +84,7 @@ if __name__ == '__main__':
         mpl.ylabel('Variance($E_{tot}$)')
         mpl.savefig(f'../Plots/Project3_main/Figure_920.pdf')
     
-    if False:
+    if True:
         # Test the beta and gamma parameter on the implicit Newmark method
         # experiments are of the form [alpha, betas, gammas]
         experiments = [[0., np.linspace(0.15,0.49,25), np.linspace(0.3,0.99,25)]]
