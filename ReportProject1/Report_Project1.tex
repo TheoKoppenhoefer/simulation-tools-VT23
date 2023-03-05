@@ -216,9 +216,10 @@
 %%%%% TITLE PAGE
 
 %\subject{Simulation Tools, VT23}
-\title{Project Reports}
+\title{ Project Reports \\[1ex]
+	  \large NUMN26 / FMNN05, Simulation Tools}
 \author{Salvador Castagnino, Theo Koppenhöfer}
-\date{\today}
+\date{Lund \\[1ex] \today}
 
 
 %%%%% The content starts here %%%%%%%%%%%%%
@@ -232,19 +233,25 @@
 
 \section*{Introduction}
 
+In the following report we will discuss our implementation of the projects to the course NUMN26 / FMNN05, Simulation Tools. During the project we try out solvers from the \pyth{Assimulo} package which wraps the SUNDIALS ODE solvers and in project 3 briefly the \pyth{dune-fem} package for discretising PDEs. In project one we will use a variant of the pendulum as a toy problem to test various explicit solvers of Assimulo. In project 2 we will then use a mechanical model of a pincer mechanism in various formulations as a benchmark to test Assimulo's various implicit solvers. In project 3 we then test an implementation of the explicit Newmark method on the pendulum and an implementation of the HHT-$\alpha$ and the implicit Newmark solvers on a discretised PDE given by an elastic beam.
 This report and the code belonging to it can be found online under \cite{Repository}.
 
 \subsection*{The Benchmark}
 
+<<<<<<< HEAD
 In the following we use the model of a pendulum attached to a rod which is elastic in the radial direction as described in Task 1. The situation is depicted in figure \ref{dr:Pendulum}. 
+=======
+>>>>>>> fixing merge of tex file again
 
 \begin{wrapfigure}{r}{0.43\textwidth}
 \centering
 \input{../Drawings/pendulum.pdf_tex}
 \caption{The pendulum}
 \label{dr:Pendulum}
+\vspace*{-1cm}
 \end{wrapfigure}
 
+In the following we use the model of a pendulum attached to a rod which is elastic in the radial direction. The situation is depicted in figure \ref{dr:Pendulum}.
 This problem leads to the formulation as an ODE
 \begin{align*}
 	\vect{y_1 \\ y_2 \\ y_3 \\ y_4}' = \vect{y_3 \\ y_4 \\ -y_1\lambda(y_1,y_2) \\ -y_2\lambda(y_1,y_2)-1}
@@ -253,7 +260,7 @@ with
 \begin{align*}
 	\lambda(y_1,y_2)=k\frac{\norm{(y_1,y_2)}-1}{\norm{(y_1,y_2)}}\,.
 \end{align*}
-The plot of a numerical solution to this problem for $k=1$ can be seen in figures \ref{pl:StateTime1} \ref{pl:PhasePortrait1} and \ref{pl:PolarPlot1}.
+The plot of a numerical solution to this problem for $k=1$ can be seen in figures \ref{pl:StateTime1}, \ref{pl:PhasePortrait1} and \ref{pl:PolarPlot1}.
 
 \begin{figure}[h]
 \centering
@@ -272,7 +279,7 @@ The plot of a numerical solution to this problem for $k=1$ can be seen in figure
 \end{minipage}
 \end{figure}
 
-We can calculate the potential, kinetic and approximate the elastic energy with the formulas
+We can calculate the potential, kinetic and approximate elastic energies with the formulas
 \begin{align*}
 	E_{\text{pot}}=1+y_2
 	\qquad E_{\text{kin}}=\frac{\norm{(y_3,y_4)}^2}{2}
@@ -282,8 +289,8 @@ Adding these up we get the approximate total energy
 \begin{align*}
 	E_{\text{tot}}=E_{\text{pot}}+E_{\text{kin}}+E_{\text{elast}}\,.
 \end{align*}
-We expect the approximate total energy to be constant which indeed can be seen in Figure \ref{pl:EnergyPlot1} for that previously calculated numerical solution.
-Because of this property we can use the variance of the approximate total energy as an index to measure the stability of the method. 
+We expect the approximate total energy to be almost constant which indeed can be seen in Figure \ref{pl:EnergyPlot1} for that previously calculated numerical solution.
+Because of this property we can use the variance of the approximate total energy as an index to measure the stability of a solver. 
 In the ideal world this index almost vanishes.
 
 \begin{figure}[h]
@@ -309,14 +316,14 @@ For linear problems, explicit methods present a much reduced stability region wh
 For the problem of the elastic pendulum, approximated by explicit methods, when the value of $k$ is increased we are expected to see the approximation blow up showing oscillations of unbounded amplitude.
 This unstable behavior will be attenuated by reducing the value of the step $h$.
 
-%\begin{figure}[h]
-%\centering
-%\begin{minipage}[b]{0.45\textwidth}
-%\centering
-%\includegraphics[width=\textwidth]{../Drawings/Runge_Kutter_stability_regions}
-%\caption{Stability regions of the Runge-Kutta-methods, taken from \cite{Stab_RK}[p.238]}
-%\end{minipage}
-%\end{figure}
+\begin{figure}[h]
+\centering
+\begin{minipage}[b]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Drawings/Runge_Kutter_stability_regions}
+\caption{Stability regions of the Runge-Kutta-methods, taken from \cite{Stab_RK}[p.238]}
+\end{minipage}
+\end{figure}
 
 The problem was simulated using Explicit Euler and RK4.
 All the experiments in this section are simulated on the domain $[0,20]$ and have initial the initial value $y_0 = [1.1, 0, 0, 0]$ if not otherwise stated.
@@ -377,7 +384,7 @@ This behavior cannot be observed in the other explicit methods.
 \section*{Testing Implicit Methods}
 
 Opposite to the case of explicit methods, for linear problems implicit methods count with an extensive stability region which does not make their stability dependent on the value of the step $k$.
-The problem was simulated using Implicit Euler, BDF2 with Fixed Point as corrector and BDFk with Newton as corrector for $k$ between $1$ and $4$. All the following experiments take as initial value $$y_0 = [1.1, 0, 0, 0]$$ and have $[0, 20]$ for time domain.
+The problem was simulated using Implicit Euler, BDF2 with Fixed Point as corrector and BDFk with Newton as corrector for $k$ between $1$ and $4$. All the following experiments take as initial value $y_0 = [1.1, 0, 0, 0]$ and have $[0, 20]$ for time domain.
 It is interesting to see how the oscillation of the spring decays for implicit methods. This decay can be attenuated by reducing the step size or accelerated by increasing the value of the spring constant.
 
 \begin{figure}[h]
@@ -854,35 +861,28 @@ As all experiments deliver more or less the same result we will be comparing the
 
 As part of the final task we used an explicit RK4 method to solve the index 1 problem. As a result of the method exploding for $h=0.01$, the default step value, the method was tested for various values of $h$.
 
-In particular in Figure \ref{pl:L2_norm_explicit} the $L_2$ norm of each angle over time is plotted with respect to $h \in [0.001, 0.002)$ with $\Delta h = 5\mathrm{e}{-6}$.
+In particular in Figure ... the $L_2$ norm of each angle over time is plotted with respect to $h \in [0.001, 0.002)$ with $\Delta h = 5\mathrm{e}{-6}$.
 
 \begin{figure}[h]
-\begin{minipage}[t]{0.45\textwidth}
+\begin{minipage}[t]{0.7\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/L2_norm_different_k.pdf}
-\caption{Value of $L_2$ norms depending on $h$}
-\label{pl:L2_norm_explicit}
+%\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/L2_0.001<h<0.002_delta=0.000005.png}
 \end{minipage}
 \end{figure}
 
 
 The explicit method can then be tested with individual step sizes and as expected, the method explodes for $h \in \{0.001446, 0.0018, 0.00195\}$ and is stable for $h \in \{0.00185, 0.0012, 0.0016\}$.
 
-In Figures \ref{pl:explicit_angles} and \ref{pl:explicit_angles_dot} it can be observerd the aproximation using the explicit RK4 for a value of the stes size which makes the approximation stable, in particular we are taking $h=1\mathrm{e}{-4}$.
+In Figures ... and ... it can be observerd the aproximation using the explicit RK4 for a value of the stes size which makes the approximation stable, in particular we are taking $h=1\mathrm{e}{-4}$.
 
 \begin{figure}[h]
-\begin{minipage}[t]{0.45\textwidth}
+\begin{minipage}[t]{0.4\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/angles}
-\caption{Approximation of angles using explicit method}
-\label{pl:explicit_angles}
+%\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/angles.png}
 \end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
+\begin{minipage}[t]{0.4\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/derivatives}
-\caption{Approximation of angles derivatives using explicit method}
-\label{pl:explicit_angles_dot}
+%\includegraphics[width=\textwidth]{../Plots/RK4_Proj2/derivatives.png}
 \end{minipage}
 \end{figure}
 
@@ -978,8 +978,7 @@ In a first experiment we compare the performance of our implementation of the HH
 
 \subsubsection*{Testing the implicit Newmark solver}
 
-In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the parameter $\alpha=0$ and the stepsize $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is instable for the specific choice of $\beta$ and $\gamma$. One can observe that indeed the implicit Newmark method is stable for $1/2\leq\gamma\leq2\beta$.
-One can observe that the solver is most stable $\gamma\approx1/2$. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
+In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the parameter $\alpha=0$ and the stepsize $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is instable for the specific choice of $\beta$ and $\gamma$. One can observe that the problem becomes more stable with decreasing $\beta$ and and that the region of stability increases with decreasing $\gamma$. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
 
 \begin{figure}[h]
 \centering
@@ -1028,68 +1027,6 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 \label{pl:beam_exp_HHTalpha_minimal}
 \end{minipage}
 \end{figure}
-
-\section*{The elastic pendulum}
-
-In this section we will use the developed methods to solve the problem of the elastic spring presented in Project 1. In particular we will compare the performance of different explicit methods solving the problem. The method we will be comparing are Newmark Explicit against Explicit Euler and Newmark Explicit againts RK4.
-\bigbreak
-It is common to both methods that the simulations start at the same point and rapidly drift away. This drif will continuate in different ways depending on the method tested.
-
-\subsubsection*{Newmark - RK4}
-
-This is probably the most interesting of both cases given that RK4 doesn't lose stability as fast as Explici Euler does. As mentioned, the distance between the approximations will drift away in an oscillating fashion with an increasing amplitude. This can be observed in Figure \ref{pl:new_rk4_k=10} for $y$ and in Figure \ref{pl:new_rk4_k=10_dot} for $\dot{y}$.
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E1_t=1E5_y}
-\caption{Difference of $y$ with $h=0.01$ and $k=10$.}
-\label{pl:new_rk4_k=10}
-\end{minipage}
-\hfill	
-\begin{minipage}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E1_t=1E5_ydot}
-\caption{Difference of $\dot{y}$ with $h=0.01$ and $k=10$.}\label{pl:new_rk4_k=10_dot}
-\end{minipage}
-\end{figure}
-
-The amplitude of the oscillations will eventualy converge to a value which appears to depend on the value of $k$. For bigger values of $k$ the amplitude appeats to converge faster. Convergence of the amplitudes can be observed in Figure \ref{pl:new_rk4_k=1000} for $y$ and in Figure \ref{pl:new_rk4_k=1000_dot} for $\dot{y}$.
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E3_t=1E5_y}
-\caption{Difference of $y$ with $h=0.01$ and $k=1\mathrm{e}{3}$.}
-\label{pl:new_rk4_k=1000}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-RK4_k=1E3_t=1E5_ydot}
-\caption{Difference of $\dot{y}$ with $h=0.01$ and $k=1\mathrm{e}{3}$.}
-\label{pl:new_rk4_k=1000_dot}
-\end{minipage}
-\end{figure}
-
-With regards to performance, Newmark's method is faster than RK4 being for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
-
-\subsubsection*{Newmark - Euler}
-Not much can be said about the relation between Newmark's and Euler's methods given the unstable nature of Explicit Euler. It is common to see how Euler's method explodes to infinity while Newmark's remains stable. This can be observed in Figure \ref{pl:new_eul}.
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../Plots/Diff_Proj3/Real/New-Eul_k=1E1_t=1E3_y}
-\caption{Difference of $y$ with $h=0.01$ and $k=10$.}
-\label{pl:new_eul}
-\end{minipage}
-\end{figure}
-
-With regard to performance, Euler's method is faster than Newmark's for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
 
 
 
