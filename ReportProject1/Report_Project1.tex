@@ -285,7 +285,7 @@ Adding these up we get the approximate total energy
 \begin{align*}
 	E_{\text{tot}}=E_{\text{pot}}+E_{\text{kin}}+E_{\text{elast}}\,.
 \end{align*}
-We expect the approximate total energy to be almost constant which indeed can be seen in Figure \ref{pl:EnergyPlot1} for that previously calculated numerical solution.
+We expect the approximate total energy to be almost constant which indeed can be seen in figure \ref{pl:EnergyPlot1} for that previously calculated numerical solution.
 Because of this property we can use the variance of the approximate total energy as an index to measure the stability of a solver. 
 In the ideal world this index almost vanishes.
 
@@ -323,7 +323,7 @@ The problem was simulated using Explicit Euler and RK4.
 All the experiments in this section are simulated on the domain $[0,20]$ and have initial the initial value $$y_0 = \vect{1.1 \\ 0 \\ 0 \\ 0}\,.$$
 The graphs are presented in polar coordinates where $r$ refers to the length of the spring and $\theta$ refers to the angle between the pendulum and the vertical axis.
 
-It can be observed that for the fixed step size $h=0.01$ Explicit Euler (Figure \ref{exp_euler_k=50_h=0.01_c}) already shows instability for values of $k=50$ while RK4 (Figure \ref{rk4_h=0.01_k=3000_c}) remains stable for values up to $k=3000$.
+It can be observed that for the fixed step size $h=0.01$ Explicit Euler (figure \ref{exp_euler_k=50_h=0.01_c}) already shows instability for values of $k=50$ while RK4 (figure \ref{rk4_h=0.01_k=3000_c}) remains stable for values up to $k=3000$.
 
 \begin{figure}[h]
 \centering
@@ -341,11 +341,9 @@ It can be observed that for the fixed step size $h=0.01$ Explicit Euler (Figure 
 \label{rk4_h=0.01_k=3000_c}
 \end{minipage}
 \end{figure}
-	
-By keeping the value of $k$ constant and reducing the step size by an order of magnitude with Explicit Euler (Figure \ref{exp_euler_k=50_h=0.001_c_2}) we see how the instability is attenuated and it thus presents a similar amplitude over time.
-It takes a much larger step size and spring constant for RK4 to become unstable (Figure \ref{rk4_h=0.1_k=975_c}). Furthermore its growth is much more rapid than Explicit Euler’s when unstable and occurs without oscillating.
 
-\begin{figure}[h]
+\begin{wrapfigure}{r}{0.50\textwidth}
+\vspace*{-0.8cm}
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
@@ -353,20 +351,21 @@ It takes a much larger step size and spring constant for RK4 to become unstable 
 \caption{Explicit Euler with parameters $h=0.001$ and $k=50$.}
 \label{exp_euler_k=50_h=0.001_c_2}
 \end{minipage}
-\hfill
+\end{wrapfigure}
+	
+By keeping the value of $k$ constant and reducing the step size by an order of magnitude with Explicit Euler (c.f.\ figure \ref{exp_euler_k=50_h=0.001_c_2}) we see how the instability is attenuated and it thus presents a similar amplitude over time.
+It takes a much larger step size and spring constant for RK4 to become unstable as can be seen in figure \ref{rk4_h=0.1_k=975_c}. Furthermore its growth is much more rapid than Explicit Euler’s when unstable and occurs without oscillating.
+
+
+\begin{figure}[h]
+\centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4/rk4_h=0.1_k=975_c}
 \caption{RK4 with parameters $h=0.1$ and $k=975$.}
 \label{rk4_h=0.1_k=975_c}
 \end{minipage}
-\end{figure}
-
-It is interesting to observe that the oscillation of the spring is rapidly damped with RK4 (Figure \ref{rk4_h=0.1_k=300_c}), a behavior similar to that presented by implicit methods.
-This behavior was not observed in the other explicit methods.
-
-\begin{figure}[h]
-\centering
+\hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4/rk4_h=0.1_k=300_c}
@@ -374,6 +373,10 @@ This behavior was not observed in the other explicit methods.
 \label{rk4_h=0.1_k=300_c}
 \end{minipage}
 \end{figure}
+
+It is interesting to observe that the oscillation of the spring is rapidly damped with RK4 (figure \ref{rk4_h=0.1_k=300_c}), a behavior similar to that presented by implicit methods.
+This behavior was not observed in the other explicit methods.
+
 
 \section*{Testing Implicit Methods}
 
@@ -410,7 +413,7 @@ It is interesting to see how the oscillation of the spring decays for implicit m
 
 The BDFk method with Newton presents a decay in the spring oscillation as the other methods do.
 However, it also shows decay of the pendulum oscillation which cannot be observed in the other implicit methods.
-To better observe this decay (Figure \ref{bdf2_h=0.01_h=100_tf=100} and Figure \ref{bdf4_h=0.01_h=100_tf=100.png}) the domain is increased to $[0, 100]$.
+To better observe this decay (figure \ref{bdf2_h=0.01_h=100_tf=100} and figure \ref{bdf4_h=0.01_h=100_tf=100.png}) the domain is increased to $[0, 100]$.
 
 \begin{figure}[h]
 \centering
@@ -459,9 +462,6 @@ A higher $k$ reflects a problem which is more stiff. As a stiff problem requires
 \end{minipage}
 \end{figure}
 
-From figure \ref{pl:njacs_nsteps1} it can be seen that the number of Jacobin evaluations stays roughly constant and happens roughly every 5'th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though the general tendency is that it is smaller the lower \pyth{maxord} is set. This makes sense because a lower \pyth{maxord} means there are fewer possibilities for the method order and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result tends to be further away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
-
-
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
@@ -479,6 +479,7 @@ From figure \ref{pl:njacs_nsteps1} it can be seen that the number of Jacobin eva
 \end{minipage}
 \end{figure}
 
+From figure \ref{pl:njacs_nsteps1} it can be seen that the number of Jacobian evaluations stays roughly constant and happens roughly every 5'th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though the general tendency is that it is smaller the lower \pyth{maxord} is set. This makes sense because a lower \pyth{maxord} means there are fewer possibilities for the method order and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result tends to be further away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
 
 \begin{figure}[h]
 \centering
@@ -502,46 +503,46 @@ Perhaps surprisingly the Adams-Moulton-method seems to perform better on this pr
 This experiment also highlights that a lower \pyth{maxord} parameter tends to be more computationally expensive though it reduces the number of error test failures \pyth{nerrfails}.
 
 \subsection*{Testing the parameter rtol}
+
+\begin{wrapfigure}{r}{0.45\textwidth}
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Task4/Figure_300}
+\caption{\pyth{nsteps} in relation to the parameter \pyth{rtol}.}
+\label{pl:nsteps2}
+\end{minipage}
+\end{wrapfigure}
+
 We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). We see in \ref{pl:stability2} that for a particular choice of \pyth{rtol} the simulation with Adams-Moulton has a large energy sink or energy source which indicates that this method becomes unstable for this particular value. It is unsurprising that this occurs for a relatively large \pyth{rtol}.
 
 \begin{figure}[h]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
-\includegraphics[width=\textwidth]{../Plots/Task4/Figure_300}
-\caption{\pyth{nsteps} in relation to the parameter \pyth{rtol}.}
-\label{pl:nsteps2}
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.45\textwidth}
-\centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_310}
 \caption{\pyth{nfcns/nsteps} in relation to the parameter \pyth{rtol}.}
 \label{pl:nfcns_nsteps2}
 \end{minipage}
-\end{figure}
-
-
-\begin{figure}[h]
-\centering
+\hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_311}
 \caption{\pyth{njacs/nsteps} in relation to the parameter \pyth{rtol}.}
 \label{pl:njacs_nsteps2}
 \end{minipage}
-\hfill
+\end{figure}
+
+
+\begin{figure}[h]
+\centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_312}
 \caption{\pyth{nerrfails/nsteps} in relation to the parameter \pyth{rtol}.}
 \label{pl:nerrfails_nsteps2}
 \end{minipage}
-\end{figure}
-
-
-\begin{figure}[h]
-\centering
+\hfill
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_304}
@@ -550,32 +551,36 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 \end{minipage}
 \end{figure}
 
+\newpage
+
 \subsection*{Testing the parameter atol}
 
-If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we can see that for the Adams-Moulton method the variance of the energy (c.f.\ figure \ref{pl:stability3}) is for certain \pyth{rtol} significantly above the value for the default parameter which indicates some instability.
-In either case we observe that increasing the tolerance seems to come at the cost of energy conversation as is dramatically visualised in Figures \ref{pl:energy2} and \ref{pl:energy3}.
-
-
-\begin{figure}[h]
+\begin{wrapfigure}{r}{0.47\textwidth}
 \centering
+\vspace*{-0.8cm}
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_404}
 \caption{Variance of the energy in relation to the parameter \pyth{atol}.}
 \label{pl:stability3}
 \end{minipage}
-\end{figure}
+\vspace*{-1cm}
+\end{wrapfigure}
+
+If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we can see that for the Adams-Moulton method the variance of the energy (c.f.\ figure \ref{pl:stability3}) is for certain \pyth{rtol} significantly above the value for the default parameter which indicates some instability.
+In either case we observe that increasing the tolerance seems to come at the cost of energy conversation as is dramatically visualised in figures \ref{pl:energy2} and \ref{pl:energy3}.
+
 
 \begin{figure}[h]
 \centering
-\begin{minipage}[b]{0.45\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_450}
 \caption{Energy plot for $k=10^3$ with \pyth{atol=1E-2}.}
 \label{pl:energy2}
 \end{minipage}
 \hfill
-\begin{minipage}[b]{0.45\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_451}
 \caption{Energy plot for $k=10^3$.}
@@ -583,6 +588,7 @@ In either case we observe that increasing the tolerance seems to come at the cos
 \end{minipage}
 \end{figure}
 
+\newpage
 All in all we see that none of the (admittedly crude) tweaking of the parameters improved the performance of CVODE. To the contrary, most changes worsened the performance. The choice of the discretisation method on the other hand did make a big difference and the performance for solving the toy problem could be improved by switching from the default BDF method to the Adams-Moulton method.
 
 
@@ -601,15 +607,7 @@ and differentiating this again we obtain the index 1 formulation
 \begin{align}
 	0&= \partial_q^2g(q)\,(q',q')+G(q)\,q''\,.  \label{eq:condition_indx1}
 \end{align}
-Note that condition \eqref{eq:condition_indx1} and \eqref{eq:sevenBody} can be uniquely solved for $q''$ and $\lambda$ and we then obtain an ODE in the explicit formulation.
-For the implementation we rewrite this second order system as a first order system by the usual trick of introducing the variable $v=q'$ so that in the implicit formulation the problem depends on the variable
-\begin{align*}
-	y = \vect{q \\ v \\ \lambda}
-\end{align*}
-
-A plot of the solution of the index 1 formulation can be seen in figures \ref{pl:indx3_soln_angles}, \ref{pl:indx3_soln_anglesdot} and \ref{pl:indx3_soln_lambdas}.
-
-\begin{figure}[h]
+\begin{figure}[b]
 \centering
 \begin{minipage}[t]{0.45\textwidth}
 \centering
@@ -625,8 +623,14 @@ A plot of the solution of the index 1 formulation can be seen in figures \ref{pl
 \label{pl:indx3_soln_anglesdot}
 \end{minipage}
 \end{figure}
+Note that condition \eqref{eq:condition_indx1} and \eqref{eq:sevenBody} can be uniquely solved for $q''$ and $\lambda$ and we then obtain an ODE in the explicit formulation.
+For the implementation we rewrite this second order system as a first order system by the usual trick of introducing the variable $v=q'$ so that in the implicit formulation the problem depends on the variable
+\begin{align*}
+	y = \vect{q \\ v \\ \lambda}\,.
+\end{align*}
+A plot of the solution of the index 1 formulation can be seen in figures \ref{pl:indx3_soln_angles} to \ref{pl:indx3_soln_lambdas}.
 
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \begin{minipage}[b]{0.45\textwidth}
 \centering
@@ -636,12 +640,11 @@ A plot of the solution of the index 1 formulation can be seen in figures \ref{pl
 \end{minipage}
 \end{figure}
 
+
+
 \section*{Generation of consistent initial values}
 
 Due to the restrictions imposed on the system the generation of initial values is no trivial task. To do this we follow the steps presented in \cite{HW_SolvingODEs}. We start with $q$ and $v$.
-
-First we take $\theta=0$ which can be done given that the system is under-determined under the assumption that a solution exists (this makes sense as a physical model of the system was presented in class). We then use \textit{Newton Iteration} to solve the equations obtaining values for the remaining angles.
-We also take the initial value of $v$ to be $0$ as we assume the system starts at rest. Now for $w$ and $\lambda$ using the Index 1 formulation we have to solve a linear system which is presented in \cite{HW_SolvingODEs}. Doing this we get the values given in tables  \ref{tb:initial_angles}, \ref{tb:initial_accelerations} and \ref{tb:initial_lambdas}.
 
 
 \begin{figure}[h]
@@ -668,12 +671,11 @@ We also take the initial value of $v$ to be $0$ as we assume the system starts a
 \end{minipage}
 \end{figure}
 
+First we take $\theta=0$ which can be done given that the system is under-determined under the assumption that a solution exists (this makes sense as a physical model of the system was presented in class). We then use \textit{Newton Iteration} to solve the equations obtaining values for the remaining angles.
+We also take the initial value of $v$ to be $0$ as we assume the system starts at rest. Now for $w$ and $\lambda$ using the Index 1 formulation we have to solve a linear system which is presented in \cite{HW_SolvingODEs}. Doing this we get the values given in tables  \ref{tb:initial_angles}, \ref{tb:initial_accelerations} and \ref{tb:initial_lambdas}.
 Many of the values are minute but non-zero. This is due to rounding errors, but in theory these small values equal zero.
 
 \section*{A comparison of the index 1, 2 and 3 formulations}
-
-We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver. However, to get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchanged and in the following we only vary the index of the problem. One can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas}  the index 1 solution subtracted from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
-
 
 \begin{figure}[h]
 \centering
@@ -709,6 +711,9 @@ We now would like to compare the solutions of the various formulations. To calcu
 \end{minipage}
 \end{figure}
 
+We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver. However, to get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchanged and in the following we only vary the index of the problem. One can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas}  the index 1 solution subtracted from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
+
+
 \begin{figure}[h]
 \centering
 \begin{minipage}[t]{0.45\textwidth}
@@ -726,9 +731,6 @@ We now would like to compare the solutions of the various formulations. To calcu
 \end{minipage}
 \end{figure}
 
-Rather unexpectedly however the difference of the index 1 to the index 3 solution is in general greater than the difference of the index 2 to the index 3 solutions. Also unexpectedly these differences are noticeable in the plots of the Lagrange parameter $\lambda$ as shown in figures \ref{pl:indx1_soln_lambdas}, \ref{pl:indx2_soln_lambdas} and \ref{pl:indx3_soln_lambdas}. Here we see that the solution becomes increasingly rough as the index increases.
-
-
 \begin{figure}[h]
 \centering
 \begin{minipage}[t]{0.45\textwidth}
@@ -745,6 +747,9 @@ Rather unexpectedly however the difference of the index 1 to the index 3 solutio
 \label{pl:indx2_soln_lambdas}
 \end{minipage}
 \end{figure}
+
+Rather unexpectedly however the difference of the index 1 to the index 3 solution is in general greater than the difference of the index 2 to the index 3 solutions. Also unexpectedly these differences are noticeable in the plots of the Lagrange parameter $\lambda$ as shown in figures \ref{pl:indx1_soln_lambdas}, \ref{pl:indx2_soln_lambdas} and \ref{pl:indx3_soln_lambdas}. Here we see that the solution becomes increasingly rough as the index increases.
+
 
 
 The performance of the IDA solver for the various indexes can be seen in figures \ref{pl:nsteps_indx123} to \ref{pl:nerrfails_nsteps_indx123}. We see in figure \ref{pl:nsteps_indx123} that the number of steps of the solver increases with the index. As the number of function evaluations per step stays roughly constant by figure \ref{pl:nfcns_nsteps_indx123} this means that the number of function evaluations increases with the index. One other other notable statistic regards the number of error test failures for the different problems which can be seen in figure \ref{pl:nerrfails_nsteps_indx123} where we see a larger difference between the problems though this is probably not statistically significant as the total number of error test failures is approximately a dozen.
@@ -861,6 +866,7 @@ As part of the final task we used an explicit RK4 method to solve the index 1 pr
 In figure  \ref{pl:L2_norm_explicit} the $L_2$ norm of each angle over time is plotted with respect to $h \in [0.001, 0.002)$ with $\Delta h = 5\mathrm{e}{-6}$.
 
 \begin{figure}[h]
+\centering
 \begin{minipage}[t]{0.7\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4_Proj2/L2_norm_different_k.pdf}
@@ -875,13 +881,15 @@ The explicit method can then be tested with individual step sizes and as expecte
 In figures \ref{pl:explicit_angles}  and \ref{pl:explicit_angles_dot} the approximation using the explicit RK4 with the stable step size $h=10^{-4}$ can be observed.
 
 \begin{figure}[h]
-\begin{minipage}[t]{0.4\textwidth}
+\centering
+\begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4_Proj2/angles}
 \caption{Approximation of angles using explicit method}
 \label{pl:explicit_angles}
 \end{minipage}
-\begin{minipage}[t]{0.4\textwidth}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/RK4_Proj2/derivatives}
 \caption{Approximation of angles derivatives using explicit method}
@@ -907,7 +915,7 @@ It is common to both methods that the simulations start at the same point and ra
 
 \subsubsection*{Newmark - RK4}
 
-This is probably the most interesting of both cases given that RK4 does not lose stability as fast as Explicit Euler does. As mentioned, the distance between the approximations will drift away in an oscillating fashion with an increasing amplitude. This can be observed in Figure \ref{pl:new_rk4_k=10} for $y$ and in Figure \ref{pl:new_rk4_k=10_dot} for $\dot{y}$.
+This is probably the most interesting of both cases given that RK4 does not lose stability as fast as Explicit Euler does. As mentioned, the distance between the approximations will drift away in an oscillating fashion with an increasing amplitude. This can be observed in figure \ref{pl:new_rk4_k=10} for $y$ and in figure \ref{pl:new_rk4_k=10_dot} for $\dot{y}$.
 
 \begin{figure}[h]
 \centering
@@ -925,7 +933,7 @@ This is probably the most interesting of both cases given that RK4 does not lose
 \end{minipage}
 \end{figure}
 
-The amplitude of the oscillations will eventually converge to a value which appears to depend on the value of $k$. For bigger values of $k$ the amplitude appears to converge faster. Convergence of the amplitudes can be observed in Figure \ref{pl:new_rk4_k=1000} for $y$ and in Figure \ref{pl:new_rk4_k=1000_dot} for $\dot{y}$.
+The amplitude of the oscillations will eventually converge to a value which appears to depend on the value of $k$. For bigger values of $k$ the amplitude appears to converge faster. Convergence of the amplitudes can be observed in figure \ref{pl:new_rk4_k=1000} for $y$ and in figure \ref{pl:new_rk4_k=1000_dot} for $\dot{y}$.
 
 \begin{figure}[h]
 \centering
@@ -947,9 +955,8 @@ The amplitude of the oscillations will eventually converge to a value which appe
 With regards to performance, Newmark's method is faster than RK4 being for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
 
 \subsubsection*{Newmark - Euler}
-Not much can be said about the relation between Newmark's and Euler's methods given the unstable nature of Explicit Euler. It is common to see how Euler's method explodes to infinity while Newmark's remains stable. This can be observed in Figure \ref{pl:new_eul}.
-
-\begin{figure}[h]
+\begin{wrapfigure}{r}{0.45\textwidth}
+\vspace*{-1cm}
 \centering
 \begin{minipage}[t]{0.45\textwidth}
 \centering
@@ -957,7 +964,9 @@ Not much can be said about the relation between Newmark's and Euler's methods gi
 \caption{Difference of $y$ with $h=0.01$ and $k=10$.}
 \label{pl:new_eul}
 \end{minipage}
-\end{figure}
+\end{wrapfigure}
+Not much can be said about the relation between Newmark's and Euler's methods given the unstable nature of Explicit Euler. It is common to see how Euler's method explodes to infinity while Newmark's remains stable. This can be observed in figure \ref{pl:new_eul}.
+
 
 With regard to performance, Euler's method is faster than Newmark's for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
 
@@ -1141,27 +1150,27 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 \end{minipage}
 \end{figure}
 
-
-\begin{figure}[h]
-\centering
-\begin{minipage}[b]{0.45\textwidth}
-\centering
-\hspace*{-1cm}
-\scalebox{0.32}{
-\input{../Drawings/Stability_region_for_BDF5.pdf_tex}
-}
-\caption{Stability region for BDF5, taken from \cite{Stab_BDF}}
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.45\textwidth}
-\centering
-\hspace*{-1cm}
-\scalebox{0.32}{
-\input{../Drawings/Stability_region_for_BDF6.pdf_tex}
-}
-\caption{Stability region for BDF6, taken from \cite{Stab_BDF}}
-\end{minipage}
-\end{figure}
+%
+%\begin{figure}[h]
+%\centering
+%\begin{minipage}[b]{0.45\textwidth}
+%\centering
+%\hspace*{-1cm}
+%\scalebox{0.32}{
+%\input{../Drawings/Stability_region_for_BDF5.pdf_tex}
+%}
+%\caption{Stability region for BDF5, taken from \cite{Stab_BDF}}
+%\end{minipage}
+%\hfill
+%\begin{minipage}[b]{0.45\textwidth}
+%\centering
+%\hspace*{-1cm}
+%\scalebox{0.32}{
+%\input{../Drawings/Stability_region_for_BDF6.pdf_tex}
+%}
+%\caption{Stability region for BDF6, taken from \cite{Stab_BDF}}
+%\end{minipage}
+%\end{figure}
 
 % here come some stability regions
 
