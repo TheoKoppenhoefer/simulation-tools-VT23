@@ -343,7 +343,7 @@ It can be observed that for the fixed step size $h=0.01$ Explicit Euler (Figure 
 \end{figure}
 	
 By keeping the value of $k$ constant and reducing the step size by an order of magnitude with Explicit Euler (Figure \ref{exp_euler_k=50_h=0.001_c_2}) we see how the instability is attenuated and it thus presents a similar amplitude over time.
-It takes a much larger step size and spring constant for RK4 to become unstable (Figure \ref{rk4_h=0.1_k=975_c}). Furthermore its growth is much more rapid than Explicit Euler’s when unstable and occurs without oscillating.
+It takes a much larger step size and spring constant for RK4 to become unstable (Figure \ref{rk4_h=0.1_k=975_c}). Furthermore its growth is much more rapid than Explicit Euler’s when instable and occurs without oscillating.
 
 \begin{figure}[h]
 \centering
@@ -439,8 +439,8 @@ It is interesting to see how the relation between the speed of decay of the spri
 \section*{Testing CVODE}
 \subsection*{A first test series}
 
-In the first specific test of CVODE we solve our toy problem for increasing $k$. Here we switch between the BDF and Adam-Moulton's discretisation method. We also vary the \pyth{maxorder} parameter for both methods.
-A higher $k$ reflects a problem which is more stiff. As a stiff problem requires smaller steps the number of steps \pyth{nsteps} increases as $k$ increases which  can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per step size, \pyth{nfcns/nsteps}, hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase proportionally to \pyth{nsteps} with $k$ as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. And the general trend is that the number of steps increases as \pyth{maxord} is reduced. 
+In the first specific test of CVODE we solve our toy problem for increasing $k$. Here we switch between the BDF and Adam-Moultons discretisation method. We also vary the \pyth{maxorder} parameter for both methods.
+A higher $k$ reflects a problem which is more stiff. As a stiff problem requires smaller steps the number of steps \pyth{nsteps} increases as $k$ increases which  can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per stepsize, \pyth{nfcns/nsteps}, hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase proportionally to \pyth{nsteps} with $k$ as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. And the general trend is that the number of steps increases as \pyth{maxord} is reduced. 
 
 \begin{figure}[h]
 \centering
@@ -459,7 +459,7 @@ A higher $k$ reflects a problem which is more stiff. As a stiff problem requires
 \end{minipage}
 \end{figure}
 
-From figure \ref{pl:njacs_nsteps1} it can be seen that the number of Jacobin evaluations stays roughly constant and happens roughly every 5'th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though the general tendency is that it is smaller the lower \pyth{maxord} is set. This makes sense because a lower \pyth{maxord} means there are fewer possibilities for the method order and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result tends to be further away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
+From figure \ref{pl:njacs_nsteps1} it can be seen that the number of jacobian evaluations stays roughly constant and happens roughly every 5th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though the general tendency is that it is smaller the lower \pyth{maxord} is set. This makes sense because a lower \pyth{maxord} means there are fewer possibilities for the method order and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result tends to be further away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
 
 
 \begin{figure}[h]
@@ -502,7 +502,7 @@ Perhaps surprisingly the Adams-Moulton-method seems to perform better on this pr
 This experiment also highlights that a lower \pyth{maxord} parameter tends to be more computationally expensive though it reduces the number of error test failures \pyth{nerrfails}.
 
 \subsection*{Testing the parameter rtol}
-We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). We see in \ref{pl:stability2} that for a particular choice of \pyth{rtol} the simulation with Adams-Moulton has a large energy sink or energy source which indicates that this method becomes unstable for this particular value. It is unsurprising that this occurs for a relatively large \pyth{rtol}.
+We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). We see in \ref{pl:stability2} that for a particular choice of \pyth{rtol} the simulation with Adams-Moulton has a large energy sink or energy source which indicates that this method becomes instable for this particular value. It is unsurprising that this occurs for a relatively large \pyth{rtol}.
 
 \begin{figure}[h]
 \centering
@@ -593,7 +593,7 @@ In this project we used the implementation of the seven body mechanism as descri
 	M(q)\,q''&= f(q,q')-G(q)^\top\,\lambda\label{eq:sevenBody} \\
 	0 &= g(q) \label{eq:condition_indx3}
 \end{align}
-where $q\in\R^7$, $\lambda\in\R^6$ and $G=Dg$. If we differentiate condition \eqref{eq:condition_indx3} we obtain the index 2 condition
+where $q\in\R^7$, $\lambda\in\R^6$ and $G=Dg$. If we differentiate condition \eqref{eq:condition_indx3} we obtain the index 2 condtition
 \begin{align*}
 	0&=G(q)\,q'
 \end{align*}
@@ -640,7 +640,7 @@ A plot of the solution of the index 1 formulation can be seen in figures \ref{pl
 
 Due to the restrictions imposed on the system the generation of initial values is no trivial task. To do this we follow the steps presented in \cite{HW_SolvingODEs}. We start with $q$ and $v$.
 
-First we take $\theta=0$ which can be done given that the system is under-determined under the assumption that a solution exists (this makes sense as a physical model of the system was presented in class). We then use \textit{Newton Iteration} to solve the equations obtaining values for the remaining angles.
+First we take $\theta=0$ which can be done given that the system is underdetermined under the assumption that a solution exists (this makes sense as a physical model of the system was presented in class). We then use \textit{Newton Iteration} to solve the equations obtaining values for the remaining angles.
 We also take the initial value of $v$ to be $0$ as we assume the system starts at rest. Now for $w$ and $\lambda$ using the Index 1 formulation we have to solve a linear system which is presented in \cite{HW_SolvingODEs}. Doing this we get the values given in tables  \ref{tb:initial_angles}, \ref{tb:initial_accelerations} and \ref{tb:initial_lambdas}.
 
 
@@ -672,7 +672,7 @@ Many of the values are minute but non-zero. This is due to rounding errors, but 
 
 \section*{A comparison of the index 1, 2 and 3 formulations}
 
-We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver. However, to get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchanged and in the following we only vary the index of the problem. One can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas}  the index 1 solution subtracted from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
+We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver. However, to get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchainged and in the following we only vary the index of the problem. One can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas}  the index 1 solution subtracted from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
 
 
 \begin{figure}[h]
@@ -726,7 +726,7 @@ We now would like to compare the solutions of the various formulations. To calcu
 \end{minipage}
 \end{figure}
 
-Rather unexpectedly however the difference of the index 1 to the index 3 solution is in general greater than the difference of the index 2 to the index 3 solutions. Also unexpectedly these differences are noticeable in the plots of the Lagrange parameter $\lambda$ as shown in figures \ref{pl:indx1_soln_lambdas}, \ref{pl:indx2_soln_lambdas} and \ref{pl:indx3_soln_lambdas}. Here we see that the solution becomes increasingly rough as the index increases.
+Rather unexpectedly however the difference of the index 1 to the index 3 solution is in general greater than the difference of the index 2 to the index 3 solutions. Also unexpectedly these differences are noticable in the plots of the Lagrange parameter $\lambda$ as shown in figures \ref{pl:indx1_soln_lambdas}, \ref{pl:indx2_soln_lambdas} and \ref{pl:indx3_soln_lambdas}. Here we see that the solution becomes increasingly rough as the index increases.
 
 
 \begin{figure}[h]
@@ -803,7 +803,7 @@ This can be resolved by declaring the entries of $y$ corresponding to $v$ and or
 \label{tb:indx1_experiment_params}
 \end{figure}
 
-As all experiments deliver more or less the same result we will be comparing the statistics of IDA as depicted in figures \ref{pl:nsteps_indx1} to \ref{pl:nerrfails_nsteps_indx1}. Once again we observe in figure \ref{pl:nfcns_nsteps_indx1} that the total number of function evaluations is roughly proportional to the number of steps needed. Here experiments 1 and 4 stick out for requiring comparatively more function evaluations per step. However in figure \ref{pl:nsteps_indx1} we see that these are also precisely the experiments in which the total number of steps taken is by far the least. Experiments 1 and 4 are also precisely those experiments that have the most stringent requirements on the $v$ part of $y$. Both have set \pyth{atol_v=1E-6} and declare $v$ to not be an algebraic variable. We see in figures \ref{pl:njacs_indx1} and \ref{pl:nerrfails_nsteps_indx1} that experiment 0 is an outlier in requiring comparatively many Jacobian evaluations and having relatively few error test failures.
+As all experiments deliver more or less the same result we will be comparing the statistics of IDA as depicted in figures \ref{pl:nsteps_indx1} to \ref{pl:nerrfails_nsteps_indx1}. Once again we observe in figure \ref{pl:nfcns_nsteps_indx1} that the total number of function evaluations is roughly proportional to the number of steps needed. Here experiments 1 and 4 stick out for requiring comparatively more function evaluations per step. However in figure \ref{pl:nsteps_indx1} we see that these are also precisely the experiments in which the total number of steps taken is by far the least. Experiments 1 and 4 are also precisely those experiments that have the most stringent requirements on the $v$ part of $y$. Both have set \pyth{atol_v=1E-6} and declare $v$ to not be an algebraic variable. We see in figures \ref{pl:njacs_indx1} and \ref{pl:nerrfails_nsteps_indx1} that experiment 0 is an outlier in requiring comparitively many jacobian evaluations and having relatively few error test failures.
 
 \begin{figure}[h]
 \centering
@@ -872,7 +872,7 @@ In figure  \ref{pl:L2_norm_explicit} the $L_2$ norm of each angle over time is p
 
 The explicit method can then be tested with individual step sizes and as expected, the method explodes e.g.\ for $h \in \{0.001446, 0.0018, 0.00195\}$ and is stable for $h \in \{0.00185, 0.0012, 0.0016\}$.
 
-In figures \ref{pl:explicit_angles}  and \ref{pl:explicit_angles_dot} the approximation using the explicit RK4 with the stable step size $h=10^{-4}$ can be observed.
+In figures \ref{pl:explicit_angles}  and \ref{pl:explicit_angles_dot} the aproximation using the explicit RK4 with the stable step size $h=10^{-4}$ can be observed.
 
 \begin{figure}[h]
 \begin{minipage}[t]{0.4\textwidth}
@@ -893,7 +893,7 @@ In figures \ref{pl:explicit_angles}  and \ref{pl:explicit_angles_dot} the approx
 
 In this project we consider an initial value problem of the form
 \begin{align*}
-	M \ddot{u}+C\dot{u}+KY = f(t) \\
+	M \ddot{u}+C\dot{u}+Ku = f(t) \\
 	u(0) = u_0 \\
 	\dot{u}(0) = v_0
 \end{align*}
@@ -901,9 +901,9 @@ for this we implemented an Assimulo problem class, the HHT solver and the Newmar
 
 \section*{The elastic pendulum revisited}
 
-In this section we will use the aforementioned methods to solve the problem of the elastic spring presented in Project 1. In particular we will compare the performance of different explicit methods solving the problem. We will compare Newmark Explicit against Explicit Euler and Newmark Explicit against RK4.
+In this section we will use the aforementioned methods to solve the problem of the elastic spring presented in Project 1. In particular we will compare the performance of different explicit methods solving the problem. We will compare Newmark Explicit against Explicit Euler and Newmark Explicit againts RK4.
 \bigbreak
-It is common to both methods that the simulations start at the same point and rapidly drift away. This drift will continue in different ways depending on the method tested.
+It is common to both methods that the simulations start at the same point and rapidly drift away. This drif will continuate in different ways depending on the method tested.
 
 \subsubsection*{Newmark - RK4}
 
@@ -925,7 +925,7 @@ This is probably the most interesting of both cases given that RK4 does not lose
 \end{minipage}
 \end{figure}
 
-The amplitude of the oscillations will eventually converge to a value which appears to depend on the value of $k$. For bigger values of $k$ the amplitude appears to converge faster. Convergence of the amplitudes can be observed in Figure \ref{pl:new_rk4_k=1000} for $y$ and in Figure \ref{pl:new_rk4_k=1000_dot} for $\dot{y}$.
+The amplitude of the oscillations will eventualy converge to a value which appears to depend on the value of $k$. For bigger values of $k$ the amplitude appeats to converge faster. Convergence of the amplitudes can be observed in Figure \ref{pl:new_rk4_k=1000} for $y$ and in Figure \ref{pl:new_rk4_k=1000_dot} for $\dot{y}$.
 
 \begin{figure}[h]
 \centering
@@ -1030,7 +1030,7 @@ With an ideal solver this quantity vanishes.
 
 \subsubsection*{A brief comparison of solvers}
 
-In a first experiment we compare the performance of our implementation of the HHT solver and the implicit Euler solver from Assimulo. The HHT method was applied with the parameter $\alpha=0$ and the step size was the same for all methods. The results are plotted in figure \ref{tb:beam_exp_solverComparison}. Here one sees that for all solvers the variance of the total energy is small. There is however a big difference in the performance of the various methods. On my computer the implicit Euler solver takes roughly two orders of magnitude longer than the HHT method.
+In a first experiment we compare the performance of our implementation of the HHT solver and the implicit Euler solver from Assimulo. The HHT method was applied with the parameter $\alpha=0$ and the stepsize was the same for all methods. The results are plotted in figure \ref{tb:beam_exp_solverComparison}. Here one sees that for all solvers the variance of the total energy is small. There is however a big difference in the performance of the various methods. On my computer the implicit Euler solver takes roughly two orders of magnitude longer than the HHT method.
 
 \begin{figure}[h]
 \centering
@@ -1042,8 +1042,8 @@ In a first experiment we compare the performance of our implementation of the HH
 
 \subsubsection*{Testing the implicit Newmark solver}
 
-In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the step size $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is unstable for the specific choice of $\beta$ and $\gamma$. One sees that for $1/2\leq \gamma\leq2\beta$ the solver is stable.
-One can observe that the solver is most stable for $\gamma\approx1/2$ and for $\beta\approx1/4$ which is just the value at which the method achieves second order accuracy. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
+In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the stepsize $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is instable for the specific choice of $\beta$ and $\gamma$. One sees that for $1/2\leq \gamma\leq2\beta$ the solver is stable.
+One can observe that the solver is most stable for $\gamma\approx1/2$ and for $\beta\approx1/4$ which is just the value at which the method archieves second order accuracy. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
 
 \begin{figure}[h]
 \centering
@@ -1064,7 +1064,7 @@ One can observe that the solver is most stable for $\gamma\approx1/2$ and for $\
 
 \subsubsection*{Testing the HHT solver}
 
-In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. The variance of the total energy can be seen in figure \ref{pl:beam_exp_HHTalpha} where it is noticeable that the value decreases as $\alpha$ increases albeit from a small level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as can be seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. It is also astonishing that despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size, like the almost constant total energy and the eventual periodic behavior of the kinetic and elastic energies.
+In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. The variance of the total energy can be seen in figure \ref{pl:beam_exp_HHTalpha} where it is noticable that the value decreases as $\alpha$ increases albeit from a small level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as can be seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. It is also astonishing that despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size, like the almost constant total energy and the eventual periodic behaviour of the kinetic and elastic energies.
 
 \begin{figure}[h]
 \centering
@@ -1081,14 +1081,14 @@ In a final experiment we test the dependence of the HHT solver on the parameter 
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_900.pdf}
-\caption{Energy f1or the HHT method with $\alpha=0$ and step size $h=1$.}
+\caption{Energy f1or the HHT method with $\alpha=0$ and stepsize $h=1$.}
 \label{pl:beam_exp_HHTalpha_0}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_901.pdf}
-\caption{Energy for the HHT method with $\alpha=-1/3$ and step size $h=1$.}
+\caption{Energy for the HHT method with $\alpha=-1/3$ and stepsize $h=1$.}
 \label{pl:beam_exp_HHTalpha_minimal}
 \end{minipage}
 \end{figure}

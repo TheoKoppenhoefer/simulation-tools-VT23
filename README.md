@@ -24,4 +24,5 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 ## Some general TODO's
 - [ ] fix broken links in Latex
 - [ ] spell check
-- [ ] clean up graphs 
+- [ ] clean up graphs
+- [ ] hyperlinks
