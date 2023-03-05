@@ -76,7 +76,7 @@ if __name__ == '__main__':
         stability_indxs = []
         alphas = np.linspace(-1/3,0,10)
         for alpha in alphas:
-            mod, sim, soln = run_beam_problem_HHT('HHT', alpha)
+            mod, sim, soln = run_beam_problem_HHT('HHT', alpha, h=0.05)
             stability_indxs.append(soln[6])
         mpl.figure()
         mpl.plot(alphas, stability_indxs)
@@ -84,32 +84,32 @@ if __name__ == '__main__':
         mpl.ylabel('Variance($E_{tot}$)')
         mpl.savefig(f'../Plots/Project3_main/Figure_920.pdf')
     
-    if False:
+    if True:
         # Test the beta and gamma parameter on the implicit Newmark method
         # experiments are of the form [alpha, betas, gammas]
-        experiments = [[0., np.linspace(0.01,0.49,20), np.linspace(0.5,0.99,20)]]
+        experiments = [[0., np.linspace(0.01,0.49,10), np.linspace(0.01,0.99,20)]]
                         #   [0., np.linspace(0.01,0.49,8), np.linspace(0.7,0.99,8)]]
         
         for i, experiment in enumerate(experiments):
-            stability_indxs = []
+            # stability_indxs = []
             alpha = experiment[0]
             betas = experiment[1]
             gammas = experiment[2]
 
+            X, Y = np.meshgrid(betas, gammas)
+            stability_indxs = np.zeros(X.shape)
             for j, beta in enumerate(betas):
-                stability_indxs.append([])
-                for gamma in gammas:
-                    mod, sim, soln = run_beam_problem_HHT('Newmark_implicit', alpha, beta, gamma)
-                    stability_indxs[j].append(soln[6])
+                for k, gamma in enumerate(gammas):
+                    mod, sim, soln = run_beam_problem_HHT('Newmark_implicit', alpha, beta, gamma, h=0.05)
+                    stability_indxs[k,j] = soln[6]
 
-            max_stab = 1E1
+            max_stab = 1E2
             stability_indxs = np.nan_to_num(np.asarray(stability_indxs))
             stability_indxs[stability_indxs >= max_stab] = max_stab
             stability_indxs[stability_indxs <= 0] = max_stab
 
             mpl.figure(i)
             fig, ax = mpl.subplots()
-            X, Y = np.meshgrid(betas, gammas)
             surf = mpl.contourf(X, Y, np.log10(stability_indxs))
             ax.set_xlabel(r'$\beta$')
             ax.set_ylabel(r'$\gamma$')
@@ -122,7 +122,7 @@ if __name__ == '__main__':
         stability_indxs = [r'Variance($E_{\text{tot}}$)']
         solving_times = ['Elapsed simulation time [s]']
         for solver in solvers[1:]:
-            mod, sim, soln = run_beam_problem_HHT(solver)
+            mod, sim, soln = run_beam_problem_HHT(solver, h=0.05)
             stability_indxs.append(f'{soln[6]:0.1e}')
             solving_times.append(np.around(soln[7], 1))
             
