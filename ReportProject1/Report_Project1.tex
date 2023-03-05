@@ -381,7 +381,7 @@ This behavior cannot be observed in the other explicit methods.
 \section*{Testing Implicit Methods}
 
 Opposite to the case of explicit methods, for linear problems implicit methods count with an extensive stability region which does not make their stability dependent on the value of the step $k$.
-The problem was simulated using Implicit Euler, BDF2 with Fixed Point as corrector and BDFk with Newton as corrector for $k$ between $1$ and $4$. All the following experiments take as initial value $y_0 = [1.1, 0, 0, 0]$ and have $[0, 20]$ for time domain.
+The problem was simulated using Implicit Euler, BDF2 with Fixed Point as corrector and BDFk with Newton as corrector for $k$ between $1$ and $4$. All the following experiments take as initial value $$y_0 = [1.1, 0, 0, 0]$$ and have $[0, 20]$ for time domain.
 It is interesting to see how the oscillation of the spring decays for implicit methods. This decay can be attenuated by reducing the step size or accelerated by increasing the value of the spring constant.
 
 \begin{figure}[h]
@@ -975,7 +975,8 @@ In a first experiment we compare the performance of our implementation of the HH
 
 \subsubsection*{Testing the implicit Newmark solver}
 
-In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the parameter $\alpha=0$ and the stepsize $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is instable for the specific choice of $\beta$ and $\gamma$. One can observe that the problem becomes more stable with decreasing $\beta$ and and that the region of stability increases with decreasing $\gamma$. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
+In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the parameter $\alpha=0$ and the stepsize $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is instable for the specific choice of $\beta$ and $\gamma$. One can observe that indeed the implicit Newmark method is stable for $1/2\leq\gamma\leq2\beta$.
+One can observe that the solver is most stable $\gamma\approx1/2$. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
 
 \begin{figure}[h]
 \centering
