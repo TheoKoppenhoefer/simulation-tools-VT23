@@ -6,7 +6,6 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 - [ ] remove the noise in the last energy plot
 - [ ] remove reference to stability index
 - [ ] revise conclusion
-- [ ] write introduction
 
 
 ## Some TODO's for project 2
@@ -23,3 +22,8 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 - [ ] check the damping behaviour
 - [ ] rename stability index
 - [ ] write introduction
+
+## Some general TODO's
+- [ ] fix broken links in Latex
+- [ ] spell check
+- [ ] clean up graphs 
