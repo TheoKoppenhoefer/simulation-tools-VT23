@@ -321,7 +321,7 @@ With increasing $k$ the elastic pendulum problem behaves increasingly stiff. As 
 %\end{figure}
 
 The problem was simulated using Explicit Euler and RK4.
-All the experiments in this section are simulated on the domain $[0,20]$ and have initial the initial value $$y_0 = \vect{1.1 \\ 0 \\ 0 \\ 0}\,.$$
+All the experiments in this section are simulated on the domain $[0,20]$ and have the initial value $$y_0 = \vect{1.1 \\ 0 \\ 0 \\ 0}\,.$$
 The graphs are presented in polar coordinates where $r$ refers to the length of the spring and $\theta$ refers to the angle between the pendulum and the vertical axis.
 
 It can be observed that for the fixed step size $h=0.01$ Explicit Euler (figure \ref{exp_euler_k=50_h=0.01_c}) already shows instability for values of $k=50$ while RK4 (figure \ref{rk4_h=0.01_k=3000_c}) remains stable for values up to $k=3000$.
@@ -586,7 +586,7 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 \end{figure}
 
 
-When testing the \pyth{atol} analogously to the parameter \pyth{rtol} one observes similar behaviour. As \pyth{atol} increases the number of steps taken dramatically decreases (figure \ref{pl:nsteps3}), the number of jacobian evaluations per step eventually increases (figure \ref{pl:njacs_nsteps3} and for the Adams-Moulton method the variance of the total energy also eventually increases (figure \ref{pl:stability3}). Here again a larger value for the variance of the total energy indicates instability.
+When testing the \pyth{atol} analogously to the parameter \pyth{rtol} one observes similar behaviour. As \pyth{atol} increases the number of steps taken dramatically decreases (figure \ref{pl:nsteps3}), the number of Jacobian evaluations per step eventually increases (figure \ref{pl:njacs_nsteps3} and for the Adams-Moulton method the variance of the total energy also eventually increases (figure \ref{pl:stability3}). Here again a larger value for the variance of the total energy indicates instability.
 In either case we observe that increasing the tolerance seems to come at the cost of energy conversation as is dramatically visualised in figures \ref{pl:energy2} and \ref{pl:energy3}.
 
 
