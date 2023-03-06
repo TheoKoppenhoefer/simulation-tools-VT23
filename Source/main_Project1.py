@@ -141,8 +141,8 @@ if __name__ == '__main__':
                            xlabel=r'$k$', plotlabel=f'discr={discr}, maxord={maxord}', plotnumber=200,
                            savefig=True)
 
-        if False:
-            rtols = np.logspace(1E-10, 1, 30)
+        if True:
+            rtols = np.logspace(-10, 0, 30)
             nsteps = []
             nfcns = []
             njacs = []
@@ -163,8 +163,8 @@ if __name__ == '__main__':
                        xlabel='rtol', plotlabel=f'discr={discr}', plotnumber=300, semilogx=True,
                        savefig=True)
 
-        if False:
-            atols = np.logspace(1E-8, 0.5, 30)
+        if True:
+            atols = np.logspace(-10, 0, 30)
             nsteps = []
             nfcns = []
             njacs = []

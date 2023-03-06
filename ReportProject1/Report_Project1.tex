@@ -344,7 +344,7 @@ It can be observed that for the fixed step size $h=0.01$ Explicit Euler (figure 
 
 \begin{wrapfigure}{r}{0.50\textwidth}
 \vspace*{-0.8cm}
-\centering
+\raggedleft
 \begin{minipage}[b]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/ExpEuler/exp_euler_k=50_h=0.001_c}
@@ -514,7 +514,7 @@ This experiment also highlights that a lower \pyth{maxord} parameter tends to be
 \end{minipage}
 \end{wrapfigure}
 
-We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}). We see in \ref{pl:stability2} that for a particular choice of \pyth{rtol} the simulation with Adams-Moulton has a large energy sink or energy source which indicates that this method becomes unstable for this particular value. It is unsurprising that this occurs for a relatively large \pyth{rtol}.
+We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}).The general tendency is that the number of Jacobian evaluations per step (figure \ref{pl:njacs_nsteps2}) and the number of error test failures per step (figure \ref{pl:nerrfails_nsteps2}) increases with \pyth{rtol}. We see in \ref{pl:stability2} that for large \pyth{rtol} the simulation with Adams-Moulton has a large energy sink or energy source. This indicates that this method becomes increasingly unstable for large \pyth{rtol}.
 
 \begin{figure}[h]
 \centering
@@ -558,17 +558,36 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 \begin{wrapfigure}{r}{0.47\textwidth}
 \centering
 \vspace*{-0.8cm}
-\begin{minipage}[b]{0.45\textwidth}
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Task4/Figure_400}
+\caption{\pyth{nsteps} in relation to the parameter \pyth{atol}.}
+\label{pl:nsteps3}
+\end{minipage}
+\vspace*{1cm}
+\end{wrapfigure}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Task4/Figure_411}
+\caption{\pyth{njacs/nsteps} in relation to the parameter \pyth{atol}.}
+\label{pl:njacs_nsteps3}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.45\textwidth}
 \centering
 \includegraphics[width=\textwidth]{../Plots/Task4/Figure_404}
 \caption{Variance of the energy in relation to the parameter \pyth{atol}.}
 \label{pl:stability3}
 \end{minipage}
-\vspace*{-1cm}
-\end{wrapfigure}
+\end{figure}
 
-If we test the \pyth{atol} parameter on the Adams and Newton method analogously to the test of the \pyth{rtol} parameter we can see that for the Adams-Moulton method the variance of the energy (c.f.\ figure \ref{pl:stability3}) is for certain \pyth{rtol} significantly above the value for the default parameter which indicates some instability.
+
+When testing the \pyth{atol} analogously to the parameter \pyth{rtol} one observes similar behaviour. As \pyth{atol} increases the number of steps taken dramatically decreases (figure \ref{pl:nsteps3}), the number of jacobian evaluations per step eventually increases (figure \ref{pl:njacs_nsteps3} and for the Adams-Moulton method the variance of the total energy also eventually increases (figure \ref{pl:stability3}). Here again a larger value for the variance of the total energy indicates instability.
 In either case we observe that increasing the tolerance seems to come at the cost of energy conversation as is dramatically visualised in figures \ref{pl:energy2} and \ref{pl:energy3}.
+
 
 
 \begin{figure}[h]
@@ -1018,7 +1037,7 @@ In the second part of the project we tested the implicit Newmark and the HHT met
 \end{align*}
 which add up to the total energy
 \begin{align*}
-	E_{\text{tot}}=E_{\text{kin}}+E_{\text{elast}}
+	E_{\text{tot}}=E_{\text{kin}}+E_{\text{elast}}\,.
 \end{align*}
 The development of the energy of the system can be seen in figure \ref{pl:beam_soln_energy}. One can see in particular that after the initial application of an external force to the system the energy remains almost constant. As in project 1 the variance of the total energy serves as a measure of the instability of the solver. Here we calculate this variance only for the latter $4/5$ of the simulation because the applied force changes the total energy in the first part.
 With an ideal solver this quantity vanishes.
