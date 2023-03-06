@@ -900,22 +900,25 @@ In figures \ref{pl:explicit_angles}  and \ref{pl:explicit_angles_dot} the approx
 \chapter*{Project 3}
 
 In this project we consider an initial value problem of the form
-\begin{align*}
-	M \ddot{u}+C\dot{u}+KY = f(t) \\
-	u(0) = u_0 \\
-	\dot{u}(0) = v_0
-\end{align*}
-for this we implemented an Assimulo problem class, the HHT solver and the Newmark implicit and explicit solvers. The explicit solver was tested on the pendulum. The implicit solvers were tested on a discretised PDE obtained from an elastic beam.
+\begin{align}
+	\begin{aligned}
+	M \ddot{u}+C\dot{u}+Ku &= f(t) \\
+	u(0) &= u_0 \\
+	\dot{u}(0) &= v_0
+	\end{aligned}
+	\label{eq:IVPSparse}
+\end{align}
+where $M, C, K\in\R^{n\times n}$ are sparse matrices and $u_0, v_0\in\R^n$ initial values. For this we implemented an Assimulo problem class, the HHT solver and the Newmark implicit and explicit solvers. The explicit solver was tested on the pendulum. The implicit solvers were tested on a discretised PDE obtained from an elastic beam which yields a system of the form \eqref{eq:IVPSparse}.
 
 \section*{The elastic pendulum revisited}
 
-In this section we will use the aforementioned methods to solve the problem of the elastic spring presented in Project 1. In particular we will compare the performance of different explicit methods solving the problem. We will compare Newmark Explicit against Explicit Euler and Newmark Explicit against RK4.
-\bigbreak
-It is common to both methods that the simulations start at the same point and rapidly drift away. This drift will continue in different ways depending on the method tested.
+In this section we will use the aforementioned methods to solve the problem of the elastic spring from Project 1. In particular we will compare the performance of different explicit methods for solving the problem. We will compare Newmark Explicit with Explicit Euler and Newmark Explicit with RK4.
 
-\subsubsection*{Newmark - RK4}
+It is common to both methods that the simulations starts at the same point and rapidly drifts away. This drift will continue in different ways depending on the method tested.
 
-This is probably the most interesting of both cases given that RK4 does not lose stability as fast as Explicit Euler does. As mentioned, the distance between the approximations will drift away in an oscillating fashion with an increasing amplitude. This can be observed in figure \ref{pl:new_rk4_k=10} for $y$ and in figure \ref{pl:new_rk4_k=10_dot} for $\dot{y}$.
+\subsection*{Newmark - RK4}
+
+This is probably the most interesting of both cases given that RK4 does not lose stability as quickly as Explicit Euler does. The distance between the approximations will dilate in an oscillating manner with increasing amplitude. This can be observed in figure \ref{pl:new_rk4_k=10} for $y$ and in figure \ref{pl:new_rk4_k=10_dot} for $\dot{y}$.
 
 \begin{figure}[h]
 \centering
@@ -954,7 +957,7 @@ The amplitude of the oscillations will eventually converge to a value which appe
 
 With regards to performance, Newmark's method is faster than RK4 being for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
 
-\subsubsection*{Newmark - Euler}
+\subsection*{Newmark - Euler}
 \begin{wrapfigure}{r}{0.45\textwidth}
 \vspace*{-1cm}
 \centering
@@ -965,7 +968,7 @@ With regards to performance, Newmark's method is faster than RK4 being for diffe
 \label{pl:new_eul}
 \end{minipage}
 \end{wrapfigure}
-Not much can be said about the relation between Newmark's and Euler's methods given the unstable nature of Explicit Euler. It is common to see how Euler's method explodes to infinity while Newmark's remains stable. This can be observed in figure \ref{pl:new_eul}.
+Not much can be said about the relation between Newmark's and Euler's methods given the unstable nature of Explicit Euler. Euler's method explodes to infinity while Newmark's remains stable. This can be observed in figure \ref{pl:new_eul}.
 
 
 With regard to performance, Euler's method is faster than Newmark's for different values of $h$ and $t_f$ approximately $c$ times faster having $c$ order of magnitude 0.
@@ -973,7 +976,7 @@ With regard to performance, Euler's method is faster than Newmark's for differen
 
 \section*{An elastic beam}
 
-In the second part of the project we tested the implicit Newmark and the HHT method on a discretised beam as seen in figure \ref{pl:beam_soln_initial}. The beam is displaced by a force until it is deformed as in figure \ref{pl:beam_soln_position1}. With time it then swings back and forth between the positions in figures \ref{pl:beam_soln_initial}-\ref{pl:beam_soln_position3}. Figure \ref{pl:beam_soln_displacement} shows the displacement of the tip of the beam in dependence of time.
+In the second part of the project we tested the implicit Newmark and the HHT method on a discretised beam plotted in figure \ref{pl:beam_soln_initial}. The beam is displaced by a force until it is deformed as in figure \ref{pl:beam_soln_position1}. With time it then swings back and forth between the positions in figures \ref{pl:beam_soln_initial} to \ref{pl:beam_soln_position3}. Figure \ref{pl:beam_soln_displacement} shows the displacement of the tip of the beam in dependence of time.
 
 \begin{figure}[h]
 \centering
@@ -1017,7 +1020,7 @@ which add up to the total energy
 \begin{align*}
 	E_{\text{tot}}=E_{\text{kin}}+E_{\text{elast}}
 \end{align*}
-The development of the energy of the system can be seen in figure \ref{pl:beam_soln_energy}. Here we see in particular that after the initial application of an external force to the system the energy stays almost constant. As in project 1 the variance of the total energy serves as a measure of the instability of the solver. Here we calculate this variance only for the latter $4/5$ of the simulation because in the first part the applied force changes the total energy.
+The development of the energy of the system can be seen in figure \ref{pl:beam_soln_energy}. One can see in particular that after the initial application of an external force to the system the energy remains almost constant. As in project 1 the variance of the total energy serves as a measure of the instability of the solver. Here we calculate this variance only for the latter $4/5$ of the simulation because the applied force changes the total energy in the first part.
 With an ideal solver this quantity vanishes.
 
 \begin{figure}[h]
@@ -1037,22 +1040,22 @@ With an ideal solver this quantity vanishes.
 \end{minipage}
 \end{figure}
 
-\subsubsection*{A brief comparison of solvers}
+\subsection*{A brief comparison of solvers}
 
-In a first experiment we compare the performance of our implementation of the HHT solver and the implicit Euler solver from Assimulo. The HHT method was applied with the parameter $\alpha=0$ and the step size was the same for all methods. The results are plotted in figure \ref{tb:beam_exp_solverComparison}. Here one sees that for all solvers the variance of the total energy is small. There is however a big difference in the performance of the various methods. On my computer the implicit Euler solver takes roughly two orders of magnitude longer than the HHT method.
+In a first experiment we compare the performance of our implementation of the HHT solver and the implicit Euler solver from Assimulo. The HHT method was applied with the parameter $\alpha=0$ and the step size $h=0.05$ was identical for both methods. The results are plotted in figure \ref{tb:beam_exp_solverComparison}. One sees that for all solvers the variance of the total energy is small. There is however a big difference in the performance of the methods. On my computer the implicit Euler solver takes roughly two orders of magnitude longer than the HHT method.
 
 \begin{figure}[h]
 \centering
 \input{../Plots/Tables/Statistics_beam_solvers.tex}
-\caption{Performance of various solvers for the beam problem}
+\caption{Performance of various solvers for the beam problem.}
 \label{tb:beam_exp_solverComparison}
 \end{figure}
 
 
-\subsubsection*{Testing the implicit Newmark solver}
+\subsection*{Testing the implicit Newmark solver}
 
-In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ whereby we keep the step size $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because this value shows that the solution is unstable for the specific choice of $\beta$ and $\gamma$. One sees that for $1/2\leq \gamma\leq2\beta$ the solver is stable.
-One can observe that the solver is most stable for $\gamma\approx1/2$ and for $\beta\approx1/4$ which is just the value at which the method achieves second order accuracy. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
+In a second experiment we test the dependence of the implicit Newmark method on the parameters $\beta$ and $\gamma$ while keeping the step size $h=0.05$ constant. The variance of the total energy can be seen in figure \ref{pl:beam_exp_betagamma_alpha0}. It should be noted that we cut off the value of the variance of the total energy at $10^2$ because any greater value shows that the solution is unstable for the specific choice of $\beta$ and $\gamma$. One sees that for $1/2\leq \gamma\leq2\beta$ the solver is stable.
+Also observe that the solver is most stable for $\gamma\approx1/2$ and for $\beta\approx1/4$ which is precisely the value at which the method achieves second order accuracy. Figure \ref{pl:beam_exp_betagamma_instable1} shows what happens if we leave the region of stability.
 
 \begin{figure}[h]
 \centering
@@ -1071,9 +1074,9 @@ One can observe that the solver is most stable for $\gamma\approx1/2$ and for $\
 \end{minipage}
 \end{figure}
 
-\subsubsection*{Testing the HHT solver}
+\subsection*{Testing the HHT solver}
 
-In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. The variance of the total energy can be seen in figure \ref{pl:beam_exp_HHTalpha} where it is noticeable that the value decreases as $\alpha$ increases albeit from a small level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as can be seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. It is also astonishing that despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size, like the almost constant total energy and the eventual periodic behavior of the kinetic and elastic energies.
+In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. The variance of the total energy can be seen in figure \ref{pl:beam_exp_HHTalpha}. It is noticeable that this value decreases as $\alpha$ increases albeit from a low level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. Despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size. For example the total energy is almost constant and the kinetic and elastic energies are eventually periodic.
 
 \begin{figure}[h]
 \centering
