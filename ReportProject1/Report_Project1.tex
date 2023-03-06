@@ -730,7 +730,7 @@ Many of the values are minute but non-zero. This is due to rounding errors, but 
 \end{minipage}
 \end{figure}
 
-We now would like to compare the solutions of the various formulations. To calculate the solutions we used the IDA solver. However, to get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchanged and in the following we only vary the index of the problem. One can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas}  the index 1 solution subtracted from the index 3 solution. In the figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
+We now will compare the solutions of the different formulations. To calculate the solutions we used the IDA solver. To get the problem to run we set the \pyth{atol} parameter to the large number \pyth{1E5} and the \pyth{algvar} parameter to \pyth{False} for the algebraic variable $\lambda$ and for $v$. These settings remain unchanged and in the following we only vary the index of the problem. One can see in the figures \ref{pl:indx1_solndiff_angles} to \ref{pl:indx1_solndiff_lambdas}  the index 1 solution subtracted from the index 3 solution. In figures \ref{pl:indx2_solndiff_angles} to \ref{pl:indx2_solndiff_lambdas} we see the index 2 solution subtracted from the index 3 solution. As expected we see that the difference the solutions grows as time progresses.
 
 
 \begin{figure}[h]
@@ -767,12 +767,13 @@ We now would like to compare the solutions of the various formulations. To calcu
 \end{minipage}
 \end{figure}
 
-Rather unexpectedly however the difference of the index 1 to the index 3 solution is in general greater than the difference of the index 2 to the index 3 solutions. Also unexpectedly these differences are noticeable in the plots of the Lagrange parameter $\lambda$ as shown in figures \ref{pl:indx1_soln_lambdas}, \ref{pl:indx2_soln_lambdas} and \ref{pl:indx3_soln_lambdas}. Here we see that the solution becomes increasingly rough as the index increases.
+Rather unexpectedly the difference of the index 1 to the index 3 solution is in general greater than the difference of the index 2 to the index 3 solutions. Also unexpectedly these differences are noticeable in the plots of the Lagrange parameter $\lambda$ as shown in figures \ref{pl:indx1_soln_lambdas}, \ref{pl:indx2_soln_lambdas} and \ref{pl:indx3_soln_lambdas}. Here we see that the solution becomes increasingly rough as the index increases.
 
 
 
-The performance of the IDA solver for the various indexes can be seen in figures \ref{pl:nsteps_indx123} to \ref{pl:nerrfails_nsteps_indx123}. We see in figure \ref{pl:nsteps_indx123} that the number of steps of the solver increases with the index. As the number of function evaluations per step stays roughly constant by figure \ref{pl:nfcns_nsteps_indx123} this means that the number of function evaluations increases with the index. One other other notable statistic regards the number of error test failures for the different problems which can be seen in figure \ref{pl:nerrfails_nsteps_indx123} where we see a larger difference between the problems though this is probably not statistically significant as the total number of error test failures is approximately a dozen.
-
+The performance of the IDA solver for the various indexes can be seen in figures \ref{pl:nsteps_indx123} to \ref{pl:nerrfails_nsteps_indx123}. We see in figure \ref{pl:nsteps_indx123} that the number of steps of the solver increases with the index. As the number of function evaluations per step stays roughly constant (c.f.\ figure \ref{pl:nfcns_nsteps_indx123}) this means that the number of function evaluations increases with the index.
+In the number of error test failures (figure \ref{pl:nerrfails_nsteps_indx123}) we see a larger difference between the problems though this is probably not statistically significant as the total number of error test failures is approximately a dozen.
+\newpage
 
 \begin{figure}[h]
 \centering
@@ -809,13 +810,15 @@ The performance of the IDA solver for the various indexes can be seen in figures
 \end{minipage}
 \end{figure}
 
+\vspace*{-0.5cm}
+
 \section*{Dependence on the parameters \pyth{algvar} and \pyth{atol}}
 
 As previously indicated the IDA solver will throw an error
 \begin{python}
 assimulo.solvers.sundials.IDAError: 'Convergence test failures occurred too many times during one internal time step or minimum step size was reached. At time 0.000000.'
 \end{python}
-This can be resolved by declaring the entries of $y$ corresponding to $v$ and or $\lambda$ to be algebraic variables with the parameter \pyth{algvar} and to set the parameter \pyth{atol} to a large variable. In the following we would like to check how these parameters impact the performance of the solver in the case of the index 1 formulation. For this denote by \pyth{algvar_v} and \pyth{algvar_lambda} the value of the \pyth{algvar} parameter for $v$ and $\lambda$. The default value of \pyth{algvar} is set to \pyth{True}. Analogously we denote the components of \pyth{atol} corresponding to $v$ and $\lambda$ with \pyth{atol_v} and \pyth{atol_lambda} and set the default value to \pyth{1E-6}. We now run a series of 5 experiments as depicted in table \ref{tb:indx1_experiment_params}.
+This can be resolved by declaring the entries of $y$ corresponding to $v$ and or $\lambda$ to be algebraic variables with the parameter \pyth{algvar} and to set the parameter \pyth{atol} to a large constant. In the following we will check how these parameters impact the performance of the solver for the index 1 formulation. For this denote by \pyth{algvar_v} and \pyth{algvar_lambda} the value of the \pyth{algvar} parameter for $v$ and $\lambda$. The default value of \pyth{algvar} is set to \pyth{True}. Analogously denote the components of \pyth{atol} corresponding to $v$ and $\lambda$ with \pyth{atol_v} and \pyth{atol_lambda} and set the default value to \pyth{1E-6}. We run a series of 5 experiments as depicted in table \ref{tb:indx1_experiment_params}.
 
 
 \begin{figure}[h]
@@ -827,7 +830,7 @@ This can be resolved by declaring the entries of $y$ corresponding to $v$ and or
 \label{tb:indx1_experiment_params}
 \end{figure}
 
-As all experiments deliver more or less the same result we will be comparing the statistics of IDA as depicted in figures \ref{pl:nsteps_indx1} to \ref{pl:nerrfails_nsteps_indx1}. Once again we observe in figure \ref{pl:nfcns_nsteps_indx1} that the total number of function evaluations is roughly proportional to the number of steps needed. Here experiments 1 and 4 stick out for requiring comparatively more function evaluations per step. However in figure \ref{pl:nsteps_indx1} we see that these are also precisely the experiments in which the total number of steps taken is by far the least. Experiments 1 and 4 are also precisely those experiments that have the most stringent requirements on the $v$ part of $y$. Both have set \pyth{atol_v=1E-6} and declare $v$ to not be an algebraic variable. We see in figures \ref{pl:njacs_indx1} and \ref{pl:nerrfails_nsteps_indx1} that experiment 0 is an outlier in requiring comparatively many Jacobian evaluations and having relatively few error test failures.
+As all experiments deliver a similar result we will compare the statistics of IDA as depicted in figures \ref{pl:nsteps_indx1} to \ref{pl:nerrfails_nsteps_indx1}. Once again we observe in figure \ref{pl:nfcns_nsteps_indx1} that the total number of function evaluations is roughly proportional to the number of steps. Here experiments 1 and 4 stick out for requiring comparatively more function evaluations per step. However in figure \ref{pl:nsteps_indx1} we see that these are also precisely the experiments in which the total number of steps taken is by far the least. Experiments 1 and 4 are also precisely those experiments that have the most stringent requirements on the $v$ part of $y$. Both have set \pyth{atol_v=1E-6} and declare $v$ to not be an algebraic variable. We see in figures \ref{pl:njacs_indx1} and \ref{pl:nerrfails_nsteps_indx1} that experiment 0 is an outlier in requiring comparatively many Jacobian evaluations and having relatively few error test failures.
 
 \begin{figure}[h]
 \centering
@@ -854,7 +857,7 @@ As all experiments deliver more or less the same result we will be comparing the
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{figure}[b]
 \centering
 \begin{minipage}[t]{0.3\textwidth}
 \centering
