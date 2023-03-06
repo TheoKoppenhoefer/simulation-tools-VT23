@@ -3,7 +3,6 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 
 ## Some TODO's for project 1
 - [ ] refer to stability regions
-- [ ] remove the noise in the last energy plot
 
 
 ## Some TODO's for project 2
@@ -17,9 +16,7 @@ This is a repository of a great team in the simulation tools course at Lund, HT2
 
 ## Some TODO's for project 3
 - [ ] Task 4: Comparison plots
-- [ ] check the damping behaviour
 - [ ] write conclusion
 
 ## Some general TODO's
-- [ ] clean up graphs
 - [ ] hyperlinks
