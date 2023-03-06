@@ -443,7 +443,7 @@ It is interesting to see how the relation between the speed of decay of the spri
 \subsection*{A first test series}
 
 In the first specific test of CVODE we solve our toy problem for increasing $k$. Here we switch between the BDF and Adam-Moulton's discretisation method. We also vary the \pyth{maxorder} parameter for both methods.
-A higher $k$ reflects a problem which is more stiff. As a stiff problem requires smaller steps the number of steps \pyth{nsteps} increases as $k$ increases which  can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per step size, \pyth{nfcns/nsteps}, hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase proportionally to \pyth{nsteps} with $k$ as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. And the general trend is that the number of steps increases as \pyth{maxord} is reduced. 
+A higher $k$ causes a stiffer problem. As a stiff problem requires smaller steps the number of steps \pyth{nsteps} increases as $k$ increases which  can be seen in figure \ref{pl:nsteps1}. As the number of function evaluations per step size, \pyth{nfcns/nsteps}, hovers slightly above 1 for all methods (c.f.\ figure \ref{pl:nfcns_nsteps1}) the number of function evaluations increase proportionally to \pyth{nsteps} with $k$ as can be seen in figure \ref{pl:nfcns1}. There is however a difference in how many steps each method needs. The BDF-method requires in general more steps than the Adams-Moulton method. In general the number of steps increases as \pyth{maxord} is reduced. 
 
 \begin{figure}[h]
 \centering
@@ -479,7 +479,7 @@ A higher $k$ reflects a problem which is more stiff. As a stiff problem requires
 \end{minipage}
 \end{figure}
 
-From figure \ref{pl:njacs_nsteps1} it can be seen that the number of Jacobian evaluations stays roughly constant and happens roughly every 5'th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though the general tendency is that it is smaller the lower \pyth{maxord} is set. This makes sense because a lower \pyth{maxord} means there are fewer possibilities for the method order and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result tends to be further away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
+One sees in figure \ref{pl:njacs_nsteps1} that the number of Jacobian evaluations stays roughly constant and happens roughly every 5'th step. The number \pyth{nerrfails/steps} stays roughly constant in dependence of $k$ though in general it decreases with decreasing \pyth{maxord}. This makes sense because a lower \pyth{maxord} means there are fewer possibilities for the method order and hence fewer changes of order. In figure \ref{pl:stability1} we see a difference in how much the methods obey the principles of energy conservation. One can see that for growing $k$ the result diverge away from physical reality. Once again the methods with higher \pyth{maxord} do better with the exception of the BDF method where for some reason a \pyth{maxord} of 4 performs best.
 
 \begin{figure}[h]
 \centering
@@ -498,8 +498,8 @@ From figure \ref{pl:njacs_nsteps1} it can be seen that the number of Jacobian ev
 \end{minipage}
 \end{figure}
 
-This test confirms once again that a stiffer Problem needs more function evaluations in CVODE.
-Perhaps surprisingly the Adams-Moulton-method seems to perform better on this problem.
+This test confirms once again that stiffer problems need more function evaluations in CVODE.
+Also, the Adams-Moulton-method seems to perform better on this problem.
 This experiment also highlights that a lower \pyth{maxord} parameter tends to be more computationally expensive though it reduces the number of error test failures \pyth{nerrfails}.
 
 \subsection*{Testing the parameter rtol}
@@ -514,7 +514,7 @@ This experiment also highlights that a lower \pyth{maxord} parameter tends to be
 \end{minipage}
 \end{wrapfigure}
 
-We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}).The general tendency is that the number of Jacobian evaluations per step (figure \ref{pl:njacs_nsteps2}) and the number of error test failures per step (figure \ref{pl:nerrfails_nsteps2}) increases with \pyth{rtol}. We see in \ref{pl:stability2} that for large \pyth{rtol} the simulation with Adams-Moulton has a large energy sink or energy source. This indicates that this method becomes increasingly unstable for large \pyth{rtol}.
+We now test the influence of the parameter \pyth{rtol} on the methods BDF and Adams-Moulton. For this we set $k=10^3$ and keep all other parameters on their default values. The results can be seen in figures \ref{pl:nsteps2} to \ref{pl:stability2}. We note that as \pyth{rtol} increases the number of steps decreases (c.f.\ figure \ref{pl:nsteps2}).The general tendency is that the number of Jacobian evaluations per step (figure \ref{pl:njacs_nsteps2}) and the number of error test failures per step (figure \ref{pl:nerrfails_nsteps2}) increases with \pyth{rtol}. We see in \ref{pl:stability2} that for large \pyth{rtol} the simulation with Adams-Moulton defies physics which indicates instability.
 
 \begin{figure}[h]
 \centering
@@ -555,7 +555,7 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 
 \subsection*{Testing the parameter atol}
 
-\begin{wrapfigure}{r}{0.47\textwidth}
+\begin{wrapfigure}{r}{0.45\textwidth}
 \centering
 \vspace*{-0.8cm}
 \begin{minipage}[t]{0.45\textwidth}
@@ -564,7 +564,7 @@ We now test the influence of the parameter \pyth{rtol} on the methods BDF and Ad
 \caption{\pyth{nsteps} in relation to the parameter \pyth{atol}.}
 \label{pl:nsteps3}
 \end{minipage}
-\vspace*{1cm}
+\vspace*{0.5cm}
 \end{wrapfigure}
 
 \begin{figure}[h]
