@@ -995,6 +995,7 @@ Not much can be said about the relation between Newmark's and Euler's methods gi
 
 With regard to performance, Euler's method is around 1 and 5 faster than Newmark's.
 
+\newpage
 
 \section*{An elastic beam}
 
@@ -1097,21 +1098,24 @@ Also observe that the solver is most stable for $\gamma\approx1/2$ and for $\bet
 \end{minipage}
 \end{figure}
 
+\newpage
 
-\begin{figure}[h]
-\centering
-\begin{minipage}[t]{0.45\textwidth}
-\centering
-\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_920.pdf}
-\caption{Dependence of the variance of the total energy on the parameter $\alpha$.}
-\label{pl:beam_exp_HHTalpha}
-\end{minipage}
-\end{figure}
 
 \subsection*{Testing the HHT solver}
 
-In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. The variance of the total energy can be seen in figure \ref{pl:beam_exp_HHTalpha}. It is noticeable that this value decreases as $\alpha$ increases albeit from a low level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. Despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size. For example the total energy is almost constant and the kinetic and elastic energies are eventually periodic.
 
+\begin{wrapfigure}{r}{0.45\textwidth}
+\centering
+\vspace*{-1.5cm}
+\begin{minipage}[t]{0.45\textwidth}
+\centering
+\includegraphics[width=\textwidth]{../Plots/Project3_main/Figure_920.pdf}
+\caption{Dependence of the variance of the total energy on $\alpha$.}
+\label{pl:beam_exp_HHTalpha}
+\end{minipage}
+\end{wrapfigure}
+
+In a final experiment we test the dependence of the HHT solver on the parameter $\alpha$. The variance of the total energy can be seen in figure \ref{pl:beam_exp_HHTalpha}. It is noticeable that this value decreases as $\alpha$ increases albeit from a low level. To make it more visible what is happening we set the step size to $h=1$ and plotted the energies of the solutions for the HHT solver as seen in figures \ref{pl:beam_exp_HHTalpha_0} and \ref{pl:beam_exp_HHTalpha_minimal}. Here the parameter $\alpha=-1/3$ acts in a dampening manner in comparison to the plot for $\alpha=0$. Despite the very rough step size the energy plot for $\alpha=0$ shares many features of the solution with a more refined step size. For example the total energy is almost constant and the kinetic and elastic energies are eventually periodic.
 
 \begin{figure}[h]
 \centering
